@@ -103,7 +103,7 @@ public:
     bool buttonRight() const;
     bool buttonGuide() const;
 
-signals:
+Q_SIGNALS:
 
     void indexChanged(int value);
     void connectedChanged(bool value);
@@ -130,11 +130,11 @@ signals:
     void buttonRightChanged(bool value);
     void buttonGuideChanged(bool value);
 
-public slots:
+public Q_SLOTS:
 
     void setIndex(int number);
 
-private slots:
+private Q_SLOTS:
     void setConnected(bool isConnected);
 
     void handleGamepadConnected(int index);

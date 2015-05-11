@@ -89,14 +89,14 @@ public:
 
     bool isGamepadConnected(int index);
 
-signals:
+Q_SIGNALS:
     void gamepadConnected(int index);
     void gamepadDisconnected(int index);
     void gamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value);
     void gamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
     void gamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
 
-private slots:
+private Q_SLOTS:
     void forwardGamepadConnected(int index);
     void forwardGamepadDisconnected(int index);
     void forwardGamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value);

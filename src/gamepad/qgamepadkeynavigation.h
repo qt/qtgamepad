@@ -94,7 +94,7 @@ public:
     Qt::Key buttonL3Key() const;
     Qt::Key buttonR3Key() const;
 
-signals:
+Q_SIGNALS:
     void activeChanged(bool isActive);
     void gamepadChanged(QGamepad *gamepad);
 
@@ -116,7 +116,7 @@ signals:
     void buttonL3KeyChanged(Qt::Key key);
     void buttonR3KeyChanged(Qt::Key key);
 
-public slots:
+public Q_SLOTS:
     void setActive(bool isActive);
     void setGamepad(QGamepad *gamepad);
 
@@ -138,7 +138,7 @@ public slots:
     void setButtonL3Key(Qt::Key key);
     void setButtonR3Key(Qt::Key key);
 
-private slots:
+private Q_SLOTS:
     void processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
     void procressGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
 
