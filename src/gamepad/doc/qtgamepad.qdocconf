@@ -1,0 +1,65 @@
+include($QT_INSTALL_DOCS/global/macros.qdocconf)
+include($QT_INSTALL_DOCS/global/qt-cpp-defines.qdocconf)
+include($QT_INSTALL_DOCS/global/compat.qdocconf)
+include($QT_INSTALL_DOCS/global/fileextensions.qdocconf)
+include($QT_INSTALL_DOCS/global/qt-html-templates-offline.qdocconf)
+
+project                                            = QtGamepad
+description                                        = Qt Gamepad Reference Documentation
+url                                                = http://doc.qt.digia.com/QtGamepad/
+version                                            = 1.0
+
+qhp.projects                                       = QtGamepad
+
+qhp.QtGamepad.file                              = qtgamepad.qhp
+qhp.QtGamepad.namespace                         = com.digia.qtgamepad.1.0
+qhp.QtGamepad.virtualFolder                     = qtgamepad
+qhp.QtGamepad.indexTitle                        = Qt Gamepad
+qhp.QtGamepad.indexRoot                         =
+qhp.QtGamepad.filterAttributes                  = qtgamepad 1.0 qtrefdoc
+qhp.QtGamepad.customFilters.Qt.name             = QtGamepad 1.0
+qhp.QtGamepad.customFilters.Qt.filterAttributes = qtgamepad 1.0
+
+qhp.QtGamepad.subprojects                       = qmltypes classes examples
+qhp.QtGamepad.subprojects.qmltypes.title        = QML Types
+qhp.QtGamepad.subprojects.qmltypes.indexTitle   = Qt Gamepad QML Types
+qhp.QtGamepad.subprojects.qmltypes.selectors    = fake:qmlclass
+qhp.QtGamepad.subprojects.qmltypes.sortPages    = true
+qhp.QtGamepad.subprojects.classes.title         = C++ Classes
+qhp.QtGamepad.subprojects.classes.indexTitle    = Qt Gamepad C++ Classes
+qhp.QtGamepad.subprojects.classes.selectors     = class fake:headerfile
+qhp.QtGamepad.subprojects.classes.sortPages     = true
+qhp.QtGamepad.subprojects.examples.title        = Examples
+qhp.QtGamepad.subprojects.examples.indexTitle   = Qt Gamepad Examples
+qhp.QtGamepad.subprojects.examples.selectors    = fake:example
+
+HTML.footer = \
+    "<div class=\"footer\">\n" \
+    "    <p>\n" \
+    "      <acronym title=\"Copyright\">&copy;</acronym> 2014 Digia. Qt and Qt logos are\n" \
+    "      trademarks of of Digia Corporation in Finland and/or other countries worldwide.\n" \
+    "    </p>\n" \
+    "      All other trademarks are property of their respective owners.\n" \
+    "    <br />\n" \
+    "    <p>\n" \
+    "      Licensees holding valid Qt Enterprise licenses may use this document in accordance\n" \
+    "      with the Qt Enterprise License Agreement provided with the Software or,\n" \
+    "      alternatively, in accordance with the terms contained in a written agreement\n" \
+    "      between you and Digia.\n" \
+    "    </p>\n" \
+    "</div>\n"
+
+indexes +=  $QT_INSTALL_DOCS/qtqml/qtqml.index \
+            $QT_INSTALL_DOCS/qtquick/qtquick.index \
+            $QT_INSTALL_DOCS/qtdoc/qtdoc.index \
+            $QT_INSTALL_DOCS/qtquickcontrols/qtquickcontrols.index
+
+headerdirs += ../
+sourcedirs += ../
+exampledirs += ../../../examples/
+imagedirs  += images
+
+navigation.landingpage    = "Qt Gamepad"
+navigation.qmltypespage   = "Qt Gamepad QML Types"
+navigation.cppclassespage = "Qt Gamepad C++ Classes"
+buildversion              = "Qt Gamepad 1.0"

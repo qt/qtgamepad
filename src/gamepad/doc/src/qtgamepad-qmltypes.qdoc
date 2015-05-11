@@ -1,0 +1,45 @@
+/****************************************************************************
+**
+** Copyright (C) 2014 Digia Plc
+** All rights reserved.
+** For any questions to Digia, please use contact form at http://qt.digia.com
+**
+** This file is part of the Qt Gamepad Add-on.
+**
+** $QT_BEGIN_LICENSE$
+** Licensees holding valid Qt Commercial licenses may use this file in
+** accordance with the Qt Commercial License Agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and Digia.
+**
+** If you have questions regarding the use of this file, please use
+** contact form at http://qt.digia.com
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
+/*!
+  \qmlmodule QtGamepad 1.0
+  \title Qt Gamepad QML Types
+  \ingroup qmlmodules
+  \brief Provides QML types for using gamepad hardware.
+
+  The Qt Gamepad module provides QML types that can be used to access the
+  state of gamepad hardware that may be available on a system.
+
+  The QML types can be imported into your application using the following
+  import statement:
+
+  \code
+  import QtGamepad 1.0
+  \endcode
+
+  To link against the module, add this line to your \l qmake \c .pro file:
+
+  \code
+  QT += gamepad
+  \endcode
+
+  For more information about using these types in your application,
+  see the \l{Qt Gamepad} documentation.
+*/
