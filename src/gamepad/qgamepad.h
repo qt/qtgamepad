@@ -41,7 +41,6 @@
 #include <QtGamepad/qtgamepadglobal.h>
 #include <QtGamepad/QGamepadManager>
 
-QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
 class Q_GAMEPAD_EXPORT QGamepad : public QObject
@@ -176,6 +175,5 @@ private:
 Q_DECLARE_METATYPE(QGamepad*)
 
 QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // QGAMEPAD_H

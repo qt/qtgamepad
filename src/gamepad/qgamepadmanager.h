@@ -41,7 +41,6 @@
 #include <QtCore/QList>
 #include <QtGamepad/qtgamepadglobal.h>
 
-QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
 class QGamepadBackend;
@@ -120,6 +119,5 @@ Q_DECLARE_METATYPE(QGamepadManager::GamepadButton)
 Q_DECLARE_METATYPE(QGamepadManager::GamepadAxis)
 
 QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // JOYSTICKMANAGER_H

@@ -39,8 +39,6 @@
 
 #include <QtCore/qglobal.h>
 
-QT_BEGIN_HEADER
-
 QT_BEGIN_NAMESPACE
 
 #ifndef Q_GAMEPAD_EXPORT
@@ -56,7 +54,5 @@ QT_BEGIN_NAMESPACE
 #endif
 
 QT_END_NAMESPACE
-
-QT_END_HEADER
 
 #endif

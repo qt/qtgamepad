@@ -43,7 +43,6 @@
 
 #include <QtGamepad/QGamepadManager>
 
-QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
 class QKeyEvent;
@@ -154,6 +153,5 @@ private:
 };
 
 QT_END_NAMESPACE
-QT_END_HEADER
 
 #endif // QGAMEPADKEYNAVIGATION_H
