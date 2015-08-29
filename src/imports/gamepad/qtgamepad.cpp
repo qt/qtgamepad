@@ -34,6 +34,7 @@
 **
 ****************************************************************************/
 
+#include <QtQml/qqmlengine.h>
 #include <QtQml/qqmlextensionplugin.h>
 #include <QtQml/qqml.h>
 
@@ -44,6 +45,13 @@
 
 QT_BEGIN_NAMESPACE
 
+static QObject *gamepadmanager_singletontype_provider(QQmlEngine */*engine*/, QJSEngine */*scriptEngine*/)
+{
+    QGamepadManager *manager = QGamepadManager::instance();
+    QQmlEngine::setObjectOwnership(manager, QQmlEngine::CppOwnership);
+    return manager;
+}
+
 class QGamepadModule : public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -53,6 +61,7 @@ public:
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("QtGamepad"));
 
+        qmlRegisterSingletonType<QGamepadManager>(uri, 1, 0, "GamepadManager", &gamepadmanager_singletontype_provider);
         qmlRegisterType<QGamepad>(uri, 1, 0, "Gamepad");
         qmlRegisterType<QGamepadKeyNavigation>(uri, 1, 0, "GamepadKeyNavigation");
         qmlRegisterType<QGamepadMouseItem>(uri, 1, 0, "GamepadMouseItem");
