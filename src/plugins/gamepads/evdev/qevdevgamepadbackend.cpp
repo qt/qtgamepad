@@ -280,6 +280,14 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
             btn = QGamepadManager::ButtonR1;
             break;
 
+        case BTN_TL2:
+            btn = QGamepadManager::ButtonL2;
+            break;
+        case BTN_TR2:
+            btn = QGamepadManager::ButtonR2;
+            break;
+
+
         case BTN_THUMB: // wireless
         case BTN_THUMBL: // wired
             btn = QGamepadManager::ButtonL3;
