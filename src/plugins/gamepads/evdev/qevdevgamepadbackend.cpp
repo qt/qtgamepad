@@ -84,7 +84,7 @@ QEvdevGamepadDevice *QEvdevGamepadBackend::newDevice(const QByteArray &device)
 }
 
 // To be called only when it is sure that there is a controller on-line.
-int QEvdevGamepadBackend::indexForDevice(const QByteArray &device)
+int QEvdevGamepadBackend::idForDevice(const QByteArray &device)
 {
     int index;
     if (m_devIndex.contains(device)) {
@@ -240,7 +240,7 @@ double QEvdevGamepadDevice::AxisInfo::normalized(int value) const
 void QEvdevGamepadDevice::processInputEvent(input_event *e)
 {
     if (m_index < 0) {
-        m_index = m_backend->indexForDevice(m_dev);
+        m_index = m_backend->idForDevice(m_dev);
         qCDebug(lcEGB) << "Adding gamepad" << m_dev << "with index" << m_index;
         emit m_backend->gamepadAdded(m_index);
     }

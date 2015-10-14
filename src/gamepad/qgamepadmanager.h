@@ -38,7 +38,7 @@
 #define JOYSTICKMANAGER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QtCore/QSet>
 #include <QtGamepad/qtgamepadglobal.h>
 
 QT_BEGIN_NAMESPACE
@@ -51,6 +51,7 @@ class Q_GAMEPAD_EXPORT QGamepadManager : public QObject
     Q_OBJECT
     Q_FLAGS(GamepadButton GamepadButtons)
     Q_FLAGS(GamepadAxis GamepadAxes)
+    Q_PROPERTY(QList<int> connectedGamepads READ connectedGamepads NOTIFY connectedGamepadsChanged)
 
 public:
     enum GamepadButton {
@@ -86,21 +87,23 @@ public:
 
     static QGamepadManager* instance();
 
-    bool isGamepadConnected(int index);
+    bool isGamepadConnected(int deviceId);
+    const QList<int> connectedGamepads() const;
 
 Q_SIGNALS:
-    void gamepadConnected(int index);
-    void gamepadDisconnected(int index);
-    void gamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value);
-    void gamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
-    void gamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
+    void connectedGamepadsChanged();
+    void gamepadConnected(int deviceId);
+    void gamepadDisconnected(int deviceId);
+    void gamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
+    void gamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
+    void gamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
 
 private Q_SLOTS:
-    void forwardGamepadConnected(int index);
-    void forwardGamepadDisconnected(int index);
-    void forwardGamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value);
-    void forwardGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
-    void forwardGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
+    void forwardGamepadConnected(int deviceId);
+    void forwardGamepadDisconnected(int deviceId);
+    void forwardGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
+    void forwardGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
+    void forwardGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
 
 private:
     QGamepadManager();
@@ -111,7 +114,7 @@ private:
     void loadBackend();
 
     QGamepadBackend *m_gamepadBackend;
-    QList<int> m_connectedGamepads;
+    QSet<int> m_connectedGamepads;
 
 };
 

@@ -55,11 +55,11 @@ public slots:
     virtual void stop();
 
 signals:
-    void gamepadAdded(int index);
-    void gamepadRemoved(int index);
-    void gamepadAxisMoved(int index, QGamepadManager::GamepadAxis axis, double value);
-    void gamepadButtonPressed(int index, QGamepadManager::GamepadButton button, double value);
-    void gamepadButtonReleased(int index, QGamepadManager::GamepadButton button);
+    void gamepadAdded(int deviceId);
+    void gamepadRemoved(int deviceId);
+    void gamepadAxisMoved(int deviceId, QGamepadManager::GamepadAxis axis, double value);
+    void gamepadButtonPressed(int deviceId, QGamepadManager::GamepadButton button, double value);
+    void gamepadButtonReleased(int deviceId, QGamepadManager::GamepadButton button);
 };
 
 QT_END_NAMESPACE

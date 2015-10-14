@@ -326,7 +326,7 @@ void QGamepadKeyNavigation::processGamepadButtonPressEvent(int index, QGamepadMa
     Q_UNUSED(value)
 
     //If a gamepad has been set then, only use the events of that gamepad
-    if (m_gamepad && m_gamepad->index() != index)
+    if (m_gamepad && m_gamepad->deviceId() != index)
         return;
 
     //Trigger buttons are a special case as they get multiple press events as the value changes
@@ -346,7 +346,7 @@ void QGamepadKeyNavigation::processGamepadButtonPressEvent(int index, QGamepadMa
 void QGamepadKeyNavigation::procressGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button)
 {
     //If a gamepad has been set then, only use the events of that gamepad
-    if (m_gamepad && m_gamepad->index() != index)
+    if (m_gamepad && m_gamepad->deviceId() != index)
         return;
 
     //Free the trigger buttons if necessary

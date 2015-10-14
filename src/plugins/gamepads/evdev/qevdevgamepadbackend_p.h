@@ -95,7 +95,7 @@ public:
     QEvdevGamepadBackend();
     bool start() Q_DECL_OVERRIDE;
     void stop() Q_DECL_OVERRIDE;
-    int indexForDevice(const QByteArray &device);
+    int idForDevice(const QByteArray &device);
 
 private slots:
     void handleAddedDevice(const QString &device);

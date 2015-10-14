@@ -48,13 +48,13 @@ QT_BEGIN_NAMESPACE
  */
 
 /*!
- * \brief Constructs a QGamepad for device at \a index.
- * \param index is the number of the gamepad you wish to see the state of
+ * \brief Constructs a QGamepad for \a deviceId.
+ * \param deviceId is the id of the gamepad you wish to see the state of
  * \param parent
  */
-QGamepad::QGamepad(int index, QObject *parent)
+QGamepad::QGamepad(int deviceId, QObject *parent)
     : QObject(parent)
-    , m_index(index)
+    , m_deviceId(deviceId)
     , m_connected(false)
     , m_axisLeftX(0.0)
     , m_axisLeftY(0.0)
@@ -85,7 +85,7 @@ QGamepad::QGamepad(int index, QObject *parent)
     connect(m_gamepadManager, SIGNAL(gamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)), this, SLOT(handleGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
     connect(m_gamepadManager, SIGNAL(gamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)), this, SLOT(handleGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
 
-    setConnected(m_gamepadManager->isGamepadConnected(m_index));
+    setConnected(m_gamepadManager->isGamepadConnected(m_deviceId));
 }
 
 /*!
@@ -96,16 +96,16 @@ QGamepad::~QGamepad()
 }
 
 /*!
- * \property QGamepad::index
+ * \property QGamepad::deviceId
  *
- * This property holds the index of the gamepad device.  It is possible for there to be
+ * This property holds the deviceId of the gamepad device.  It is possible for there to be
  * multiple gamepad devices connected at any given time, so setting this property defines
  * which gamepad to use.
  *
  */
-int QGamepad::index() const
+int QGamepad::deviceId() const
 {
-    return m_index;
+    return m_deviceId;
 }
 
 /*!
@@ -365,12 +365,12 @@ bool QGamepad::buttonGuide() const
     return m_buttonGuide;
 }
 
-void QGamepad::setIndex(int number)
+void QGamepad::setDeviceId(int number)
 {
-    if (m_index != number) {
-        m_index = number;
-        emit indexChanged(number);
-        setConnected(m_gamepadManager->isGamepadConnected(m_index));
+    if (m_deviceId != number) {
+        m_deviceId = number;
+        emit deviceIdChanged(number);
+        setConnected(m_gamepadManager->isGamepadConnected(m_deviceId));
     }
 }
 
@@ -385,9 +385,9 @@ void QGamepad::setConnected(bool isConnected)
 /*!
  * \internal
  */\
-void QGamepad::handleGamepadConnected(int index)
+void QGamepad::handleGamepadConnected(int deviceId)
 {
-    if (index == m_index) {
+    if (deviceId == m_deviceId) {
         setConnected(true);
     }
 }
@@ -395,9 +395,9 @@ void QGamepad::handleGamepadConnected(int index)
 /*!
  * \internal
  */\
-void QGamepad::handleGamepadDisconnected(int index)
+void QGamepad::handleGamepadDisconnected(int deviceId)
 {
-    if (index == m_index) {
+    if (deviceId == m_deviceId) {
         setConnected(false);
     }
 }
@@ -405,9 +405,9 @@ void QGamepad::handleGamepadDisconnected(int index)
 /*!
  * \internal
  */\
-void QGamepad::handleGamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value)
+void QGamepad::handleGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value)
 {
-    if (index != m_index)
+    if (deviceId != m_deviceId)
         return;
 
     switch (axis) {
@@ -435,9 +435,9 @@ void QGamepad::handleGamepadAxisEvent(int index, QGamepadManager::GamepadAxis ax
 /*!
  * \internal
  */\
-void QGamepad::handleGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value)
+void QGamepad::handleGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value)
 {
-    if (index != m_index)
+    if (deviceId != m_deviceId)
         return;
 
     switch (button) {
@@ -518,9 +518,9 @@ void QGamepad::handleGamepadButtonPressEvent(int index, QGamepadManager::Gamepad
 /*!
  * \internal
  */\
-void QGamepad::handleGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button)
+void QGamepad::handleGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button)
 {
-    if (index != m_index)
+    if (deviceId != m_deviceId)
         return;
 
     switch (button) {

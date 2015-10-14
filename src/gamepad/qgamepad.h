@@ -46,7 +46,7 @@ QT_BEGIN_NAMESPACE
 class Q_GAMEPAD_EXPORT QGamepad : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int index READ index WRITE setIndex NOTIFY indexChanged)
+    Q_PROPERTY(int deviceId READ deviceId WRITE setDeviceId NOTIFY deviceIdChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(double axisLeftX READ axisLeftX NOTIFY axisLeftXChanged)
@@ -71,10 +71,10 @@ class Q_GAMEPAD_EXPORT QGamepad : public QObject
     Q_PROPERTY(bool buttonRight READ buttonRight NOTIFY buttonRightChanged)
     Q_PROPERTY(bool buttonGuide READ buttonGuide NOTIFY buttonGuideChanged)
 public:
-    explicit QGamepad(int index = 0, QObject *parent = 0);
+    explicit QGamepad(int deviceId = 0, QObject *parent = 0);
     ~QGamepad();
 
-    int index() const;
+    int deviceId() const;
 
     bool isConnected() const;
 
@@ -104,7 +104,7 @@ public:
 
 Q_SIGNALS:
 
-    void indexChanged(int value);
+    void deviceIdChanged(int value);
     void connectedChanged(bool value);
     void nameChanged(QString value);
     void axisLeftXChanged(double value);
@@ -131,22 +131,22 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void setIndex(int number);
+    void setDeviceId(int number);
 
 private Q_SLOTS:
     void setConnected(bool isConnected);
 
-    void handleGamepadConnected(int index);
-    void handleGamepadDisconnected(int index);
-    void handleGamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value);
-    void handleGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
-    void handleGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
+    void handleGamepadConnected(int deviceId);
+    void handleGamepadDisconnected(int deviceId);
+    void handleGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
+    void handleGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
+    void handleGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
 
 private:
 
     QGamepadManager *m_gamepadManager;
 
-    int m_index;
+    int m_deviceId;
     bool m_connected;
     QString m_name;
     double m_axisLeftX;

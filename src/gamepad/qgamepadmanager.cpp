@@ -97,41 +97,48 @@ QGamepadManager *QGamepadManager::instance()
     return &instance;
 }
 
-bool QGamepadManager::isGamepadConnected(int index)
+bool QGamepadManager::isGamepadConnected(int deviceId)
 {
-    return m_connectedGamepads.contains(index);
+    return m_connectedGamepads.contains(deviceId);
 }
 
-void QGamepadManager::forwardGamepadConnected(int index)
+const QList<int> QGamepadManager::connectedGamepads() const
+{
+    return m_connectedGamepads.toList();
+}
+
+void QGamepadManager::forwardGamepadConnected(int deviceId)
 {
     //qDebug() << "gamepad connected: " << index;
-    m_connectedGamepads.append(index);
-    emit gamepadConnected(index);
+    m_connectedGamepads.insert(deviceId);
+    emit gamepadConnected(deviceId);
+    emit connectedGamepadsChanged();
 }
 
-void QGamepadManager::forwardGamepadDisconnected(int index)
+void QGamepadManager::forwardGamepadDisconnected(int deviceId)
 {
     //qDebug() << "gamepad disconnected: " << index;
-    m_connectedGamepads.removeAll(index);
-    emit gamepadDisconnected(index);
+    m_connectedGamepads.remove(deviceId);
+    emit gamepadDisconnected(deviceId);
+    emit connectedGamepadsChanged();
 }
 
-void QGamepadManager::forwardGamepadAxisEvent(int index, QGamepadManager::GamepadAxis axis, double value)
+void QGamepadManager::forwardGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value)
 {
     //qDebug() << "gamepad axis event: " << index << axis << value;
-    emit gamepadAxisEvent(index, axis, value);
+    emit gamepadAxisEvent(deviceId, axis, value);
 }
 
-void QGamepadManager::forwardGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value)
+void QGamepadManager::forwardGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value)
 {
     //qDebug() << "gamepad button press event: " << index << button << value;
-    emit gamepadButtonPressEvent(index, button, value);
+    emit gamepadButtonPressEvent(deviceId, button, value);
 }
 
-void QGamepadManager::forwardGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button)
+void QGamepadManager::forwardGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button)
 {
     //qDebug() << "gamepad button release event: " << index << button;
-    emit gamepadButtonReleaseEvent(index, button);
+    emit gamepadButtonReleaseEvent(deviceId, button);
 }
 
 QT_END_NAMESPACE
