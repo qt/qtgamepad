@@ -25,3 +25,12 @@ SOURCES += \
     qgamepadkeynavigation.cpp \
     qgamepadbackendplugin.cpp
 
+
+ANDROID_BUNDLED_JAR_DEPENDENCIES = \
+    jar/QtAndroidGamepad-bundled.jar
+
+ANDROID_JAR_DEPENDENCIES = \
+    jar/QtAndroidGamepad.jar
+
+ANDROID_LIB_DEPENDENCIES = \
+    plugins/gamepads/libandroidgamepad.so

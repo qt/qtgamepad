@@ -76,6 +76,7 @@ QGamepad::QGamepad(int deviceId, QObject *parent)
     , m_buttonDown(false)
     , m_buttonLeft(false)
     , m_buttonRight(false)
+    , m_buttonCenter(false)
     , m_buttonGuide(false)
 {
     m_gamepadManager = QGamepadManager::instance();
@@ -352,6 +353,11 @@ bool QGamepad::buttonRight() const
     return m_buttonRight;
 }
 
+bool QGamepad::buttonCenter() const
+{
+    return m_buttonCenter;
+}
+
 /*!
  * \property QGamepad::buttonGuide
  *
@@ -505,6 +511,10 @@ void QGamepad::handleGamepadButtonPressEvent(int deviceId, QGamepadManager::Game
         m_buttonRight = true;
         emit buttonRightChanged(true);
         break;
+    case QGamepadManager::ButtonCenter:
+        m_buttonCenter = true;
+        emit buttonCenterChanged(true);
+        break;
     case QGamepadManager::ButtonGuide:
         m_buttonGuide = true;
         emit buttonGuideChanged(true);
@@ -587,6 +597,10 @@ void QGamepad::handleGamepadButtonReleaseEvent(int deviceId, QGamepadManager::Ga
     case QGamepadManager::ButtonRight:
         m_buttonRight = false;
         emit buttonRightChanged(false);
+        break;
+    case QGamepadManager::ButtonCenter:
+        m_buttonCenter = false;
+        emit buttonCenterChanged(false);
         break;
     case QGamepadManager::ButtonGuide:
         m_buttonGuide = false;

@@ -53,10 +53,6 @@ public:
     explicit GamepadMonitor(QObject *parent = 0);
     ~GamepadMonitor();
 
-public slots:
-    void printStatusL2();
-    void printStatusR2();
-
 private:
     QGamepad *m_gamepad;
 };

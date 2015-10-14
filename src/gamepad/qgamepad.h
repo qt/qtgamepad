@@ -69,6 +69,7 @@ class Q_GAMEPAD_EXPORT QGamepad : public QObject
     Q_PROPERTY(bool buttonDown READ buttonDown NOTIFY buttonDownChanged)
     Q_PROPERTY(bool buttonLeft READ buttonLeft NOTIFY buttonLeftChanged)
     Q_PROPERTY(bool buttonRight READ buttonRight NOTIFY buttonRightChanged)
+    Q_PROPERTY(bool buttonCenter READ buttonCenter NOTIFY buttonCenterChanged)
     Q_PROPERTY(bool buttonGuide READ buttonGuide NOTIFY buttonGuideChanged)
 public:
     explicit QGamepad(int deviceId = 0, QObject *parent = 0);
@@ -100,6 +101,7 @@ public:
     bool buttonDown() const;
     bool buttonLeft() const;
     bool buttonRight() const;
+    bool buttonCenter() const;
     bool buttonGuide() const;
 
 Q_SIGNALS:
@@ -127,6 +129,7 @@ Q_SIGNALS:
     void buttonDownChanged(bool value);
     void buttonLeftChanged(bool value);
     void buttonRightChanged(bool value);
+    void buttonCenterChanged(bool value);
     void buttonGuideChanged(bool value);
 
 public Q_SLOTS:
@@ -169,6 +172,7 @@ private:
     bool m_buttonDown;
     bool m_buttonLeft;
     bool m_buttonRight;
+    bool m_buttonCenter;
     bool m_buttonGuide;
 };
 

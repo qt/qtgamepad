@@ -72,6 +72,7 @@ public:
         ButtonDown,
         ButtonRight,
         ButtonLeft,
+        ButtonCenter,
         ButtonGuide
     };
     Q_DECLARE_FLAGS(GamepadButtons, GamepadButton)
