@@ -72,12 +72,13 @@ private:
     int m_fd;
     QSocketNotifier *m_notifier;
     struct AxisInfo {
-        AxisInfo() : minValue(0), maxValue(1) { }
-        AxisInfo(int minValue, int maxValue) : minValue(minValue), maxValue(maxValue) { }
+        AxisInfo() : minValue(0), maxValue(1), flat(0) { }
+        AxisInfo(int minValue, int maxValue, int flat) : minValue(minValue), maxValue(maxValue), flat(fabs((maxValue-minValue) ? flat/double(maxValue-minValue) : 0)) { }
         double normalized(int value) const;
 
         int minValue;
         int maxValue;
+        double flat;
     };
     QHash<int, AxisInfo> m_axisInfo;
     QGamepadManager::GamepadButton m_prevYHatButton;

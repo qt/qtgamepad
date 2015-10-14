@@ -159,27 +159,27 @@ bool QEvdevGamepadDevice::openDevice(const QByteArray &dev)
     }
 
     // Defaults. To be replaced with queried values below.
-    m_axisInfo.insert(ABS_X, AxisInfo(-32768, 32767));
-    m_axisInfo.insert(ABS_Y, AxisInfo(-32768, 32767));
-    m_axisInfo.insert(ABS_RX, AxisInfo(-32768, 32767));
-    m_axisInfo.insert(ABS_RY, AxisInfo(-32768, 32767));
-    m_axisInfo.insert(ABS_Z, AxisInfo(0, 255));
-    m_axisInfo.insert(ABS_RZ, AxisInfo(0, 255));
+    m_axisInfo.insert(ABS_X, AxisInfo(-32768, 32767, 0));
+    m_axisInfo.insert(ABS_Y, AxisInfo(-32768, 32767, 0));
+    m_axisInfo.insert(ABS_RX, AxisInfo(-32768, 32767, 0));
+    m_axisInfo.insert(ABS_RY, AxisInfo(-32768, 32767, 0));
+    m_axisInfo.insert(ABS_Z, AxisInfo(0, 255, 0));
+    m_axisInfo.insert(ABS_RZ, AxisInfo(0, 255, 0));
 
     input_absinfo absInfo;
     memset(&absInfo, 0, sizeof(input_absinfo));
     if (ioctl(m_fd, EVIOCGABS(ABS_X), &absInfo) >= 0)
-        m_axisInfo.insert(ABS_X, AxisInfo(absInfo.minimum, absInfo.maximum));
+        m_axisInfo.insert(ABS_X, AxisInfo(absInfo.minimum, absInfo.maximum, absInfo.flat));
     if (ioctl(m_fd, EVIOCGABS(ABS_Y), &absInfo) >= 0)
-        m_axisInfo.insert(ABS_Y, AxisInfo(absInfo.minimum, absInfo.maximum));
+        m_axisInfo.insert(ABS_Y, AxisInfo(absInfo.minimum, absInfo.maximum, absInfo.flat));
     if (ioctl(m_fd, EVIOCGABS(ABS_RX), &absInfo) >= 0)
-        m_axisInfo.insert(ABS_RX, AxisInfo(absInfo.minimum, absInfo.maximum));
+        m_axisInfo.insert(ABS_RX, AxisInfo(absInfo.minimum, absInfo.maximum, absInfo.flat));
     if (ioctl(m_fd, EVIOCGABS(ABS_RY), &absInfo) >= 0)
-        m_axisInfo.insert(ABS_RY, AxisInfo(absInfo.minimum, absInfo.maximum));
+        m_axisInfo.insert(ABS_RY, AxisInfo(absInfo.minimum, absInfo.maximum, absInfo.flat));
     if (ioctl(m_fd, EVIOCGABS(ABS_Z), &absInfo) >= 0)
-        m_axisInfo.insert(ABS_Z, AxisInfo(absInfo.minimum, absInfo.maximum));
+        m_axisInfo.insert(ABS_Z, AxisInfo(absInfo.minimum, absInfo.maximum, absInfo.flat));
     if (ioctl(m_fd, EVIOCGABS(ABS_RZ), &absInfo) >= 0)
-        m_axisInfo.insert(ABS_RZ, AxisInfo(absInfo.minimum, absInfo.maximum));
+        m_axisInfo.insert(ABS_RZ, AxisInfo(absInfo.minimum, absInfo.maximum, absInfo.flat));
 
     qCDebug(lcEGB) << "Axis limits:" << m_axisInfo;
 
@@ -231,10 +231,14 @@ err:
 
 double QEvdevGamepadDevice::AxisInfo::normalized(int value) const
 {
+    double ret = 0;
     if (minValue >= 0)
-        return (value - minValue) / double(maxValue - minValue);
+        ret = 2 * (value - double(maxValue - minValue) / 2) / double(maxValue - minValue);
     else
-        return 2 * (value - minValue) / double(maxValue - minValue) - 1.0;
+        ret = 2 * (value - minValue) / double(maxValue - minValue) - 1.0;
+    if (fabs(ret) <= fabs(flat))
+        ret = 0;
+    return ret;
 }
 
 void QEvdevGamepadDevice::processInputEvent(input_event *e)
