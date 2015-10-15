@@ -103,14 +103,7 @@ void QSdlGamepadBackend::pumpSdlEventLoop()
         } else if (event.type == SDL_CONTROLLERDEVICEADDED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
             //qDebug() << deviceEvent.timestamp << "Controller Added: " << deviceEvent.which;
-            SDL_GameController *controller = SDL_GameControllerOpen(deviceEvent.which);
-            if (controller) {
-                m_indexForController.insert(deviceEvent.which, controller);
-                int instanceID = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
-                m_instanceIdForIndex.insert(instanceID, deviceEvent.which);
-                //qDebug() << "Controller " << deviceEvent.which << " added with instanceId: " << instanceID;
-                emit gamepadAdded(deviceEvent.which);
-            }
+            addController(deviceEvent.which);
         } else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
             SDL_ControllerDeviceEvent deviceEvent = event.cdevice;
 
@@ -136,6 +129,9 @@ bool QSdlGamepadBackend::start()
     }
 
     m_eventLoopTimer.start(16);
+    for (int i = 0; i < SDL_NumJoysticks() ; i++)
+        addController(i);
+
     return true;
 }
 
@@ -180,6 +176,23 @@ QGamepadManager::GamepadButton QSdlGamepadBackend::translateButton(int button)
         return QGamepadManager::ButtonRight;
     default:
         return QGamepadManager::ButtonInvalid;
+    }
+}
+
+void QSdlGamepadBackend::addController(int index)
+{
+    char GUID[100];
+    SDL_JoystickGetGUIDString(SDL_JoystickGetDeviceGUID(index), GUID, 100);
+    if (!SDL_IsGameController(index))
+        return;
+
+    SDL_GameController *controller = SDL_GameControllerOpen(index);
+    if (controller) {
+        m_indexForController.insert(index, controller);
+        int instanceID = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
+        m_instanceIdForIndex.insert(instanceID, index);
+        //qDebug() << "Controller " << index << " added with instanceId: " << instanceID;
+        emit gamepadAdded(index);
     }
 }
 

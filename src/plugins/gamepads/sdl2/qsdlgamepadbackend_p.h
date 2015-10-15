@@ -63,7 +63,7 @@ protected:
 
 private:
     QGamepadManager::GamepadButton translateButton(int button);
-
+    void addController(int index);
     QTimer m_eventLoopTimer;
     QMap<int, SDL_GameController*> m_indexForController;
     QMap<int, int> m_instanceIdForIndex;
