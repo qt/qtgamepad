@@ -2,7 +2,14 @@ Qt Gamepad
 
 A Qt 5 module that adds support for getting events from gamepad devices on multiple platforms.
 
-Currently supports Linux (evdev), Windows (xinput) and OS X (via SDL2).
+Supported Platforms:
+Native Backends
+ - Linux (evdev)
+ - Window (xinput)
+ - Android
+ - iOS
+
+For other platforms there is a backend that uses SDL2 for gamepad support.
 
 This module provides classes that can:
  - Read input events from game controllers (Button and Axis events), both from C++ and Qt Quick (QML)
