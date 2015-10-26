@@ -226,10 +226,13 @@ ApplicationWindow {
 
     }
 
-
+    Connections {
+        target: GamepadManager
+        onGamepadConnected: gamepad.deviceId = deviceId
+    }
 
     Gamepad {
         id: gamepad
+        deviceId: GamepadManager.connectedGamepads.length > 0 ? GamepadManager.connectedGamepads[0] : -1
     }
-
 }

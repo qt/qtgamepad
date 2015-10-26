@@ -51,7 +51,12 @@ ApplicationWindow {
 
     Gamepad {
         id: gamepad1
-        index: 0
+        deviceId: GamepadManager.connectedGamepads.length > 0 ? GamepadManager.connectedGamepads[0] : -1
+    }
+
+    Connections {
+        target: GamepadManager
+        onGamepadConnected: gamepad1.deviceId = deviceId
     }
 
     GamepadKeyNavigation {

@@ -58,6 +58,9 @@ QGamepadManager::QGamepadManager() :
     connect(m_gamepadBackend, SIGNAL(gamepadAxisMoved(int,QGamepadManager::GamepadAxis,double)), this, SLOT(forwardGamepadAxisEvent(int,QGamepadManager::GamepadAxis,double)));
     connect(m_gamepadBackend, SIGNAL(gamepadButtonPressed(int,QGamepadManager::GamepadButton,double)), this, SLOT(forwardGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
     connect(m_gamepadBackend, SIGNAL(gamepadButtonReleased(int,QGamepadManager::GamepadButton)), this, SLOT(forwardGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
+    connect(m_gamepadBackend, &QGamepadBackend::buttonConfigured, this, &QGamepadManager::buttonConfigured);
+    connect(m_gamepadBackend, &QGamepadBackend::axisConfigured, this, &QGamepadManager::axisConfigured);
+    connect(m_gamepadBackend, &QGamepadBackend::configurationCanceled, this, &QGamepadManager::configurationCanceled);
 
     if (!m_gamepadBackend->start())
         qCWarning(gp) << "Failed to start gamepad backend";
@@ -105,6 +108,36 @@ bool QGamepadManager::isGamepadConnected(int deviceId)
 const QList<int> QGamepadManager::connectedGamepads() const
 {
     return m_connectedGamepads.toList();
+}
+
+bool QGamepadManager::isConfigurationNeeded(int deviceId)
+{
+    return m_gamepadBackend->isConfigurationNeeded(deviceId);
+}
+
+bool QGamepadManager::configureButton(int deviceId, QGamepadManager::GamepadButton button)
+{
+    return m_gamepadBackend->configureButton(deviceId, button);
+}
+
+bool QGamepadManager::configureAxis(int deviceId, QGamepadManager::GamepadAxis axis)
+{
+    return m_gamepadBackend->configureAxis(deviceId, axis);
+}
+
+bool QGamepadManager::setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button)
+{
+    return m_gamepadBackend->setCancelConfigureButton(deviceId, button);
+}
+
+void QGamepadManager::resetConfiguration(int deviceId)
+{
+    m_gamepadBackend->resetConfiguration(deviceId);
+}
+
+void QGamepadManager::setSettingsFile(const QString &file)
+{
+    m_gamepadBackend->setSettingsFile(file);
 }
 
 void QGamepadManager::forwardGamepadConnected(int deviceId)

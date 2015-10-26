@@ -48,18 +48,53 @@ class Q_GAMEPAD_EXPORT QGamepadBackend : public QObject
 {
     Q_OBJECT
 public:
+    template <typename T>
+    struct AxisInfo {
+        AxisInfo(T minValue = 0, T maxValue = 1, QGamepadManager::GamepadAxis gamepadAxis = QGamepadManager::AxisInvalid)
+            : minValue(minValue)
+            , maxValue(maxValue)
+            , gamepadAxis(gamepadAxis)
+        {}
+
+        virtual double normalized(T value) const
+        {
+            if (minValue >= 0)
+                return 2.0 * double(value - double(maxValue - minValue) / 2.0) / double(maxValue - minValue);
+            else
+                return 2.0 * double(value - minValue) / double(maxValue - minValue) - 1.0;
+        }
+        T minValue;
+        T maxValue;
+        QGamepadManager::GamepadAxis gamepadAxis;
+    };
+
+public:
     explicit QGamepadBackend(QObject *parent = 0);
+    virtual bool isConfigurationNeeded(int deviceId);
+    virtual void resetConfiguration(int deviceId);
+    virtual bool configureButton(int deviceId, QGamepadManager::GamepadButton button);
+    virtual bool configureAxis(int deviceId, QGamepadManager::GamepadAxis axis);
+    virtual bool setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button);
+    virtual void setSettingsFile(const QString &file);
+    virtual void saveSettings(int productId, const QVariant &value);
+    virtual QVariant readSettings(int productId);
 
 public slots:
     virtual bool start();
     virtual void stop();
 
 signals:
+    void buttonConfigured(int deviceId, QGamepadManager::GamepadButton button);
+    void axisConfigured(int deviceId, QGamepadManager::GamepadAxis axis);
+    void configurationCanceled(int deviceId);
     void gamepadAdded(int deviceId);
     void gamepadRemoved(int deviceId);
     void gamepadAxisMoved(int deviceId, QGamepadManager::GamepadAxis axis, double value);
     void gamepadButtonPressed(int deviceId, QGamepadManager::GamepadButton button, double value);
     void gamepadButtonReleased(int deviceId, QGamepadManager::GamepadButton button);
+
+protected:
+    QString m_settingsFilePath;
 };
 
 QT_END_NAMESPACE

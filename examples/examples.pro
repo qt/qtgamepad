@@ -5,5 +5,6 @@ SUBDIRS += simple \
 
 qtHaveModule(quick) {
     SUBDIRS += quickGamepad \
-               keyNavigation
+               keyNavigation \
+               configureButtons
 }

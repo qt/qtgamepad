@@ -58,35 +58,54 @@ public:
     QEvdevGamepadDevice(const QByteArray &dev, QEvdevGamepadBackend *backend);
     ~QEvdevGamepadDevice();
     QByteArray deviceName() const { return m_dev; }
+    int deviceId() const { return m_fd; }
+    void resetConfiguration();
+    bool isConfigurationNeeded();
+    bool configureButton(QGamepadManager::GamepadButton button);
+    bool configureAxis(QGamepadManager::GamepadAxis axis);
+    bool setCancelConfigureButton(QGamepadManager::GamepadButton button);
 
 private slots:
     void readData();
 
 private:
+    void saveData();
     void processInputEvent(input_event *e);
     bool openDevice(const QByteArray &dev);
 
     QByteArray m_dev;
     QEvdevGamepadBackend *m_backend;
-    int m_index;
     int m_fd;
+    int m_productId;
+    bool m_needsConfigure;
     QSocketNotifier *m_notifier;
-    struct AxisInfo {
-        AxisInfo() : minValue(0), maxValue(1), flat(0) { }
-        AxisInfo(int minValue, int maxValue, int flat) : minValue(minValue), maxValue(maxValue), flat(fabs((maxValue-minValue) ? flat/double(maxValue-minValue) : 0)) { }
+    struct EvdevAxisInfo : public QGamepadBackend::AxisInfo<int>
+    {
+        EvdevAxisInfo();
+        EvdevAxisInfo(int fd, quint16 abs, int minValue = 0, int maxValue = 1, QGamepadManager::GamepadAxis gamepadAxis = QGamepadManager::AxisInvalid);
         double normalized(int value) const;
-
-        int minValue;
-        int maxValue;
+        void setAbsInfo(int fd, int abs);
+        void restoreSavedData(int fd, int abs, const QVariantMap &value);
+        QVariantMap dataToSave() const;
         double flat;
+        QGamepadManager::GamepadButton gamepadMinButton;
+        QGamepadManager::GamepadButton gamepadMaxButton;
+        QGamepadManager::GamepadButton gamepadLastButton;
     };
-    QHash<int, AxisInfo> m_axisInfo;
-    QGamepadManager::GamepadButton m_prevYHatButton;
-    QGamepadManager::GamepadButton m_prevXHatButton;
-    friend QDebug operator<<(QDebug dbg, const QEvdevGamepadDevice::AxisInfo &axisInfo);
+    typedef QHash<int, EvdevAxisInfo> AxisMap;
+    AxisMap m_axisMap;
+
+    friend QDebug operator<<(QDebug dbg, const QEvdevGamepadDevice::EvdevAxisInfo &axisInfo);
+
+    typedef QHash<int, QGamepadManager::GamepadButton> ButtonsMap;
+    ButtonsMap m_buttonsMap;
+
+    QGamepadManager::GamepadButton m_configureButton;
+    QGamepadManager::GamepadAxis m_configureAxis;
+    QGamepadManager::GamepadButton m_configureCancelButton;
 };
 
-QDebug operator<<(QDebug dbg, const QEvdevGamepadDevice::AxisInfo &axisInfo);
+QDebug operator<<(QDebug dbg, const QEvdevGamepadDevice::EvdevAxisInfo &axisInfo);
 
 class QEvdevGamepadBackend : public QGamepadBackend
 {
@@ -96,7 +115,11 @@ public:
     QEvdevGamepadBackend();
     bool start() Q_DECL_OVERRIDE;
     void stop() Q_DECL_OVERRIDE;
-    int idForDevice(const QByteArray &device);
+    void resetConfiguration(int deviceId) Q_DECL_OVERRIDE;
+    bool isConfigurationNeeded(int deviceId) Q_DECL_OVERRIDE;
+    bool configureButton(int deviceId, QGamepadManager::GamepadButton button) Q_DECL_OVERRIDE;
+    bool configureAxis(int deviceId, QGamepadManager::GamepadAxis axis) Q_DECL_OVERRIDE;
+    bool setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button) Q_DECL_OVERRIDE;
 
 private slots:
     void handleAddedDevice(const QString &device);
@@ -104,11 +127,10 @@ private slots:
 
 private:
     QEvdevGamepadDevice *newDevice(const QByteArray &device);
+    QEvdevGamepadDevice *device(int deviceId);
 
     QDeviceDiscovery *m_discovery;
     QVector<QEvdevGamepadDevice *> m_devices;
-    QHash<QByteArray, int> m_devIndex;
-    int m_nextIndex;
 };
 
 QT_END_NAMESPACE

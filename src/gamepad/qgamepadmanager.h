@@ -90,6 +90,14 @@ public:
     bool isGamepadConnected(int deviceId);
     const QList<int> connectedGamepads() const;
 
+public Q_SLOTS:
+    bool isConfigurationNeeded(int deviceId);
+    bool configureButton(int deviceId, GamepadButton button);
+    bool configureAxis(int deviceId, GamepadAxis axis);
+    bool setCancelConfigureButton(int deviceId, GamepadButton button);
+    void resetConfiguration(int deviceId);
+    void setSettingsFile(const QString &file);
+
 Q_SIGNALS:
     void connectedGamepadsChanged();
     void gamepadConnected(int deviceId);
@@ -97,6 +105,9 @@ Q_SIGNALS:
     void gamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
     void gamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
     void gamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
+    void buttonConfigured(int deviceId, QGamepadManager::GamepadButton button);
+    void axisConfigured(int deviceId, QGamepadManager::GamepadAxis axis);
+    void configurationCanceled(int deviceId);
 
 private Q_SLOTS:
     void forwardGamepadConnected(int deviceId);
