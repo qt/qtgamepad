@@ -58,10 +58,13 @@ public:
 
         virtual double normalized(T value) const
         {
-            if (minValue >= 0)
-                return 2.0 * double(value - double(maxValue - minValue) / 2.0) / double(maxValue - minValue);
-            else
+            if (gamepadAxis == QGamepadManager::AxisInvalid && minValue >= 0) {
+                //case 0.0 - 1.0
+                return double(value - minValue) / double(maxValue - minValue);
+            } else {
+                //case -1.0 - 1.0
                 return 2.0 * double(value - minValue) / double(maxValue - minValue) - 1.0;
+            }
         }
         T minValue;
         T maxValue;
