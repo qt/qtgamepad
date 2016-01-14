@@ -44,6 +44,8 @@ QT_BEGIN_NAMESPACE
 
 QGamepadKeyNavigation::QGamepadKeyNavigation(QObject *parent)
     : QObject(parent)
+    , m_active(true)
+    , m_gamepad(Q_NULLPTR)
     , m_buttonL2Pressed(false)
     , m_buttonR2Pressed(false)
 {
