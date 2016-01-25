@@ -1,21 +1,19 @@
-TARGET = iosgamepad
+TARGET = darwingamepad
 QT += gamepad gamepad-private
 
 PLUGIN_TYPE = gamepads
 PLUGIN_EXTENDS = gamepad
-PLUGIN_CLASS_NAME = QIosGamepadBackendPlugin
+PLUGIN_CLASS_NAME = QDarwinGamepadBackendPlugin
 load(qt_plugin)
 
 LIBS += -framework GameController -framework Foundation
 
-HEADERS += qiosgamepadbackend_p.h
+HEADERS += qdarwingamepadbackend_p.h
 OBJECTIVE_SOURCES += \
-    qiosgamepadbackend.mm
+    qdarwingamepadbackend.mm
 
 SOURCES += \
     main.cpp
 
 OTHER_FILES += \
-    ios.json
-
-
+    darwin.json

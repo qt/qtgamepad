@@ -34,8 +34,8 @@
 **
 ****************************************************************************/
 
-#ifndef QIOSGAMEPADCONTROLLER_H
-#define QIOSGAMEPADCONTROLLER_H
+#ifndef QDARWINGAMEPADCONTROLLER_H
+#define QDARWINGAMEPADCONTROLLER_H
 
 #include <QtCore/QTimer>
 #include <QtCore/QMap>
@@ -43,35 +43,35 @@
 #include <QtGamepad/QGamepadManager>
 #include <QtGamepad/private/qgamepadbackend_p.h>
 
-Q_FORWARD_DECLARE_OBJC_CLASS(QT_MANGLE_NAMESPACE(IosGamepadManager));
+Q_FORWARD_DECLARE_OBJC_CLASS(QT_MANGLE_NAMESPACE(DarwinGamepadManager));
 
 QT_BEGIN_NAMESPACE
 
-class QIosGamepadBackend : public QGamepadBackend
+class QDarwinGamepadBackend : public QGamepadBackend
 {
     Q_OBJECT
 public:
-    explicit QIosGamepadBackend(QObject *parent = 0);
-    ~QIosGamepadBackend();
+    explicit QDarwinGamepadBackend(QObject *parent = 0);
+    ~QDarwinGamepadBackend();
 
 protected:
     bool start();
     void stop();
 
 public slots:
-    void iosGamepadAdded(int index);
-    void iosGamepadRemoved(int index);
-    void iosGamepadAxisMoved(int index, QGamepadManager::GamepadAxis axis, double value);
-    void iosGamepadButtonPressed(int index, QGamepadManager::GamepadButton button, double value);
-    void iosGamepadButtonReleased(int index, QGamepadManager::GamepadButton button);
+    void darwinGamepadAdded(int index);
+    void darwinGamepadRemoved(int index);
+    void darwinGamepadAxisMoved(int index, QGamepadManager::GamepadAxis axis, double value);
+    void darwinGamepadButtonPressed(int index, QGamepadManager::GamepadButton button, double value);
+    void darwinGamepadButtonReleased(int index, QGamepadManager::GamepadButton button);
     void handlePauseButton(int index);
 
 private:
-    QT_MANGLE_NAMESPACE(IosGamepadManager) *m_iosGamepadManager;
+    QT_MANGLE_NAMESPACE(DarwinGamepadManager) *m_darwinGamepadManager;
     bool m_isMonitoringActive;
     QMap<int, bool> m_pauseButtonMap;
 };
 
 QT_END_NAMESPACE
 
-#endif // QIOSGAMEPADCONTROLLER_H
+#endif // QDARWINGAMEPADCONTROLLER_H

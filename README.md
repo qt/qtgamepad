@@ -7,7 +7,7 @@ Native Backends
  - Linux (evdev)
  - Window (xinput)
  - Android
- - iOS
+ - OS X/iOS/tvOS
 
 For other platforms there is a backend that uses SDL2 for gamepad support.
 

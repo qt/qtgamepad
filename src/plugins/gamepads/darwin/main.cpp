@@ -37,23 +37,23 @@
 #include <QtGamepad/private/qgamepadbackendfactory_p.h>
 #include <QtGamepad/private/qgamepadbackendplugin_p.h>
 
-#include "qiosgamepadbackend_p.h"
+#include "qdarwingamepadbackend_p.h"
 
 QT_BEGIN_NAMESPACE
 
-class QIosGamepadBackendPlugin : public QGamepadBackendPlugin
+class QDarwinGamepadBackendPlugin : public QGamepadBackendPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID QtGamepadBackendFactoryInterface_iid FILE "ios.json")
+    Q_PLUGIN_METADATA(IID QtGamepadBackendFactoryInterface_iid FILE "darwin.json")
 public:
     QGamepadBackend *create(const QString &key, const QStringList &paramList) Q_DECL_OVERRIDE;
 };
 
-QGamepadBackend *QIosGamepadBackendPlugin::create(const QString &key, const QStringList &paramList) {
+QGamepadBackend *QDarwinGamepadBackendPlugin::create(const QString &key, const QStringList &paramList) {
     Q_UNUSED(key)
     Q_UNUSED(paramList)
 
-    return new QIosGamepadBackend();
+    return new QDarwinGamepadBackend();
 }
 
 QT_END_NAMESPACE
