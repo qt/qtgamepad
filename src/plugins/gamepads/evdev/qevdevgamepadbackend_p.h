@@ -58,7 +58,7 @@ public:
     QEvdevGamepadDevice(const QByteArray &dev, QEvdevGamepadBackend *backend);
     ~QEvdevGamepadDevice();
     QByteArray deviceName() const { return m_dev; }
-    int deviceId() const { return m_fd; }
+    int deviceId() const { return m_productId; }
     void resetConfiguration();
     bool isConfigurationNeeded();
     bool configureButton(QGamepadManager::GamepadButton button);

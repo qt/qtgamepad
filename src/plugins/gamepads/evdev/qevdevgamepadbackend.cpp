@@ -222,8 +222,9 @@ QEvdevGamepadDevice::~QEvdevGamepadDevice()
 {
     if (m_fd != -1)
         QT_CLOSE(m_fd);
-    if (m_fd >= 0)
-        emit m_backend->gamepadRemoved(m_fd);
+
+    if (m_productId)
+        emit m_backend->gamepadRemoved(m_productId);
 }
 
 void QEvdevGamepadDevice::resetConfiguration()
@@ -300,7 +301,6 @@ bool QEvdevGamepadDevice::openDevice(const QByteArray &dev)
     if (m_fd >= 0) {
         m_notifier = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
         connect(m_notifier, SIGNAL(activated(int)), this, SLOT(readData()));
-        emit m_backend->gamepadAdded(m_fd);
         qCDebug(lcEGB) << "Successfully opened" << dev;
     } else {
         qErrnoWarning(errno, "Gamepad: Cannot open input device %s", qPrintable(dev));
@@ -308,10 +308,9 @@ bool QEvdevGamepadDevice::openDevice(const QByteArray &dev)
     }
 
     input_id id;
-    if (ioctl(m_fd, EVIOCGID, &id) >= 0)
+    if (ioctl(m_fd, EVIOCGID, &id) >= 0) {
         m_productId = id.product;
 
-    if (m_productId) {
         QVariant settings = m_backend->readSettings(m_productId);
         if (!settings.isNull()) {
             m_needsConfigure = false;
@@ -325,7 +324,14 @@ bool QEvdevGamepadDevice::openDevice(const QByteArray &dev)
             for (QVariantMap::const_iterator it = data.begin(); it != data.end(); ++it)
                 m_buttonsMap[it.key().toInt()] = QGamepadManager::GamepadButton(it.value().toInt());
         }
+
+        emit m_backend->gamepadAdded(m_productId);
+    } else {
+        QT_CLOSE(m_fd);
+        m_fd = -1;
+        return false;
     }
+
     if (m_needsConfigure)
         resetConfiguration();
 
@@ -412,7 +418,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
                  m_configureAxis != QGamepadManager::AxisInvalid)) {
             m_configureButton = QGamepadManager::ButtonInvalid;
             m_configureAxis = QGamepadManager::AxisInvalid;
-            emit m_backend->configurationCanceled(m_fd);
+            emit m_backend->configurationCanceled(m_productId);
             return;
         }
 
@@ -421,7 +427,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
             QGamepadManager::GamepadButton but = m_configureButton;
             m_configureButton = QGamepadManager::ButtonInvalid;
             saveData();
-            emit m_backend->buttonConfigured(m_fd, but);
+            emit m_backend->buttonConfigured(m_productId, but);
         }
 
         it = m_buttonsMap.find(e->code);
@@ -430,19 +436,24 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
 
         if (btn != QGamepadManager::ButtonInvalid) {
             if (pressed)
-                emit m_backend->gamepadButtonPressed(m_fd, btn, 1.0);
+                emit m_backend->gamepadButtonPressed(m_productId, btn, 1.0);
             else
-                emit m_backend->gamepadButtonReleased(m_fd, btn);
+                emit m_backend->gamepadButtonReleased(m_productId, btn);
         }
     } else if (e->type == EV_ABS) {
         if (m_configureAxis != QGamepadManager::AxisInvalid) {
-            m_axisMap.insert(e->code, EvdevAxisInfo(m_fd, e->code, -32768, 32767, m_configureAxis));
+            EvdevAxisInfo inf(m_fd, e->code, -32768, 32767, m_configureAxis);
+            if (fabs(inf.normalized(e->value)) == 1) {
+                m_axisMap.insert(e->code, EvdevAxisInfo(m_fd, e->code, -32768, 32767, m_configureAxis));
 
-            QGamepadManager::GamepadAxis axis = m_configureAxis;
-            m_configureAxis = QGamepadManager::AxisInvalid;
+                QGamepadManager::GamepadAxis axis = m_configureAxis;
+                m_configureAxis = QGamepadManager::AxisInvalid;
 
-            saveData();
-            emit m_backend->axisConfigured(m_fd, axis);
+                saveData();
+                emit m_backend->axisConfigured(m_productId, axis);
+            } else {
+                return;
+            }
         }
 
         AxisMap::iterator it = m_axisMap.find(e->code);
@@ -472,7 +483,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
                 QGamepadManager::GamepadButton but = m_configureButton;
                 m_configureButton = QGamepadManager::ButtonInvalid;
                 saveData();
-                emit m_backend->buttonConfigured(m_fd, but);
+                emit m_backend->buttonConfigured(m_productId, but);
             }
         }
 
@@ -485,27 +496,27 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
         double val = info.normalized(e->value);
 
         if (info.gamepadAxis != QGamepadManager::AxisInvalid)
-            emit m_backend->gamepadAxisMoved(m_fd, info.gamepadAxis, val);
+            emit m_backend->gamepadAxisMoved(m_productId, info.gamepadAxis, val);
 
         if (info.gamepadMaxButton == info.gamepadMinButton &&
                 info.gamepadMaxButton != QGamepadManager::ButtonInvalid) {
             if (val)
-                emit m_backend->gamepadButtonPressed(m_fd, info.gamepadMaxButton, val);
+                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMaxButton, val);
             else
-                emit m_backend->gamepadButtonReleased(m_fd, info.gamepadMaxButton);
+                emit m_backend->gamepadButtonReleased(m_productId, info.gamepadMaxButton);
         } else {
             if (info.gamepadMaxButton != QGamepadManager::ButtonInvalid
                     && val == 1.0) {
                 info.gamepadLastButton = info.gamepadMaxButton;
-                emit m_backend->gamepadButtonPressed(m_fd, info.gamepadMaxButton, val);
+                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMaxButton, val);
             } else if (info.gamepadMinButton != QGamepadManager::ButtonInvalid
                        && val == -1.0) {
                 info.gamepadLastButton = info.gamepadMinButton;
-                emit m_backend->gamepadButtonPressed(m_fd, info.gamepadMinButton, val);
+                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMinButton, val);
             } else if (!val && info.gamepadLastButton != QGamepadManager::ButtonInvalid) {
                 QGamepadManager::GamepadButton but = info.gamepadLastButton;
                 info.gamepadLastButton = QGamepadManager::ButtonInvalid;
-                emit m_backend->gamepadButtonReleased(m_fd, but);
+                emit m_backend->gamepadButtonReleased(m_productId, but);
             }
         }
     }
