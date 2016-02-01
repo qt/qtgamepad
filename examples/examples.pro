@@ -1,10 +1,10 @@
 TEMPLATE = subdirs
 
-SUBDIRS += simple \
-    mouseItem
+SUBDIRS += simple
 
 qtHaveModule(quick) {
     SUBDIRS += quickGamepad \
                keyNavigation \
-               configureButtons
+               configureButtons \
+               mouseItem
 }
