@@ -482,6 +482,8 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
             if (save) {
                 QGamepadManager::GamepadButton but = m_configureButton;
                 m_configureButton = QGamepadManager::ButtonInvalid;
+                if (but == QGamepadManager::ButtonL2 || but == QGamepadManager::ButtonR2)
+                    m_axisMap.insert(e->code, axisInfo);
                 saveData();
                 emit m_backend->buttonConfigured(m_productId, but);
             }
