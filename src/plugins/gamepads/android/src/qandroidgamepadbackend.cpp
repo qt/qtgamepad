@@ -1,6 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) 2015 BogDan Vatra <bogdan@kde.org>
+** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the Qt Gamepad module
 **
