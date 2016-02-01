@@ -501,7 +501,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
         if (info.gamepadMaxButton == info.gamepadMinButton &&
                 info.gamepadMaxButton != QGamepadManager::ButtonInvalid) {
             if (val)
-                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMaxButton, val);
+                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMaxButton, fabs(val));
             else
                 emit m_backend->gamepadButtonReleased(m_productId, info.gamepadMaxButton);
         } else {
@@ -512,7 +512,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
             } else if (info.gamepadMinButton != QGamepadManager::ButtonInvalid
                        && val == -1.0) {
                 info.gamepadLastButton = info.gamepadMinButton;
-                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMinButton, val);
+                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMinButton, -val);
             } else if (!val && info.gamepadLastButton != QGamepadManager::ButtonInvalid) {
                 QGamepadManager::GamepadButton but = info.gamepadLastButton;
                 info.gamepadLastButton = QGamepadManager::ButtonInvalid;
