@@ -80,8 +80,8 @@
             [connectedControllers addObject:[NSNull null]];
 
         //Add monitoring for any alrready connected controllers
-        for (int i = 0; i < [[GCController controllers] count]; ++i) {
-            addMonitoredController:[GCController controllers][i];
+        for (NSUInteger i = 0; i < [[GCController controllers] count]; ++i) {
+            [self addMonitoredController:[GCController controllers][i]];
         }
     }
     return self;
@@ -105,7 +105,7 @@
             break;
         }
     }
-    controller.playerIndex = index;
+    controller.playerIndex = GCControllerPlayerIndex(index);
 
     QMetaObject::invokeMethod(backend, "iosGamepadAdded", Qt::AutoConnection, Q_ARG(int, index));
 
