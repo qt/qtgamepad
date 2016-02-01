@@ -176,8 +176,8 @@ private:
     bool m_buttonGuide;
 };
 
-Q_DECLARE_METATYPE(QGamepad*)
-
 QT_END_NAMESPACE
+
+Q_DECLARE_METATYPE(QGamepad*)
 
 #endif // QGAMEPAD_H

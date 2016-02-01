@@ -130,9 +130,9 @@ private:
 
 };
 
+QT_END_NAMESPACE
+
 Q_DECLARE_METATYPE(QGamepadManager::GamepadButton)
 Q_DECLARE_METATYPE(QGamepadManager::GamepadAxis)
-
-QT_END_NAMESPACE
 
 #endif // JOYSTICKMANAGER_H
