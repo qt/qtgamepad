@@ -436,8 +436,51 @@
                                           Q_ARG(QGamepadManager::GamepadButton, QGamepadManager::ButtonY));
             }
         }];
-
     }
+#ifdef Q_OS_TVOS
+    else if (controller.microGamepad) {
+        //leftThumbstick
+        [controller.microGamepad.dpad setValueChangedHandler:^(GCControllerDirectionPad *dpad, float xValue, float yValue) {
+            Q_UNUSED(dpad)
+            QMetaObject::invokeMethod(backend, "darwinGamepadAxisMoved", Qt::AutoConnection,
+                                      Q_ARG(int, index),
+                                      Q_ARG(QGamepadManager::GamepadAxis, QGamepadManager::AxisLeftX),
+                                      Q_ARG(double, xValue));
+            QMetaObject::invokeMethod(backend, "darwinGamepadAxisMoved", Qt::AutoConnection,
+                                      Q_ARG(int, index),
+                                      Q_ARG(QGamepadManager::GamepadAxis, QGamepadManager::AxisLeftY),
+                                      Q_ARG(double, -yValue));
+        }];
+        //buttonA
+        [controller.microGamepad.buttonA setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
+            Q_UNUSED(button)
+            if (pressed) {
+                QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
+                                          Q_ARG(int, index),
+                                          Q_ARG(QGamepadManager::GamepadButton, QGamepadManager::ButtonA),
+                                          Q_ARG(double, value));
+            } else {
+                QMetaObject::invokeMethod(backend, "darwinGamepadButtonReleased", Qt::AutoConnection,
+                                          Q_ARG(int, index),
+                                          Q_ARG(QGamepadManager::GamepadButton, QGamepadManager::ButtonA));
+            }
+        }];
+        //buttonX
+        [controller.microGamepad.buttonX setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
+            Q_UNUSED(button)
+            if (pressed) {
+                QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
+                                          Q_ARG(int, index),
+                                          Q_ARG(QGamepadManager::GamepadButton, QGamepadManager::ButtonX),
+                                          Q_ARG(double, value));
+            } else {
+                QMetaObject::invokeMethod(backend, "darwinGamepadButtonReleased", Qt::AutoConnection,
+                                          Q_ARG(int, index),
+                                          Q_ARG(QGamepadManager::GamepadButton, QGamepadManager::ButtonX));
+            }
+        }];
+    }
+#endif
 }
 
 -(void)removeMonitoredController:(GCController *)controller
