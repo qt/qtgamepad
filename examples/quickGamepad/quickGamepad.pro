@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick gamepad
 
 SOURCES += main.cpp
 
