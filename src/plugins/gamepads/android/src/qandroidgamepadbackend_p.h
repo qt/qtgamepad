@@ -101,10 +101,15 @@ public:
                 lastValue = value;
                 return true;
             }
+            void restoreSavedData(const QVariantMap &value);
+            QVariantMap dataToSave() const;
 
             double flatArea = -1;
             double fuzz = 0;
             double lastValue = 0;
+            QGamepadManager::GamepadButton gamepadMinButton = QGamepadManager::ButtonInvalid;
+            QGamepadManager::GamepadButton gamepadMaxButton = QGamepadManager::ButtonInvalid;
+            QGamepadManager::GamepadButton gamepadLastButton = QGamepadManager::ButtonInvalid;
         };
         QHash<int, AndroidAxisInfo> axisMap;
         QHash<int, QGamepadManager::GamepadButton> buttonsMap;
