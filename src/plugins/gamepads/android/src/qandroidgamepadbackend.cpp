@@ -148,13 +148,14 @@ namespace {
                 allAndroidAxes.push_back(motionField("AXIS_WHEEL"));
             }
 
-            acceptedSources.push_back(inputDeviceField("SOURCE_DPAD"));
             if (QtAndroidPrivate::androidSdkVersion() >= 12) {
                 acceptedSources.push_back(inputDeviceField("SOURCE_GAMEPAD"));
                 acceptedSources.push_back(inputDeviceField("SOURCE_CLASS_JOYSTICK"));
                 if (QtAndroidPrivate::androidSdkVersion() >= 21) {
                     acceptedSources.push_back(inputDeviceField("SOURCE_HDMI"));
                 }
+            } else {
+                acceptedSources.push_back(inputDeviceField("SOURCE_DPAD"));
             }
 
             ACTION_DOWN = keyField("ACTION_DOWN");
