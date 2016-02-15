@@ -34,3 +34,6 @@ ANDROID_JAR_DEPENDENCIES = \
 
 ANDROID_LIB_DEPENDENCIES = \
     plugins/gamepads/libandroidgamepad.so
+
+ANDROID_FEATURES = \
+    android.hardware.gamepad
