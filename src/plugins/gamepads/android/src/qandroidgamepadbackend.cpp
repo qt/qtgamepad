@@ -120,14 +120,18 @@ namespace {
                 axisMap[motionField("AXIS_HAT_Y")].gamepadAxis = QGamepadManager::AxisLeftY;
                 axisMap[motionField("AXIS_Z")].gamepadAxis = QGamepadManager::AxisRightX;
                 axisMap[motionField("AXIS_RZ")].gamepadAxis = QGamepadManager::AxisRightY;
-                auto &axis = axisMap[motionField("AXIS_LTRIGGER")];
-                axis.gamepadAxis = QGamepadManager::AxisInvalid;
-                axis.gamepadMinButton = QGamepadManager::ButtonL2;
-                axis.gamepadMaxButton = QGamepadManager::ButtonL2;
-                axis = axisMap[motionField("AXIS_RTRIGGER")];
-                axis.gamepadAxis = QGamepadManager::AxisInvalid;
-                axis.gamepadMinButton = QGamepadManager::ButtonR2;
-                axis.gamepadMaxButton = QGamepadManager::ButtonR2;
+                {
+                    auto &axis = axisMap[motionField("AXIS_LTRIGGER")];
+                    axis.gamepadAxis = QGamepadManager::AxisInvalid;
+                    axis.gamepadMinButton = QGamepadManager::ButtonL2;
+                    axis.gamepadMaxButton = QGamepadManager::ButtonL2;
+                }
+                {
+                    auto &axis = axisMap[motionField("AXIS_RTRIGGER")];
+                    axis.gamepadAxis = QGamepadManager::AxisInvalid;
+                    axis.gamepadMinButton = QGamepadManager::ButtonR2;
+                    axis.gamepadMaxButton = QGamepadManager::ButtonR2;
+                }
 
                 allAndroidAxes.push_back(motionField("AXIS_X"));
                 allAndroidAxes.push_back(motionField("AXIS_Y"));
