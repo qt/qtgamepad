@@ -364,9 +364,12 @@ void QAndroidGamepadBackend::resetConfiguration(int deviceId)
     if (it == m_devices.end())
         return;
 
-    int productId = it.value().productId;
-    it.value() = *g_defaultMapping();
-    it.value().productId = productId;
+    it.value().axisMap.clear();
+    it.value().buttonsMap.clear();
+    it.value().calibrateButton = QGamepadManager::ButtonInvalid;
+    it.value().calibrateAxis = QGamepadManager::AxisInvalid;
+    it.value().cancelConfigurationButton = QGamepadManager::ButtonInvalid;
+    it.value().needsConfigure = false;
 }
 
 bool QAndroidGamepadBackend::handleKeyEvent(jobject event)
