@@ -267,7 +267,7 @@ void QAndroidGamepadBackend::addDevice(int deviceId)
 
     if (acceptable) {
         m_devices.insert(deviceId, *g_defaultMapping());
-        int productId = inputDevice.callMethod<jint>("getProductId", "()I");
+        int productId = qHash(inputDevice.callObjectMethod("getDescriptor", "()Ljava/lang/String;").toString());
         m_devices[deviceId].productId = productId;
         if (productId) {
             QVariant settings = readSettings(productId);
