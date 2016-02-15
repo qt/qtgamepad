@@ -118,7 +118,7 @@ public:
         QGamepadManager::GamepadAxis calibrateAxis = QGamepadManager::AxisInvalid;
         QGamepadManager::GamepadButton cancelConfigurationButton = QGamepadManager::ButtonInvalid;
         int productId = 0;
-        bool needsConfigure = true;
+        bool needsConfigure = false;
     };
 
 private:
