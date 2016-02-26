@@ -77,10 +77,10 @@ QGamepadBackend *QGamepadBackendFactory::create(const QString &name, const QStri
 #ifndef QT_NO_LIBRARY
     if (!pluginPath.isEmpty()) {
         QCoreApplication::addLibraryPath(pluginPath);
-        if (QGamepadBackend *ret = qLoadPlugin1<QGamepadBackend, QGamepadBackendPlugin>(directLoader(), name, args))
+        if (QGamepadBackend *ret = qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(directLoader(), name, args))
             return ret;
     }
-    if (QGamepadBackend *ret = qLoadPlugin1<QGamepadBackend, QGamepadBackendPlugin>(loader(), name, args))
+    if (QGamepadBackend *ret = qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(loader(), name, args))
         return ret;
 #endif
     return 0;
