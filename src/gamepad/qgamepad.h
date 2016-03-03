@@ -72,7 +72,7 @@ class Q_GAMEPAD_EXPORT QGamepad : public QObject
     Q_PROPERTY(bool buttonCenter READ buttonCenter NOTIFY buttonCenterChanged)
     Q_PROPERTY(bool buttonGuide READ buttonGuide NOTIFY buttonGuideChanged)
 public:
-    explicit QGamepad(int deviceId = 0, QObject *parent = 0);
+    explicit QGamepad(int deviceId = 0, QObject *parent = nullptr);
     ~QGamepad();
 
     int deviceId() const;
