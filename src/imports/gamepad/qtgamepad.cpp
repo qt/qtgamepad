@@ -45,7 +45,7 @@
 
 QT_BEGIN_NAMESPACE
 
-static QObject *gamepadmanager_singletontype_provider(QQmlEngine */*engine*/, QJSEngine */*scriptEngine*/)
+static QObject *gamepadmanager_singletontype_provider(QQmlEngine * /* engine */, QJSEngine * /* scriptEngine */)
 {
     QGamepadManager *manager = QGamepadManager::instance();
     QQmlEngine::setObjectOwnership(manager, QQmlEngine::CppOwnership);

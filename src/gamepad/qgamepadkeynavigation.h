@@ -70,7 +70,7 @@ class Q_GAMEPAD_EXPORT QGamepadKeyNavigation : public QObject
     Q_PROPERTY(Qt::Key buttonL3Key READ buttonL3Key WRITE setButtonL3Key NOTIFY buttonL3KeyChanged)
     Q_PROPERTY(Qt::Key buttonR3Key READ buttonR3Key WRITE setButtonR3Key NOTIFY buttonR3KeyChanged)
 public:
-    explicit QGamepadKeyNavigation(QObject *parent = 0);
+    explicit QGamepadKeyNavigation(QObject *parent = nullptr);
 
     bool active() const;
     QGamepad *gamepad() const;

@@ -120,6 +120,18 @@ namespace {
                 axisMap[motionField("AXIS_HAT_Y")].gamepadAxis = QGamepadManager::AxisLeftY;
                 axisMap[motionField("AXIS_Z")].gamepadAxis = QGamepadManager::AxisRightX;
                 axisMap[motionField("AXIS_RZ")].gamepadAxis = QGamepadManager::AxisRightY;
+                {
+                    auto &axis = axisMap[motionField("AXIS_LTRIGGER")];
+                    axis.gamepadAxis = QGamepadManager::AxisInvalid;
+                    axis.gamepadMinButton = QGamepadManager::ButtonL2;
+                    axis.gamepadMaxButton = QGamepadManager::ButtonL2;
+                }
+                {
+                    auto &axis = axisMap[motionField("AXIS_RTRIGGER")];
+                    axis.gamepadAxis = QGamepadManager::AxisInvalid;
+                    axis.gamepadMinButton = QGamepadManager::ButtonR2;
+                    axis.gamepadMaxButton = QGamepadManager::ButtonR2;
+                }
 
                 allAndroidAxes.push_back(motionField("AXIS_X"));
                 allAndroidAxes.push_back(motionField("AXIS_Y"));
@@ -140,13 +152,14 @@ namespace {
                 allAndroidAxes.push_back(motionField("AXIS_WHEEL"));
             }
 
-            acceptedSources.push_back(inputDeviceField("SOURCE_DPAD"));
             if (QtAndroidPrivate::androidSdkVersion() >= 12) {
                 acceptedSources.push_back(inputDeviceField("SOURCE_GAMEPAD"));
                 acceptedSources.push_back(inputDeviceField("SOURCE_CLASS_JOYSTICK"));
                 if (QtAndroidPrivate::androidSdkVersion() >= 21) {
                     acceptedSources.push_back(inputDeviceField("SOURCE_HDMI"));
                 }
+            } else {
+                acceptedSources.push_back(inputDeviceField("SOURCE_DPAD"));
             }
 
             ACTION_DOWN = keyField("ACTION_DOWN");
@@ -186,21 +199,42 @@ namespace {
 
     const char qtGamePadClassName[] = "org/qtproject/qt5/android/gamepad/QtGamepad";
 
-    inline void setAxisInfo(QJNIObjectPrivate &motionRange, QAndroidGamepadBackend::Mapping::AndroidAxisInfo &info)
+    inline void setAxisInfo(QJNIObjectPrivate &event, int axis, QAndroidGamepadBackend::Mapping::AndroidAxisInfo &info)
     {
-        if (motionRange.isValid()) {
-            info.flatArea = motionRange.callMethod<jfloat>("getFlat", "()F");
-            info.minValue = motionRange.callMethod<jfloat>("getMin", "()F");
-            info.maxValue = motionRange.callMethod<jfloat>("getMax", "()F");
-            info.fuzz = motionRange.callMethod<jfloat>("getFuzz", "()F");
-        } else {
-            info.flatArea = 0;
+        QJNIObjectPrivate device(event.callObjectMethod("getDevice", "()Landroid/view/InputDevice;"));
+        if (device.isValid()) {
+            const int source = event.callMethod<jint>("getSource", "()I");
+            QJNIObjectPrivate motionRange = device.callObjectMethod("getMotionRange","(II)Landroid/view/InputDevice$MotionRange;", axis, source);
+            if (motionRange.isValid()) {
+                info.flatArea = motionRange.callMethod<jfloat>("getFlat", "()F");
+                info.minValue = motionRange.callMethod<jfloat>("getMin", "()F");
+                info.maxValue = motionRange.callMethod<jfloat>("getMax", "()F");
+                info.fuzz = motionRange.callMethod<jfloat>("getFuzz", "()F");
+                return;
+            }
         }
+        info.flatArea = 0;
     }
 
 } // namespace
 
 Q_GLOBAL_STATIC(DefaultMapping, g_defaultMapping)
+
+void QAndroidGamepadBackend::Mapping::AndroidAxisInfo::restoreSavedData(const QVariantMap &value)
+{
+    gamepadAxis = QGamepadManager::GamepadAxis(value[QLatin1Literal("axis")].toInt());
+    gamepadMinButton = QGamepadManager::GamepadButton(value[QLatin1Literal("minButton")].toInt());
+    gamepadMaxButton = QGamepadManager::GamepadButton(value[QLatin1Literal("maxButton")].toInt());
+}
+
+QVariantMap QAndroidGamepadBackend::Mapping::AndroidAxisInfo::dataToSave() const
+{
+    QVariantMap data;
+    data[QLatin1Literal("axis")] = gamepadAxis;
+    data[QLatin1Literal("minButton")] = gamepadMinButton;
+    data[QLatin1Literal("maxButton")] = gamepadMaxButton;
+    return data;
+}
 
 QAndroidGamepadBackend::QAndroidGamepadBackend(QObject *parent)
     : QGamepadBackend(parent)
@@ -233,7 +267,7 @@ void QAndroidGamepadBackend::addDevice(int deviceId)
 
     if (acceptable) {
         m_devices.insert(deviceId, *g_defaultMapping());
-        int productId = inputDevice.callMethod<jint>("getProductId", "()I");
+        int productId = qHash(inputDevice.callObjectMethod("getDescriptor", "()Ljava/lang/String;").toString());
         m_devices[deviceId].productId = productId;
         if (productId) {
             QVariant settings = readSettings(productId);
@@ -243,7 +277,7 @@ void QAndroidGamepadBackend::addDevice(int deviceId)
 
                 QVariantMap data = settings.toMap()[AXES_KEY].toMap();
                 for (QVariantMap::const_iterator it = data.begin(); it != data.end(); ++it)
-                    deviceInfo.axisMap[it.key().toInt()].gamepadAxis = QGamepadManager::GamepadAxis(it.value().toInt());
+                    deviceInfo.axisMap[it.key().toInt()].restoreSavedData(it.value().toMap());
 
                 data = settings.toMap()[BUTTONS_KEY].toMap();
                 for (QVariantMap::const_iterator it = data.begin(); it != data.end(); ++it)
@@ -330,9 +364,12 @@ void QAndroidGamepadBackend::resetConfiguration(int deviceId)
     if (it == m_devices.end())
         return;
 
-    int productId = it.value().productId;
-    it.value() = *g_defaultMapping();
-    it.value().productId = productId;
+    it.value().axisMap.clear();
+    it.value().buttonsMap.clear();
+    it.value().calibrateButton = QGamepadManager::ButtonInvalid;
+    it.value().calibrateAxis = QGamepadManager::AxisInvalid;
+    it.value().cancelConfigurationButton = QGamepadManager::ButtonInvalid;
+    it.value().needsConfigure = false;
 }
 
 bool QAndroidGamepadBackend::handleKeyEvent(jobject event)
@@ -412,12 +449,13 @@ bool QAndroidGamepadBackend::handleGenericMotionEvent(jobject event)
         return false;
 
     auto &deviceMap = deviceIt.value();
-    if (deviceMap.calibrateAxis != QGamepadManager::AxisInvalid) {
+    if (deviceMap.calibrateAxis != QGamepadManager::AxisInvalid ||
+            deviceMap.calibrateButton != QGamepadManager::ButtonInvalid) {
         double lastValue = 0;
         int lastAxis = -1;
         for (int axis : g_defaultMapping()->allAndroidAxes) {
-            double value = fabs(ev.callMethod<jfloat>("getAxisValue", "(I)F", axis));
-            if (value > lastValue) {
+            double value = ev.callMethod<jfloat>("getAxisValue", "(I)F", axis);
+            if (fabs(value) > fabs(lastValue)) {
                 lastValue = value;
                 lastAxis = axis;
             }
@@ -426,46 +464,98 @@ bool QAndroidGamepadBackend::handleGenericMotionEvent(jobject event)
         if (!lastValue || lastAxis == -1)
             return false;
 
-        deviceMap.axisMap[lastAxis].gamepadAxis = deviceMap.calibrateAxis;
-        auto axis = deviceMap.calibrateAxis;
-        deviceMap.calibrateAxis = QGamepadManager::AxisInvalid;
-        saveData(deviceMap);
-        FunctionEvent::runOnQtThread(this, [this, deviceId, axis]{
-            emit axisConfigured(deviceId, axis);
-        });
+        if (deviceMap.calibrateAxis != QGamepadManager::AxisInvalid) {
+            deviceMap.axisMap[lastAxis].gamepadAxis = deviceMap.calibrateAxis;
+            auto axis = deviceMap.calibrateAxis;
+            deviceMap.calibrateAxis = QGamepadManager::AxisInvalid;
+            saveData(deviceMap);
+            FunctionEvent::runOnQtThread(this, [this, deviceId, axis]{
+                emit axisConfigured(deviceId, axis);
+            });
+        } else if (deviceMap.calibrateButton != QGamepadManager::ButtonInvalid &&
+                   deviceMap.calibrateButton != QGamepadManager::ButtonUp &&
+                   deviceMap.calibrateButton != QGamepadManager::ButtonDown &&
+                   deviceMap.calibrateButton != QGamepadManager::ButtonLeft &&
+                   deviceMap.calibrateButton != QGamepadManager::ButtonRight) {
+            auto &axis = deviceMap.axisMap[lastAxis];
+            axis.gamepadAxis = QGamepadManager::AxisInvalid;
+            setAxisInfo(ev, lastAxis, axis);
+            bool save = false;
+            if (lastValue == axis.minValue) {
+                axis.gamepadMinButton = deviceMap.calibrateButton;
+                if (axis.gamepadMaxButton == QGamepadManager::ButtonInvalid)
+                    axis.gamepadMaxButton = deviceMap.calibrateButton;
+                save = true;
+            } else if (lastValue == axis.maxValue) {
+                axis.gamepadMaxButton = deviceMap.calibrateButton;
+                if (axis.gamepadMinButton == QGamepadManager::ButtonInvalid)
+                    axis.gamepadMinButton = deviceMap.calibrateButton;
+                save = true;
+            }
+
+            if (save) {
+                auto but = deviceMap.calibrateButton;
+                deviceMap.calibrateButton = QGamepadManager::ButtonInvalid;
+                saveData(deviceMap);
+                FunctionEvent::runOnQtThread(this, [this, deviceId, but]{
+                    emit buttonConfigured(deviceId, but);
+                });
+            }
+        }
     }
 
     typedef QPair<QGamepadManager::GamepadAxis, double> GamepadAxisValue;
-    QVector<GamepadAxisValue> values;
-    for (auto it = deviceMap.axisMap.begin(); it != deviceMap.axisMap.end(); ++it) {
-        auto &axisInfo = it.value();
-        if (axisInfo.flatArea == -1) {
-            // compute the range & flat area
-            QJNIObjectPrivate device(ev.callObjectMethod("getDevice", "()Landroid/view/InputDevice;"));
-            if (device.isValid()) {
-                const int source = ev.callMethod<jint>("getSource", "()I");
-                QJNIObjectPrivate motionRange = device.callObjectMethod("getMotionRange","(II)Landroid/view/InputDevice$MotionRange;", it.key(), source);
-                setAxisInfo(motionRange, axisInfo);
+    QVector<GamepadAxisValue> axisValues;
+    typedef QPair<QGamepadManager::GamepadButton, double> GamepadButtonValue;
+    QVector<GamepadButtonValue> buttonValues;
+    auto setValue = [&axisValues, &buttonValues](Mapping::AndroidAxisInfo &axisInfo, double value) {
+        if (axisInfo.setValue(value)) {
+            if (axisInfo.gamepadAxis != QGamepadManager::AxisInvalid) {
+                axisValues.push_back(GamepadAxisValue(axisInfo.gamepadAxis, axisInfo.lastValue));
+            } else {
+                if (axisInfo.lastValue < 0) {
+                    buttonValues.push_back(GamepadButtonValue(axisInfo.gamepadMinButton, axisInfo.lastValue));
+                    axisInfo.gamepadLastButton = axisInfo.gamepadMinButton;
+                } else if (axisInfo.lastValue > 0) {
+                    buttonValues.push_back(GamepadButtonValue(axisInfo.gamepadMaxButton, axisInfo.lastValue));
+                    axisInfo.gamepadLastButton = axisInfo.gamepadMaxButton;
+                } else {
+                    buttonValues.push_back(GamepadButtonValue(axisInfo.gamepadLastButton, 0.0));
+                    axisInfo.gamepadLastButton = QGamepadManager::ButtonInvalid;
+                }
             }
         }
-
+    };
+    for (auto it = deviceMap.axisMap.begin(); it != deviceMap.axisMap.end(); ++it) {
+        auto &axisInfo = it.value();
+        if (axisInfo.flatArea == -1)
+            setAxisInfo(ev, it.key(), axisInfo);
         const int historicalValues = ev.callMethod<jint>("getHistorySize", "()I");
         for (int i = 0; i < historicalValues; ++i) {
             double value = ev.callMethod<jfloat>("getHistoricalAxisValue", "(II)F", it.key(), i);
-            if (axisInfo.setValue(value))
-                values.push_back(GamepadAxisValue(axisInfo.gamepadAxis, axisInfo.lastValue));
+            setValue(axisInfo, value);
         }
         double value = ev.callMethod<jfloat>("getAxisValue", "(I)F", it.key());
-        if (axisInfo.setValue(value))
-            values.push_back(GamepadAxisValue(axisInfo.gamepadAxis, axisInfo.lastValue));
+        setValue(axisInfo, value);
     }
 
-    if (!values.isEmpty()) {
-        FunctionEvent::runOnQtThread(this, [this, deviceId, values]{
-            foreach (const auto &axisValue, values)
+    if (!axisValues.isEmpty()) {
+        FunctionEvent::runOnQtThread(this, [this, deviceId, axisValues]{
+            foreach (const auto &axisValue, axisValues)
                 emit gamepadAxisMoved(deviceId, axisValue.first, axisValue.second);
         });
     }
+
+    if (!buttonValues.isEmpty()) {
+        FunctionEvent::runOnQtThread(this, [this, deviceId, buttonValues]{
+            foreach (const auto &buttonValue, buttonValues)
+                if (buttonValue.second)
+                    emit gamepadButtonPressed(deviceId, buttonValue.first, fabs(buttonValue.second));
+                else
+                    emit gamepadButtonReleased(deviceId, buttonValue.first);
+        });
+    }
+
     return false;
 }
 
@@ -505,7 +595,7 @@ void QAndroidGamepadBackend::saveData(const QAndroidGamepadBackend::Mapping &dev
 
     QVariantMap settings, data;
     for (auto it = deviceInfo.axisMap.begin(); it != deviceInfo.axisMap.end(); ++it)
-        data[QString::number(it.key())] = it.value().gamepadAxis;
+        data[QString::number(it.key())] = it.value().dataToSave();
     settings[AXES_KEY] = data;
 
     data.clear();

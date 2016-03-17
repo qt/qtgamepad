@@ -39,6 +39,8 @@
 
 QT_BEGIN_NAMESPACE
 
+static const QLatin1String GAMEPAD_GROUP("___gamepad_saved_states_v2");
+
 QGamepadBackend::QGamepadBackend(QObject *parent) :
     QObject(parent)
 {
@@ -80,7 +82,7 @@ void QGamepadBackend::saveSettings(int productId, const QVariant &value)
         s.reset(new QSettings());
     else
         s.reset(new QSettings(m_settingsFilePath));
-    s->beginGroup(QString::fromLatin1("___gamepad_saved_states"));
+    s->beginGroup(GAMEPAD_GROUP);
     QString key = QString::fromLatin1("id_%1").arg(productId);
     if (value.isNull())
         s->remove(key);
@@ -95,7 +97,7 @@ QVariant QGamepadBackend::readSettings(int productId)
         s.reset(new QSettings());
     else
         s.reset(new QSettings(m_settingsFilePath));
-    s->beginGroup(QString::fromLatin1("___gamepad_saved_states"));
+    s->beginGroup(GAMEPAD_GROUP);
     return s->value(QString::fromLatin1("id_%1").arg(productId));
 }
 
