@@ -76,7 +76,7 @@ void QEvdevGamepadDevice::EvdevAxisInfo::setAbsInfo(int fd, int abs)
         minValue = absInfo.minimum;
         maxValue = absInfo.maximum;
         if (maxValue - minValue)
-            flat = fabs(absInfo.flat / double(maxValue - minValue));
+            flat = qAbs(absInfo.flat / double(maxValue - minValue));
     }
 }
 
@@ -443,7 +443,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
     } else if (e->type == EV_ABS) {
         if (m_configureAxis != QGamepadManager::AxisInvalid) {
             EvdevAxisInfo inf(m_fd, e->code, -32768, 32767, m_configureAxis);
-            if (fabs(inf.normalized(e->value)) == 1) {
+            if (qAbs(inf.normalized(e->value)) == 1) {
                 m_axisMap.insert(e->code, EvdevAxisInfo(m_fd, e->code, -32768, 32767, m_configureAxis));
 
                 QGamepadManager::GamepadAxis axis = m_configureAxis;
@@ -503,7 +503,7 @@ void QEvdevGamepadDevice::processInputEvent(input_event *e)
         if (info.gamepadMaxButton == info.gamepadMinButton &&
                 info.gamepadMaxButton != QGamepadManager::ButtonInvalid) {
             if (val)
-                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMaxButton, fabs(val));
+                emit m_backend->gamepadButtonPressed(m_productId, info.gamepadMaxButton, qAbs(val));
             else
                 emit m_backend->gamepadButtonReleased(m_productId, info.gamepadMaxButton);
         } else {
