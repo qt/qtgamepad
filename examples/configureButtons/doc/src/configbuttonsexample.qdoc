@@ -26,12 +26,10 @@
 ****************************************************************************/
 
 /*!
-    \group qtgamepad-examples
-    \title Qt Gamepad Examples
-    \brief Examples for the Qt Gamepad module
-    \ingroup all-examples
-
-    These are the Qt Gamepad examples.
-
+\example configureButtons
+\ingroup qtgamepad-examples
+\title Qt Gamepad Configure Buttons Example
+\brief Enables configuring the gamepad buttons
+\image configuregamepadbuttons-example.png
+\include examples-run.qdocinc
 */
-

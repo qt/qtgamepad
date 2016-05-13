@@ -26,12 +26,10 @@
 ****************************************************************************/
 
 /*!
-    \group qtgamepad-examples
-    \title Qt Gamepad Examples
-    \brief Examples for the Qt Gamepad module
-    \ingroup all-examples
-
-    These are the Qt Gamepad examples.
-
+\example keyNavigation
+\ingroup qtgamepad-examples
+\title Qt Gamepad Key Navigation Example
+\brief Demonstrates how to use navigation keys on the gamepad.
+\image keynavigationgamepad-example.png
+\include examples-run.qdocinc
 */
-

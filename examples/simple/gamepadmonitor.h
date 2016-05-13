@@ -44,7 +44,9 @@
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
 
+QT_BEGIN_NAMESPACE
 class QGamepad;
+QT_END_NAMESPACE
 
 class GamepadMonitor : public QObject
 {

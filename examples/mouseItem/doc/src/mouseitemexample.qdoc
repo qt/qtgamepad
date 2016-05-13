@@ -26,12 +26,9 @@
 ****************************************************************************/
 
 /*!
-    \group qtgamepad-examples
-    \title Qt Gamepad Examples
-    \brief Examples for the Qt Gamepad module
-    \ingroup all-examples
-
-    These are the Qt Gamepad examples.
-
+\example mouseItem
+\ingroup qtgamepad-examples
+\title Qt Gamepad Mouse Item Example
+\brief Depicts joystick movement using a pointer.
+\include examples-run.qdocinc
 */
-
