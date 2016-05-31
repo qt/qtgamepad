@@ -506,7 +506,7 @@ QDarwinGamepadBackend::QDarwinGamepadBackend(QObject *parent)
     , m_darwinGamepadManager(Q_NULLPTR)
     , m_isMonitoringActive(false)
 {
-    m_darwinGamepadManager = [[DarwinGamepadManager alloc] initWithBackend:this];
+    m_darwinGamepadManager = [[QT_MANGLE_NAMESPACE(DarwinGamepadManager) alloc] initWithBackend:this];
 }
 
 QDarwinGamepadBackend::~QDarwinGamepadBackend()
