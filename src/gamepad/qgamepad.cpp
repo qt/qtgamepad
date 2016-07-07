@@ -110,12 +110,10 @@ int QGamepad::deviceId() const
 }
 
 /*!
- * \property QGamepad::isConnected
- *
+ * \property QGamepad::connected
  * This property holds the connectivity state of the gamepad device. If a gamepad is connected
  * this property will be true, otherwise false.
  */
-
 bool QGamepad::isConnected() const
 {
     return m_connected;

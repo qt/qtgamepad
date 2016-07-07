@@ -31,6 +31,7 @@ qhp.QtGamepad.subprojects.examples.indexTitle   = Qt Gamepad Examples
 qhp.QtGamepad.subprojects.examples.selectors    = fake:example
 qhp.QtGamepad.subprojects.examples.sortPages    = true
 
+depends = qtcore qtdoc qmake
 
 headerdirs += ../ \
               ../../plugins
