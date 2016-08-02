@@ -4,7 +4,7 @@ project                                         = QtGamepad
 description                                     = Qt Gamepad Reference Documentation
 version                                         = $QT_VERSION
 
-examplesinstallpath                             = qtgamepad
+examplesinstallpath                             = gamepad
 
 qhp.projects                                       = QtGamepad
 
@@ -39,7 +39,7 @@ headerdirs += ../ \
 sourcedirs += ../ \
               ../../plugins
 
-exampledirs += ../../../examples
+exampledirs += ../../../examples/gamepad
 
 imagedirs  += images
 
@@ -49,3 +49,6 @@ Cpp.ignoredirectives     += Q_DECLARE_LOGGING_CATEGORY
 navigation.landingpage    = "Qt Gamepad"
 navigation.qmltypespage   = "Qt Gamepad QML Types"
 navigation.cppclassespage = "Qt Gamepad C++ Classes"
+
+manifestmeta.thumbnail.names = "QtGamepad/Qt Gamepad Mouse Item Example" \
+                               "QtGamepad/Qt Gamepad Simple Example"

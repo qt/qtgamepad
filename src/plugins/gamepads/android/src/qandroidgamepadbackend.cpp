@@ -608,6 +608,11 @@ void QAndroidGamepadBackend::saveData(const QAndroidGamepadBackend::Mapping &dev
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void */*reserved*/)
 {
+    static bool initialized = false;
+    if (initialized)
+        return JNI_VERSION_1_6;
+    initialized = true;
+
     JNIEnv* env;
     // get the JNIEnv pointer.
     if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
