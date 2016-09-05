@@ -541,14 +541,14 @@ bool QAndroidGamepadBackend::handleGenericMotionEvent(jobject event)
 
     if (!axisValues.isEmpty()) {
         FunctionEvent::runOnQtThread(this, [this, deviceId, axisValues]{
-            foreach (const auto &axisValue, axisValues)
+            for (const auto &axisValue : axisValues)
                 emit gamepadAxisMoved(deviceId, axisValue.first, axisValue.second);
         });
     }
 
     if (!buttonValues.isEmpty()) {
         FunctionEvent::runOnQtThread(this, [this, deviceId, buttonValues]{
-            foreach (const auto &buttonValue, buttonValues)
+            for (const auto &buttonValue : buttonValues)
                 if (buttonValue.second)
                     emit gamepadButtonPressed(deviceId, buttonValue.first, fabs(buttonValue.second));
                 else

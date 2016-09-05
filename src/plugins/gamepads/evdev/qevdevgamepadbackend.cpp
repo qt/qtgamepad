@@ -111,8 +111,8 @@ bool QEvdevGamepadBackend::start()
         qCDebug(lcEGB) << "Using device discovery";
         m_discovery = QDeviceDiscovery::create(QDeviceDiscovery::Device_Joystick, this);
         if (m_discovery) {
-            QStringList devices = m_discovery->scanConnectedDevices();
-            foreach (const QString &devStr, devices) {
+            const QStringList devices = m_discovery->scanConnectedDevices();
+            for (const QString &devStr : devices) {
                 device = devStr.toUtf8();
                 m_devices.append(newDevice(device));
             }
@@ -138,7 +138,7 @@ QEvdevGamepadDevice *QEvdevGamepadBackend::newDevice(const QByteArray &device)
 
 QEvdevGamepadDevice *QEvdevGamepadBackend::device(int deviceId)
 {
-    foreach (QEvdevGamepadDevice *device, m_devices)
+    for (QEvdevGamepadDevice *device : qAsConst(m_devices))
         if (device->deviceId() == deviceId)
             return device;
     return nullptr;
