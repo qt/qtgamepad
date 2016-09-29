@@ -1,5 +1,5 @@
 TARGET = evdevgamepad
-QT += core-private platformsupport-private gamepad gamepad-private
+QT += core-private devicediscovery_support-private gamepad gamepad-private
 
 PLUGIN_TYPE = gamepads
 PLUGIN_CLASS_NAME = QEvdevGamepadBackendPlugin

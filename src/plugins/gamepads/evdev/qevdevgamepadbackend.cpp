@@ -37,7 +37,7 @@
 #include "qevdevgamepadbackend_p.h"
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QLoggingCategory>
-#include <QtPlatformSupport/private/qdevicediscovery_p.h>
+#include <QtDeviceDiscoverySupport/private/qdevicediscovery_p.h>
 #include <QtCore/private/qcore_unix_p.h>
 #include <linux/input.h>
 
