@@ -43,6 +43,8 @@
 
 QT_BEGIN_NAMESPACE
 
+class QGamepadPrivate;
+
 class Q_GAMEPAD_EXPORT QGamepad : public QObject
 {
     Q_OBJECT
@@ -136,44 +138,14 @@ public Q_SLOTS:
 
     void setDeviceId(int number);
 
-private Q_SLOTS:
-    void setConnected(bool isConnected);
-
-    void handleGamepadConnected(int deviceId);
-    void handleGamepadDisconnected(int deviceId);
-    void handleGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
-    void handleGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
-    void handleGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
-
 private:
-
-    QGamepadManager *m_gamepadManager;
-
-    int m_deviceId;
-    bool m_connected;
-    QString m_name;
-    double m_axisLeftX;
-    double m_axisLeftY;
-    double m_axisRightX;
-    double m_axisRightY;
-    bool m_buttonA;
-    bool m_buttonB;
-    bool m_buttonX;
-    bool m_buttonY;
-    bool m_buttonL1;
-    bool m_buttonR1;
-    double m_buttonL2;
-    double m_buttonR2;
-    bool m_buttonSelect;
-    bool m_buttonStart;
-    bool m_buttonL3;
-    bool m_buttonR3;
-    bool m_buttonUp;
-    bool m_buttonDown;
-    bool m_buttonLeft;
-    bool m_buttonRight;
-    bool m_buttonCenter;
-    bool m_buttonGuide;
+    Q_DECLARE_PRIVATE(QGamepad)
+    Q_DISABLE_COPY(QGamepad)
+    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadConnected(int))
+    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadDisconnected(int))
+    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadAxisEvent(int, QGamepadManager::GamepadAxis, double))
+    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadButtonPressEvent(int, QGamepadManager::GamepadButton, double))
+    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadButtonReleaseEvent(int, QGamepadManager::GamepadButton))
 };
 
 QT_END_NAMESPACE

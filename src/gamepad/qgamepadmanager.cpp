@@ -41,38 +41,70 @@
 
 #include <QtCore/QLoggingCategory>
 
+#include <private/qobject_p.h>
+
 QT_BEGIN_NAMESPACE
 
 Q_LOGGING_CATEGORY(gp, "qt.gamepad")
 
-QGamepadManager::QGamepadManager() :
-    QObject(0)
+class QGamepadManagerPrivate : public QObjectPrivate
 {
-    loadBackend();
+    Q_DECLARE_PUBLIC(QGamepadManager)
+public:
+    QGamepadManagerPrivate()
+        : gamepadBackend(nullptr)
+    {
+        loadBackend();
+    }
 
-    qRegisterMetaType<QGamepadManager::GamepadButton>("QGamepadManager::GamepadButton");
-    qRegisterMetaType<QGamepadManager::GamepadAxis>("QGamepadManager::GamepadAxis");
+    void loadBackend();
 
-    connect(m_gamepadBackend, SIGNAL(gamepadAdded(int)), this, SLOT(forwardGamepadConnected(int)));
-    connect(m_gamepadBackend, SIGNAL(gamepadRemoved(int)), this, SLOT(forwardGamepadDisconnected(int)));
-    connect(m_gamepadBackend, SIGNAL(gamepadAxisMoved(int,QGamepadManager::GamepadAxis,double)), this, SLOT(forwardGamepadAxisEvent(int,QGamepadManager::GamepadAxis,double)));
-    connect(m_gamepadBackend, SIGNAL(gamepadButtonPressed(int,QGamepadManager::GamepadButton,double)), this, SLOT(forwardGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
-    connect(m_gamepadBackend, SIGNAL(gamepadButtonReleased(int,QGamepadManager::GamepadButton)), this, SLOT(forwardGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
-    connect(m_gamepadBackend, &QGamepadBackend::buttonConfigured, this, &QGamepadManager::buttonConfigured);
-    connect(m_gamepadBackend, &QGamepadBackend::axisConfigured, this, &QGamepadManager::axisConfigured);
-    connect(m_gamepadBackend, &QGamepadBackend::configurationCanceled, this, &QGamepadManager::configurationCanceled);
+    QGamepadBackend *gamepadBackend;
+    QSet<int> connectedGamepads;
 
-    if (!m_gamepadBackend->start())
-        qCWarning(gp) << "Failed to start gamepad backend";
+    //private slots
+    void _q_forwardGamepadConnected(int deviceId);
+    void _q_forwardGamepadDisconnected(int deviceId);
+    void _q_forwardGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
+    void _q_forwardGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
+    void _q_forwardGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
+};
+
+void QGamepadManagerPrivate::_q_forwardGamepadConnected(int deviceId)
+{
+    Q_Q(QGamepadManager);
+    connectedGamepads.insert(deviceId);
+    emit q->gamepadConnected(deviceId);
+    emit q->connectedGamepadsChanged();
 }
 
-QGamepadManager::~QGamepadManager()
+void QGamepadManagerPrivate::_q_forwardGamepadDisconnected(int deviceId)
 {
-    m_gamepadBackend->stop();
-    m_gamepadBackend->deleteLater();
+    Q_Q(QGamepadManager);
+    connectedGamepads.remove(deviceId);
+    emit q->gamepadDisconnected(deviceId);
+    emit q->connectedGamepadsChanged();
 }
 
-void QGamepadManager::loadBackend()
+void QGamepadManagerPrivate::_q_forwardGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value)
+{
+    Q_Q(QGamepadManager);
+    emit q->gamepadAxisEvent(deviceId, axis, value);
+}
+
+void QGamepadManagerPrivate::_q_forwardGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value)
+{
+    Q_Q(QGamepadManager);
+    emit q->gamepadButtonPressEvent(deviceId, button, value);
+}
+
+void QGamepadManagerPrivate::_q_forwardGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button)
+{
+    Q_Q(QGamepadManager);
+    emit q->gamepadButtonReleaseEvent(deviceId, button);
+}
+
+void QGamepadManagerPrivate::loadBackend()
 {
     QStringList keys = QGamepadBackendFactory::keys();
     qCDebug(gp) << "Available backends:" << keys;
@@ -83,15 +115,44 @@ void QGamepadManager::loadBackend()
             targetKey = requestedKey;
         if (!targetKey.isEmpty()) {
             qCDebug(gp) << "Loading backend" << targetKey;
-            m_gamepadBackend = QGamepadBackendFactory::create(targetKey, QStringList());
+            gamepadBackend = QGamepadBackendFactory::create(targetKey, QStringList());
         }
     }
 
-    if (!m_gamepadBackend) {
+    if (!gamepadBackend) {
         //Use dummy backend
-        m_gamepadBackend = new QGamepadBackend();
+        gamepadBackend = new QGamepadBackend();
         qCDebug(gp) << "Using dummy backend";
     }
+}
+
+QGamepadManager::QGamepadManager() :
+    QObject(*new QGamepadManagerPrivate(), 0)
+{
+    Q_D(QGamepadManager);
+
+    qRegisterMetaType<QGamepadManager::GamepadButton>("QGamepadManager::GamepadButton");
+    qRegisterMetaType<QGamepadManager::GamepadAxis>("QGamepadManager::GamepadAxis");
+
+    connect(d->gamepadBackend, SIGNAL(gamepadAdded(int)), this, SLOT(_q_forwardGamepadConnected(int)));
+    connect(d->gamepadBackend, SIGNAL(gamepadRemoved(int)), this, SLOT(_q_forwardGamepadDisconnected(int)));
+    connect(d->gamepadBackend, SIGNAL(gamepadAxisMoved(int,QGamepadManager::GamepadAxis,double)), this, SLOT(_q_forwardGamepadAxisEvent(int,QGamepadManager::GamepadAxis,double)));
+    connect(d->gamepadBackend, SIGNAL(gamepadButtonPressed(int,QGamepadManager::GamepadButton,double)), this, SLOT(_q_forwardGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
+    connect(d->gamepadBackend, SIGNAL(gamepadButtonReleased(int,QGamepadManager::GamepadButton)), this, SLOT(_q_forwardGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
+
+    connect(d->gamepadBackend, &QGamepadBackend::buttonConfigured, this, &QGamepadManager::buttonConfigured);
+    connect(d->gamepadBackend, &QGamepadBackend::axisConfigured, this, &QGamepadManager::axisConfigured);
+    connect(d->gamepadBackend, &QGamepadBackend::configurationCanceled, this, &QGamepadManager::configurationCanceled);
+
+    if (!d->gamepadBackend->start())
+        qCWarning(gp) << "Failed to start gamepad backend";
+}
+
+QGamepadManager::~QGamepadManager()
+{
+    Q_D(QGamepadManager);
+    d->gamepadBackend->stop();
+    d->gamepadBackend->deleteLater();
 }
 
 QGamepadManager *QGamepadManager::instance()
@@ -100,78 +161,54 @@ QGamepadManager *QGamepadManager::instance()
     return &instance;
 }
 
-bool QGamepadManager::isGamepadConnected(int deviceId)
+bool QGamepadManager::isGamepadConnected(int deviceId) const
 {
-    return m_connectedGamepads.contains(deviceId);
+    Q_D(const QGamepadManager);
+    return d->connectedGamepads.contains(deviceId);
 }
 
 const QList<int> QGamepadManager::connectedGamepads() const
 {
-    return m_connectedGamepads.toList();
+    Q_D(const QGamepadManager);
+    return d->connectedGamepads.toList();
 }
 
-bool QGamepadManager::isConfigurationNeeded(int deviceId)
+bool QGamepadManager::isConfigurationNeeded(int deviceId) const
 {
-    return m_gamepadBackend->isConfigurationNeeded(deviceId);
+    Q_D(const QGamepadManager);
+    return d->gamepadBackend->isConfigurationNeeded(deviceId);
 }
 
 bool QGamepadManager::configureButton(int deviceId, QGamepadManager::GamepadButton button)
 {
-    return m_gamepadBackend->configureButton(deviceId, button);
+    Q_D(QGamepadManager);
+    return d->gamepadBackend->configureButton(deviceId, button);
 }
 
 bool QGamepadManager::configureAxis(int deviceId, QGamepadManager::GamepadAxis axis)
 {
-    return m_gamepadBackend->configureAxis(deviceId, axis);
+    Q_D(QGamepadManager);
+    return d->gamepadBackend->configureAxis(deviceId, axis);
 }
 
 bool QGamepadManager::setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button)
 {
-    return m_gamepadBackend->setCancelConfigureButton(deviceId, button);
+    Q_D(QGamepadManager);
+    return d->gamepadBackend->setCancelConfigureButton(deviceId, button);
 }
 
 void QGamepadManager::resetConfiguration(int deviceId)
 {
-    m_gamepadBackend->resetConfiguration(deviceId);
+    Q_D(QGamepadManager);
+    d->gamepadBackend->resetConfiguration(deviceId);
 }
 
 void QGamepadManager::setSettingsFile(const QString &file)
 {
-    m_gamepadBackend->setSettingsFile(file);
-}
-
-void QGamepadManager::forwardGamepadConnected(int deviceId)
-{
-    //qDebug() << "gamepad connected: " << index;
-    m_connectedGamepads.insert(deviceId);
-    emit gamepadConnected(deviceId);
-    emit connectedGamepadsChanged();
-}
-
-void QGamepadManager::forwardGamepadDisconnected(int deviceId)
-{
-    //qDebug() << "gamepad disconnected: " << index;
-    m_connectedGamepads.remove(deviceId);
-    emit gamepadDisconnected(deviceId);
-    emit connectedGamepadsChanged();
-}
-
-void QGamepadManager::forwardGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value)
-{
-    //qDebug() << "gamepad axis event: " << index << axis << value;
-    emit gamepadAxisEvent(deviceId, axis, value);
-}
-
-void QGamepadManager::forwardGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value)
-{
-    //qDebug() << "gamepad button press event: " << index << button << value;
-    emit gamepadButtonPressEvent(deviceId, button, value);
-}
-
-void QGamepadManager::forwardGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button)
-{
-    //qDebug() << "gamepad button release event: " << index << button;
-    emit gamepadButtonReleaseEvent(deviceId, button);
+    Q_D(QGamepadManager);
+    d->gamepadBackend->setSettingsFile(file);
 }
 
 QT_END_NAMESPACE
+
+#include "moc_qgamepadmanager.cpp"

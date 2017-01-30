@@ -47,6 +47,7 @@ QT_BEGIN_NAMESPACE
 
 class QKeyEvent;
 class QGamepad;
+class QGamepadKeyNavigationPrivate;
 class Q_GAMEPAD_EXPORT QGamepadKeyNavigation : public QObject
 {
     Q_OBJECT
@@ -137,19 +138,11 @@ public Q_SLOTS:
     void setButtonL3Key(Qt::Key key);
     void setButtonR3Key(Qt::Key key);
 
-private Q_SLOTS:
-    void processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
-    void procressGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
-
 private:
-    void sendGeneratedKeyEvent(QKeyEvent *event);
-
-    bool m_active;
-    QGamepad *m_gamepad;
-    QGamepadManager *m_gamepadManger;
-    bool m_buttonL2Pressed;
-    bool m_buttonR2Pressed;
-    QMap<QGamepadManager::GamepadButton, Qt::Key> m_keyMapping;
+    Q_DECLARE_PRIVATE(QGamepadKeyNavigation)
+    Q_DISABLE_COPY(QGamepadKeyNavigation)
+    Q_PRIVATE_SLOT(d_func(), void _q_processGamepadButtonPressEvent(int, QGamepadManager::GamepadButton, double))
+    Q_PRIVATE_SLOT(d_func(), void _q_processGamepadButtonReleaseEvent(int, QGamepadManager::GamepadButton))
 };
 
 QT_END_NAMESPACE
