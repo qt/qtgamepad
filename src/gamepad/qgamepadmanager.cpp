@@ -45,6 +45,19 @@ QT_BEGIN_NAMESPACE
 
 Q_LOGGING_CATEGORY(gp, "qt.gamepad")
 
+/*!
+   \class QGamepadManager
+   \inmodule QtGamepad
+   \brief Queries attached gamepads and related events.
+
+   QGamepadManager provides a high-level interface for querying the attached
+   gamepads and events related to all of the connected devices.
+ */
+
+/*!
+ * Constructor for QGamepadManager.
+ */
+
 QGamepadManager::QGamepadManager() :
     QObject(0)
 {
@@ -66,6 +79,9 @@ QGamepadManager::QGamepadManager() :
         qCWarning(gp) << "Failed to start gamepad backend";
 }
 
+/*!
+ * Destructor for QGamepadManager.
+ */
 QGamepadManager::~QGamepadManager()
 {
     m_gamepadBackend->stop();

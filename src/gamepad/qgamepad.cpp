@@ -48,9 +48,7 @@ QT_BEGIN_NAMESPACE
  */
 
 /*!
- * \brief Constructs a QGamepad for \a deviceId.
- * \param deviceId is the id of the gamepad you wish to see the state of
- * \param parent
+ * Constructs a QGamepad with the given \a deviceId and \a parent.
  */
 QGamepad::QGamepad(int deviceId, QObject *parent)
     : QObject(parent)
@@ -99,10 +97,10 @@ QGamepad::~QGamepad()
 /*!
  * \property QGamepad::deviceId
  *
- * This property holds the deviceId of the gamepad device.  It is possible for there to be
- * multiple gamepad devices connected at any given time, so setting this property defines
- * which gamepad to use.
+ * This property holds the deviceId of the gamepad device.  Multiple gamepad devices can be
+ * connected at any given time, so setting this property defines which gamepad to use.
  *
+ * \sa QGamepadManager::connectedGamepads()
  */
 int QGamepad::deviceId() const
 {
@@ -133,7 +131,7 @@ QString QGamepad::name() const
  * \property QGamepad::axisLeftX
  *
  * This property holds the value of the left thumbstick's X axis.
- * The range of axis values are from -1.0 to 1.0
+ * The range of axis values are from -1.0 to 1.0.
  */
 double QGamepad::axisLeftX() const
 {
@@ -144,7 +142,7 @@ double QGamepad::axisLeftX() const
  * \property QGamepad::axisLeftY
  *
  * This property holds the value of the left thumbstick's Y axis.
- * The range of axis values are from -1.0 to 1.0
+ * The range of axis values are from -1.0 to 1.0.
  */
 double QGamepad::axisLeftY() const
 {
@@ -155,7 +153,7 @@ double QGamepad::axisLeftY() const
  * \property QGamepad::axisRightX
  *
  * This property holds the value of the right thumbstick's X axis.
- * The range of axis values are from -1.0 to 1.0
+ * The range of axis values are from -1.0 to 1.0.
  */
 double QGamepad::axisRightX() const
 {
@@ -166,7 +164,7 @@ double QGamepad::axisRightX() const
  * \property QGamepad::axisRightY
  *
  * This property holds the value of the right thumbstick's Y axis.
- * The range of axis values are from -1.0 to 1.0
+ * The range of axis values are from -1.0 to 1.0.
  */
 double QGamepad::axisRightY() const
 {
@@ -189,6 +187,8 @@ bool QGamepad::buttonA() const
  *
  * This property holds the state of the B button.  True when pressed, false when not
  * pressed.
+ *
+ * \sa QGamepadManager::connectedGamepads()
  */
 bool QGamepad::buttonB() const
 {
@@ -267,7 +267,7 @@ double QGamepad::buttonR2() const
  * \property QGamepad::buttonSelect
  *
  * This property holds the state of the Select button.  True when pressed, false when not
- * pressed. This button can sometimes be labled as the Back button on some gamepads.
+ * pressed. This button can sometimes be labeled as the Back button on some gamepads.
  */
 bool QGamepad::buttonSelect() const
 {
@@ -278,7 +278,7 @@ bool QGamepad::buttonSelect() const
  * \property QGamepad::buttonStart
  *
  * This property holds the state of the Start button.  True when pressed, false when not
- * pressed. This button can sometimes be labled as the Forward button on some gamepads.
+ * pressed. This button can sometimes be labeled as the Forward button on some gamepads.
  */
 bool QGamepad::buttonStart() const
 {

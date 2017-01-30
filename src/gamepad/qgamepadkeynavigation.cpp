@@ -42,6 +42,19 @@
 
 QT_BEGIN_NAMESPACE
 
+/*!
+   \class QGamepadKeyNavigation
+   \inmodule QtGamepad
+   \brief Provides support for keyboard events triggered by gamepads.
+
+   QGamepadKeyNavigation provides support for keyboard events triggered by
+   gamepads.
+ */
+
+/*!
+ * Constructs a QGamepadNavigation object with the given \a parent.
+ */
+
 QGamepadKeyNavigation::QGamepadKeyNavigation(QObject *parent)
     : QObject(parent)
     , m_active(true)
