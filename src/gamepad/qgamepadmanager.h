@@ -45,6 +45,7 @@ QT_BEGIN_NAMESPACE
 
 class QGamepadBackend;
 class QGamepad;
+class QGamepadManagerPrivate;
 
 class Q_GAMEPAD_EXPORT QGamepadManager : public QObject
 {
@@ -88,11 +89,11 @@ public:
 
     static QGamepadManager* instance();
 
-    bool isGamepadConnected(int deviceId);
+    bool isGamepadConnected(int deviceId) const;
     const QList<int> connectedGamepads() const;
 
 public Q_SLOTS:
-    bool isConfigurationNeeded(int deviceId);
+    bool isConfigurationNeeded(int deviceId) const;
     bool configureButton(int deviceId, GamepadButton button);
     bool configureAxis(int deviceId, GamepadAxis axis);
     bool setCancelConfigureButton(int deviceId, GamepadButton button);
@@ -110,24 +111,17 @@ Q_SIGNALS:
     void axisConfigured(int deviceId, QGamepadManager::GamepadAxis axis);
     void configurationCanceled(int deviceId);
 
-private Q_SLOTS:
-    void forwardGamepadConnected(int deviceId);
-    void forwardGamepadDisconnected(int deviceId);
-    void forwardGamepadAxisEvent(int deviceId, QGamepadManager::GamepadAxis axis, double value);
-    void forwardGamepadButtonPressEvent(int deviceId, QGamepadManager::GamepadButton button, double value);
-    void forwardGamepadButtonReleaseEvent(int deviceId, QGamepadManager::GamepadButton button);
-
 private:
     QGamepadManager();
     ~QGamepadManager();
-    QGamepadManager(QGamepadManager const&);
-    void operator=(QGamepadManager const&);
 
-    void loadBackend();
-
-    QGamepadBackend *m_gamepadBackend;
-    QSet<int> m_connectedGamepads;
-
+    Q_DECLARE_PRIVATE(QGamepadManager)
+    Q_DISABLE_COPY(QGamepadManager)
+    Q_PRIVATE_SLOT(d_func(), void _q_forwardGamepadConnected(int))
+    Q_PRIVATE_SLOT(d_func(), void _q_forwardGamepadDisconnected(int))
+    Q_PRIVATE_SLOT(d_func(), void _q_forwardGamepadAxisEvent(int, QGamepadManager::GamepadAxis, double))
+    Q_PRIVATE_SLOT(d_func(), void _q_forwardGamepadButtonPressEvent(int, QGamepadManager::GamepadButton, double))
+    Q_PRIVATE_SLOT(d_func(), void _q_forwardGamepadButtonReleaseEvent(int, QGamepadManager::GamepadButton))
 };
 
 QT_END_NAMESPACE

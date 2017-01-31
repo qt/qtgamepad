@@ -40,7 +40,83 @@
 #include <QtGui/QWindow>
 #include <QtGamepad/QGamepad>
 
+#include <private/qobject_p.h>
+
 QT_BEGIN_NAMESPACE
+
+class QGamepadKeyNavigationPrivate : public QObjectPrivate
+{
+    Q_DECLARE_PUBLIC(QGamepadKeyNavigation)
+public:
+    QGamepadKeyNavigationPrivate()
+        : active(true)
+        , gamepad(nullptr)
+        , buttonL2Pressed(false)
+        , buttonR2Pressed(false)
+    {
+    }
+
+    void sendGeneratedKeyEvent(QKeyEvent *event);
+
+    bool active;
+    QGamepad *gamepad;
+    QGamepadManager *gamepadManger;
+    bool buttonL2Pressed;
+    bool buttonR2Pressed;
+    QMap<QGamepadManager::GamepadButton, Qt::Key> keyMapping;
+
+    void _q_processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value);
+    void _q_processGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button);
+};
+
+void QGamepadKeyNavigationPrivate::sendGeneratedKeyEvent(QKeyEvent *event)
+{
+    if (!active) {
+        delete event;
+        return;
+    }
+    const QGuiApplication *app = qApp;
+    QWindow *focusWindow = app ? app->focusWindow() : nullptr;
+    if (focusWindow)
+        QGuiApplication::sendEvent(focusWindow, event);
+}
+
+void QGamepadKeyNavigationPrivate::_q_processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value)
+{
+    Q_UNUSED(value)
+    //If a gamepad has been set then, only use the events of that gamepad
+    if (gamepad && gamepad->deviceId() != index)
+        return;
+
+    //Trigger buttons are a special case as they get multiple press events as the value changes
+    if (button == QGamepadManager::ButtonL2 && buttonL2Pressed)
+        return;
+    else
+        buttonL2Pressed = true;
+    if (button == QGamepadManager::ButtonR2 && buttonR2Pressed)
+        return;
+    else
+        buttonR2Pressed = true;
+
+    QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, keyMapping[button], Qt::NoModifier);
+    sendGeneratedKeyEvent(event);
+}
+
+void QGamepadKeyNavigationPrivate::_q_processGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button)
+{
+    //If a gamepad has been set then, only use the events of that gamepad
+    if (gamepad && gamepad->deviceId() != index)
+        return;
+
+    //Free the trigger buttons if necessary
+    if (button == QGamepadManager::ButtonL2)
+        buttonL2Pressed = false;
+    if (button == QGamepadManager::ButtonR2)
+        buttonR2Pressed = false;
+
+    QKeyEvent *event = new QKeyEvent(QEvent::KeyRelease, keyMapping[button], Qt::NoModifier);
+    sendGeneratedKeyEvent(event);
+}
 
 /*!
    \class QGamepadKeyNavigation
@@ -56,334 +132,323 @@ QT_BEGIN_NAMESPACE
  */
 
 QGamepadKeyNavigation::QGamepadKeyNavigation(QObject *parent)
-    : QObject(parent)
-    , m_active(true)
-    , m_gamepad(Q_NULLPTR)
-    , m_buttonL2Pressed(false)
-    , m_buttonR2Pressed(false)
+    : QObject(*new QGamepadKeyNavigationPrivate(), parent)
 {
-    m_gamepadManger = QGamepadManager::instance();
+    Q_D(QGamepadKeyNavigation);
+    d->gamepadManger = QGamepadManager::instance();
 
     //Default keymap
-    m_keyMapping.insert(QGamepadManager::ButtonUp, Qt::Key_Up);
-    m_keyMapping.insert(QGamepadManager::ButtonDown, Qt::Key_Down);
-    m_keyMapping.insert(QGamepadManager::ButtonLeft, Qt::Key_Left);
-    m_keyMapping.insert(QGamepadManager::ButtonRight, Qt::Key_Right);
-    m_keyMapping.insert(QGamepadManager::ButtonA, Qt::Key_Return);
-    m_keyMapping.insert(QGamepadManager::ButtonB, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonX, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonY, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonSelect, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonStart, Qt::Key_Return);
-    m_keyMapping.insert(QGamepadManager::ButtonGuide, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonL1, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonR1, Qt::Key_Forward);
-    m_keyMapping.insert(QGamepadManager::ButtonL2, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonR2, Qt::Key_Forward);
-    m_keyMapping.insert(QGamepadManager::ButtonL3, Qt::Key_Back);
-    m_keyMapping.insert(QGamepadManager::ButtonR3, Qt::Key_Forward);
+    d->keyMapping.insert(QGamepadManager::ButtonUp, Qt::Key_Up);
+    d->keyMapping.insert(QGamepadManager::ButtonDown, Qt::Key_Down);
+    d->keyMapping.insert(QGamepadManager::ButtonLeft, Qt::Key_Left);
+    d->keyMapping.insert(QGamepadManager::ButtonRight, Qt::Key_Right);
+    d->keyMapping.insert(QGamepadManager::ButtonA, Qt::Key_Return);
+    d->keyMapping.insert(QGamepadManager::ButtonB, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonX, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonY, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonSelect, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonStart, Qt::Key_Return);
+    d->keyMapping.insert(QGamepadManager::ButtonGuide, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonL1, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonR1, Qt::Key_Forward);
+    d->keyMapping.insert(QGamepadManager::ButtonL2, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonR2, Qt::Key_Forward);
+    d->keyMapping.insert(QGamepadManager::ButtonL3, Qt::Key_Back);
+    d->keyMapping.insert(QGamepadManager::ButtonR3, Qt::Key_Forward);
 
-    connect(m_gamepadManger, SIGNAL(gamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)),
-            this, SLOT(processGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
-    connect(m_gamepadManger, SIGNAL(gamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)),
-            this, SLOT(procressGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
+    connect(d->gamepadManger, SIGNAL(gamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)),
+            this, SLOT(_q_processGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
+    connect(d->gamepadManger, SIGNAL(gamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)),
+            this, SLOT(_q_processGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
 }
 
 bool QGamepadKeyNavigation::active() const
 {
-    return m_active;
+    Q_D(const QGamepadKeyNavigation);
+    return d->active;
 }
 
 QGamepad *QGamepadKeyNavigation::gamepad() const
 {
-    return m_gamepad;
+    Q_D(const QGamepadKeyNavigation);
+    return d->gamepad;
 }
 
 Qt::Key QGamepadKeyNavigation::upKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonUp];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonUp];
 }
 
 Qt::Key QGamepadKeyNavigation::downKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonDown];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonDown];
 }
 
 Qt::Key QGamepadKeyNavigation::leftKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonLeft];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonLeft];
 }
 
 Qt::Key QGamepadKeyNavigation::rightKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonRight];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonRight];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonAKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonA];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonA];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonBKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonB];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonB];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonXKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonX];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonX];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonYKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonY];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonY];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonSelectKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonSelect];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonSelect];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonStartKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonStart];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonStart];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonGuideKey() const
 {
-    return m_keyMapping[QGamepadManager::ButtonGuide];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonGuide];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonL1Key() const
 {
-    return m_keyMapping[QGamepadManager::ButtonL1];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonL1];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonR1Key() const
 {
-    return m_keyMapping[QGamepadManager::ButtonL2];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonL2];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonL2Key() const
 {
-    return m_keyMapping[QGamepadManager::ButtonL2];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonL2];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonR2Key() const
 {
-    return m_keyMapping[QGamepadManager::ButtonL2];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonL2];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonL3Key() const
 {
-    return m_keyMapping[QGamepadManager::ButtonL3];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonL3];
 }
 
 Qt::Key QGamepadKeyNavigation::buttonR3Key() const
 {
-    return m_keyMapping[QGamepadManager::ButtonL3];
+    Q_D(const QGamepadKeyNavigation);
+    return d->keyMapping[QGamepadManager::ButtonL3];
 }
 
 void QGamepadKeyNavigation::setActive(bool isActive)
 {
-    if (m_active != isActive) {
-        m_active = isActive;
+    Q_D(QGamepadKeyNavigation);
+    if (d->active != isActive) {
+        d->active = isActive;
         emit activeChanged(isActive);
     }
 }
 
 void QGamepadKeyNavigation::setGamepad(QGamepad *gamepad)
 {
-    if (m_gamepad != gamepad) {
-        m_gamepad = gamepad;
+    Q_D(QGamepadKeyNavigation);
+    if (d->gamepad != gamepad) {
+        d->gamepad = gamepad;
         emit gamepadChanged(gamepad);
     }
 }
 
 void QGamepadKeyNavigation::setUpKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonUp] != key) {
-        m_keyMapping[QGamepadManager::ButtonUp] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonUp] != key) {
+        d->keyMapping[QGamepadManager::ButtonUp] = key;
         emit upKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setDownKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonDown] != key) {
-        m_keyMapping[QGamepadManager::ButtonDown] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonDown] != key) {
+        d->keyMapping[QGamepadManager::ButtonDown] = key;
         emit downKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setLeftKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonLeft] != key) {
-        m_keyMapping[QGamepadManager::ButtonLeft] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonLeft] != key) {
+        d->keyMapping[QGamepadManager::ButtonLeft] = key;
         emit leftKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setRightKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonRight] != key) {
-        m_keyMapping[QGamepadManager::ButtonRight] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonRight] != key) {
+        d->keyMapping[QGamepadManager::ButtonRight] = key;
         emit rightKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonAKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonA] != key) {
-        m_keyMapping[QGamepadManager::ButtonA] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonA] != key) {
+        d->keyMapping[QGamepadManager::ButtonA] = key;
         emit buttonAKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonBKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonB] != key) {
-        m_keyMapping[QGamepadManager::ButtonB] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonB] != key) {
+        d->keyMapping[QGamepadManager::ButtonB] = key;
         emit buttonBKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonXKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonX] != key) {
-        m_keyMapping[QGamepadManager::ButtonX] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonX] != key) {
+        d->keyMapping[QGamepadManager::ButtonX] = key;
         emit buttonXKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonYKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonY] != key) {
-        m_keyMapping[QGamepadManager::ButtonY] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonY] != key) {
+        d->keyMapping[QGamepadManager::ButtonY] = key;
         emit buttonYKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonSelectKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonSelect] != key) {
-        m_keyMapping[QGamepadManager::ButtonSelect] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonSelect] != key) {
+        d->keyMapping[QGamepadManager::ButtonSelect] = key;
         emit buttonSelectKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonStartKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonStart] != key) {
-        m_keyMapping[QGamepadManager::ButtonStart] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonStart] != key) {
+        d->keyMapping[QGamepadManager::ButtonStart] = key;
         emit buttonStartKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonGuideKey(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonGuide] != key) {
-        m_keyMapping[QGamepadManager::ButtonGuide] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonGuide] != key) {
+        d->keyMapping[QGamepadManager::ButtonGuide] = key;
         emit buttonGuideKeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonL1Key(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonL1] != key) {
-        m_keyMapping[QGamepadManager::ButtonL1] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonL1] != key) {
+        d->keyMapping[QGamepadManager::ButtonL1] = key;
         emit buttonL1KeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonR1Key(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonR1] != key) {
-        m_keyMapping[QGamepadManager::ButtonR1] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonR1] != key) {
+        d->keyMapping[QGamepadManager::ButtonR1] = key;
         emit buttonR1KeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonL2Key(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonL2] != key) {
-        m_keyMapping[QGamepadManager::ButtonL2] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonL2] != key) {
+        d->keyMapping[QGamepadManager::ButtonL2] = key;
         emit buttonL1KeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonR2Key(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonR2] != key) {
-        m_keyMapping[QGamepadManager::ButtonR2] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonR2] != key) {
+        d->keyMapping[QGamepadManager::ButtonR2] = key;
         emit buttonR1KeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonL3Key(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonL3] != key) {
-        m_keyMapping[QGamepadManager::ButtonL3] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonL3] != key) {
+        d->keyMapping[QGamepadManager::ButtonL3] = key;
         emit buttonL1KeyChanged(key);
     }
 }
 
 void QGamepadKeyNavigation::setButtonR3Key(Qt::Key key)
 {
-    if (m_keyMapping[QGamepadManager::ButtonR3] != key) {
-        m_keyMapping[QGamepadManager::ButtonR3] = key;
+    Q_D(QGamepadKeyNavigation);
+    if (d->keyMapping[QGamepadManager::ButtonR3] != key) {
+        d->keyMapping[QGamepadManager::ButtonR3] = key;
         emit buttonR1KeyChanged(key);
     }
 }
 
-void QGamepadKeyNavigation::processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value)
-{
-    Q_UNUSED(value)
 
-    //If a gamepad has been set then, only use the events of that gamepad
-    if (m_gamepad && m_gamepad->deviceId() != index)
-        return;
-
-    //Trigger buttons are a special case as they get multiple press events as the value changes
-    if (button == QGamepadManager::ButtonL2 && m_buttonL2Pressed)
-        return;
-    else
-        m_buttonL2Pressed = true;
-    if (button == QGamepadManager::ButtonR2 && m_buttonR2Pressed)
-        return;
-    else
-        m_buttonR2Pressed = true;
-
-    QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, m_keyMapping[button], Qt::NoModifier);
-    sendGeneratedKeyEvent(event);
-}
-
-void QGamepadKeyNavigation::procressGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button)
-{
-    //If a gamepad has been set then, only use the events of that gamepad
-    if (m_gamepad && m_gamepad->deviceId() != index)
-        return;
-
-    //Free the trigger buttons if necessary
-    if (button == QGamepadManager::ButtonL2)
-        m_buttonL2Pressed = false;
-    if (button == QGamepadManager::ButtonR2)
-        m_buttonR2Pressed = false;
-
-    QKeyEvent *event = new QKeyEvent(QEvent::KeyRelease, m_keyMapping[button], Qt::NoModifier);
-    sendGeneratedKeyEvent(event);
-}
-
-void QGamepadKeyNavigation::sendGeneratedKeyEvent(QKeyEvent *event)
-{
-    if (!m_active) {
-        delete event;
-        return;
-    }
-    const QGuiApplication *app = qApp;
-    QWindow *focusWindow = app ? app->focusWindow() : 0;
-    if (focusWindow)
-        QGuiApplication::sendEvent(focusWindow, event);
-}
 
 QT_END_NAMESPACE
+
+#include "moc_qgamepadkeynavigation.cpp"

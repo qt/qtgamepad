@@ -57,13 +57,13 @@ QT_BEGIN_NAMESPACE
 
 class QGamepadBackend;
 
-#define QtGamepadBackendFactoryInterface_iid "com.bsquask.Qt.Gamepad.QtGamepadBackendFactoryInterface.5.5"
+#define QtGamepadBackendFactoryInterface_iid "org.qt-project.Qt.Gamepad.QtGamepadBackendFactoryInterface.5.9"
 
 class Q_GAMEPAD_EXPORT QGamepadBackendPlugin : public QObject
 {
     Q_OBJECT
 public:
-    explicit QGamepadBackendPlugin(QObject *parent = 0);
+    explicit QGamepadBackendPlugin(QObject *parent = nullptr);
     ~QGamepadBackendPlugin();
 
     virtual QGamepadBackend *create(const QString &key, const QStringList &paramList) = 0;

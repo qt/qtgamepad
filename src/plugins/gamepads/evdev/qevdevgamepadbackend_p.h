@@ -65,7 +65,7 @@ public:
     bool configureAxis(QGamepadManager::GamepadAxis axis);
     bool setCancelConfigureButton(QGamepadManager::GamepadButton button);
 
-private slots:
+private Q_SLOTS:
     void readData();
 
 private:
@@ -113,13 +113,13 @@ class QEvdevGamepadBackend : public QGamepadBackend
 
 public:
     QEvdevGamepadBackend();
-    bool start() Q_DECL_OVERRIDE;
-    void stop() Q_DECL_OVERRIDE;
-    void resetConfiguration(int deviceId) Q_DECL_OVERRIDE;
-    bool isConfigurationNeeded(int deviceId) Q_DECL_OVERRIDE;
-    bool configureButton(int deviceId, QGamepadManager::GamepadButton button) Q_DECL_OVERRIDE;
-    bool configureAxis(int deviceId, QGamepadManager::GamepadAxis axis) Q_DECL_OVERRIDE;
-    bool setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button) Q_DECL_OVERRIDE;
+    bool start() override;
+    void stop() override;
+    void resetConfiguration(int deviceId) override;
+    bool isConfigurationNeeded(int deviceId) override;
+    bool configureButton(int deviceId, QGamepadManager::GamepadButton button) override;
+    bool configureAxis(int deviceId, QGamepadManager::GamepadAxis axis) override;
+    bool setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button) override;
 
 private slots:
     void handleAddedDevice(const QString &device);

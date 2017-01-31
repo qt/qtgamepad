@@ -46,7 +46,7 @@ class QDarwinGamepadBackendPlugin : public QGamepadBackendPlugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QtGamepadBackendFactoryInterface_iid FILE "darwin.json")
 public:
-    QGamepadBackend *create(const QString &key, const QStringList &paramList) Q_DECL_OVERRIDE;
+    QGamepadBackend *create(const QString &key, const QStringList &paramList) override;
 };
 
 QGamepadBackend *QDarwinGamepadBackendPlugin::create(const QString &key, const QStringList &paramList) {

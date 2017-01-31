@@ -62,7 +62,7 @@ public:
         Both
     };
 
-    explicit QGamepadMouseItem(QQuickItem *parent = 0);
+    explicit QGamepadMouseItem(QQuickItem *parent = nullptr);
 
     bool active() const;
     QGamepad* gamepad() const;

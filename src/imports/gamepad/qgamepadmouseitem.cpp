@@ -47,7 +47,7 @@ QT_BEGIN_NAMESPACE
 QGamepadMouseItem::QGamepadMouseItem(QQuickItem *parent)
     : QQuickItem(parent)
     , m_active(false)
-    , m_gamepad(0)
+    , m_gamepad(nullptr)
     , m_joystick(QGamepadMouseItem::LeftStick)
     , m_deadZoneSize(0.1)
 {

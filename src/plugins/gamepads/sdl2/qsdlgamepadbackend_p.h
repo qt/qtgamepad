@@ -51,15 +51,15 @@ class QSdlGamepadBackend : public QGamepadBackend
 {
     Q_OBJECT
 public:
-    explicit QSdlGamepadBackend(QObject *parent = 0);
+    explicit QSdlGamepadBackend(QObject *parent = nullptr);
     ~QSdlGamepadBackend();
 
-private slots:
+private Q_SLOTS:
     void pumpSdlEventLoop();
 
 protected:
-    bool start();
-    void stop();
+    bool start() override;
+    void stop() override;
 
 private:
     QGamepadManager::GamepadButton translateButton(int button);
