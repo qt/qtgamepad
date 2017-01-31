@@ -91,7 +91,7 @@ class QXInputThread : public QThread
 {
 public:
     QXInputThread(QXInputGamepadBackend *backend);
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
     void signalQuit() { m_quit.fetchAndStoreAcquire(1); }
 
 private:

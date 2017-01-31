@@ -46,7 +46,7 @@ class QXInputGamepadBackendPlugin : public QGamepadBackendPlugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QtGamepadBackendFactoryInterface_iid FILE "xinput.json")
 public:
-    QGamepadBackend *create(const QString &key, const QStringList &paramList) Q_DECL_OVERRIDE;
+    QGamepadBackend *create(const QString &key, const QStringList &paramList) override;
 };
 
 QGamepadBackend *QXInputGamepadBackendPlugin::create(const QString &key, const QStringList &paramList)

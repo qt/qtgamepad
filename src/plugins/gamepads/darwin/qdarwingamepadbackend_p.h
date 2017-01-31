@@ -51,14 +51,14 @@ class QDarwinGamepadBackend : public QGamepadBackend
 {
     Q_OBJECT
 public:
-    explicit QDarwinGamepadBackend(QObject *parent = 0);
+    explicit QDarwinGamepadBackend(QObject *parent = nullptr);
     ~QDarwinGamepadBackend();
 
 protected:
-    bool start();
-    void stop();
+    bool start() override;
+    void stop() override;
 
-public slots:
+public Q_SLOTS:
     void darwinGamepadAdded(int index);
     void darwinGamepadRemoved(int index);
     void darwinGamepadAxisMoved(int index, QGamepadManager::GamepadAxis axis, double value);

@@ -76,7 +76,7 @@ void QGamepadKeyNavigationPrivate::sendGeneratedKeyEvent(QKeyEvent *event)
         return;
     }
     const QGuiApplication *app = qApp;
-    QWindow *focusWindow = app ? app->focusWindow() : 0;
+    QWindow *focusWindow = app ? app->focusWindow() : nullptr;
     if (focusWindow)
         QGuiApplication::sendEvent(focusWindow, event);
 }

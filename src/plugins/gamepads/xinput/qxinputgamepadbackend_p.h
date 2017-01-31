@@ -50,8 +50,8 @@ class QXInputGamepadBackend : public QGamepadBackend
 
 public:
     QXInputGamepadBackend();
-    bool start() Q_DECL_OVERRIDE;
-    void stop() Q_DECL_OVERRIDE;
+    bool start() override;
+    void stop() override;
 
 private:
     QXInputThread *m_thread;

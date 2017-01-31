@@ -83,7 +83,7 @@ public:
     };
 
 public:
-    explicit QGamepadBackend(QObject *parent = 0);
+    explicit QGamepadBackend(QObject *parent = nullptr);
     virtual bool isConfigurationNeeded(int deviceId);
     virtual void resetConfiguration(int deviceId);
     virtual bool configureButton(int deviceId, QGamepadManager::GamepadButton button);
@@ -93,11 +93,11 @@ public:
     virtual void saveSettings(int productId, const QVariant &value);
     virtual QVariant readSettings(int productId);
 
-public slots:
+public Q_SLOTS:
     virtual bool start();
     virtual void stop();
 
-signals:
+Q_SIGNALS:
     void buttonConfigured(int deviceId, QGamepadManager::GamepadButton button);
     void axisConfigured(int deviceId, QGamepadManager::GamepadAxis axis);
     void configurationCanceled(int deviceId);

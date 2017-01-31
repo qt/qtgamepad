@@ -127,7 +127,7 @@ void QGamepadManagerPrivate::loadBackend()
 }
 
 QGamepadManager::QGamepadManager() :
-    QObject(*new QGamepadManagerPrivate(), 0)
+    QObject(*new QGamepadManagerPrivate(), nullptr)
 {
     Q_D(QGamepadManager);
 

@@ -53,7 +53,7 @@ class QAndroidGamepadBackend : public QGamepadBackend, public QtAndroidPrivate::
 {
     Q_OBJECT
 public:
-    explicit QAndroidGamepadBackend(QObject *parent = 0);
+    explicit QAndroidGamepadBackend(QObject *parent = nullptr);
     ~QAndroidGamepadBackend();
 
     void addDevice(int deviceId);
