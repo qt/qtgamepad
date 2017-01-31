@@ -162,120 +162,181 @@ QGamepadKeyNavigation::QGamepadKeyNavigation(QObject *parent)
             this, SLOT(_q_processGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
 }
 
+/*!
+ * Returns whether key navigation on the gamepad is active or not.
+*/
 bool QGamepadKeyNavigation::active() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->active;
 }
 
+/*!
+ * Returns a pointer the current QGamepad
+ */
 QGamepad *QGamepadKeyNavigation::gamepad() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->gamepad;
 }
 
+/*!
+ * Returns the key mapping of the Up button.
+ */
 Qt::Key QGamepadKeyNavigation::upKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonUp];
 }
 
+/*!
+ * Returns the key mapping of the Down button.
+ */
 Qt::Key QGamepadKeyNavigation::downKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonDown];
 }
 
+/*!
+ * Returns the key mapping of the Left button.
+ */
 Qt::Key QGamepadKeyNavigation::leftKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonLeft];
 }
 
+/*!
+ * Returns the key mapping of the Right button.
+ */
 Qt::Key QGamepadKeyNavigation::rightKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonRight];
 }
 
+/*!
+ * Returns the key mapping of A button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonAKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonA];
 }
 
+/*!
+ * Returns the key mapping of the B button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonBKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonB];
 }
 
+/*!
+ * Returns the key mapping of the X button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonXKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonX];
 }
 
+/*!
+ * Returns the key mapping of the Y button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonYKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonY];
 }
 
+/*!
+ * Returns the key mapping of the Select button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonSelectKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonSelect];
 }
 
+/*!
+ * Returns the key mapping of the Start button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonStartKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonStart];
 }
 
+/*!
+ * Returns the key mapping of the Guide button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonGuideKey() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonGuide];
 }
 
+/*!
+ * Returns the key mapping of the left shoulder button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonL1Key() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonL1];
 }
 
+/*!
+ * Returns the key mapping of the Right shoulder button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonR1Key() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonL2];
 }
 
+/*!
+ * Returns the key mapping of the left trigger button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonL2Key() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonL2];
 }
 
+/*!
+ * Returns the key mapping of the Right trigger button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonR2Key() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonL2];
 }
 
+/*!
+ * Returns the key mapping of the left stick button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonL3Key() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonL3];
 }
 
+/*!
+ * Returns the key mapping of the right stick button.
+ */
 Qt::Key QGamepadKeyNavigation::buttonR3Key() const
 {
     Q_D(const QGamepadKeyNavigation);
     return d->keyMapping[QGamepadManager::ButtonL3];
 }
 
+/*!
+ * Activates key navigation if \a isActive is true,
+ * disables it otherwise.
+ */
 void QGamepadKeyNavigation::setActive(bool isActive)
 {
     Q_D(QGamepadKeyNavigation);
@@ -285,6 +346,9 @@ void QGamepadKeyNavigation::setActive(bool isActive)
     }
 }
 
+/*!
+ * Selects the specified \a gamepad.
+*/
 void QGamepadKeyNavigation::setGamepad(QGamepad *gamepad)
 {
     Q_D(QGamepadKeyNavigation);
@@ -294,6 +358,9 @@ void QGamepadKeyNavigation::setGamepad(QGamepad *gamepad)
     }
 }
 
+/*!
+ * Sets the mapping of the Up button.
+*/
 void QGamepadKeyNavigation::setUpKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -303,6 +370,9 @@ void QGamepadKeyNavigation::setUpKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Down button.
+*/
 void QGamepadKeyNavigation::setDownKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -312,6 +382,9 @@ void QGamepadKeyNavigation::setDownKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Left button.
+*/
 void QGamepadKeyNavigation::setLeftKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -321,6 +394,9 @@ void QGamepadKeyNavigation::setLeftKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Right button.
+*/
 void QGamepadKeyNavigation::setRightKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -330,6 +406,9 @@ void QGamepadKeyNavigation::setRightKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the A button.
+*/
 void QGamepadKeyNavigation::setButtonAKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -339,6 +418,9 @@ void QGamepadKeyNavigation::setButtonAKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the B button.
+*/
 void QGamepadKeyNavigation::setButtonBKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -348,6 +430,9 @@ void QGamepadKeyNavigation::setButtonBKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the X button.
+*/
 void QGamepadKeyNavigation::setButtonXKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -357,6 +442,9 @@ void QGamepadKeyNavigation::setButtonXKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Y button.
+*/
 void QGamepadKeyNavigation::setButtonYKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -366,6 +454,9 @@ void QGamepadKeyNavigation::setButtonYKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Select button.
+*/
 void QGamepadKeyNavigation::setButtonSelectKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -375,6 +466,9 @@ void QGamepadKeyNavigation::setButtonSelectKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Start button.
+*/
 void QGamepadKeyNavigation::setButtonStartKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -384,6 +478,9 @@ void QGamepadKeyNavigation::setButtonStartKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the Guide button.
+*/
 void QGamepadKeyNavigation::setButtonGuideKey(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -393,6 +490,9 @@ void QGamepadKeyNavigation::setButtonGuideKey(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the left shoulder button.
+*/
 void QGamepadKeyNavigation::setButtonL1Key(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -402,6 +502,9 @@ void QGamepadKeyNavigation::setButtonL1Key(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the right shoulder button.
+*/
 void QGamepadKeyNavigation::setButtonR1Key(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -411,6 +514,9 @@ void QGamepadKeyNavigation::setButtonR1Key(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the left trigger button.
+*/
 void QGamepadKeyNavigation::setButtonL2Key(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -420,6 +526,9 @@ void QGamepadKeyNavigation::setButtonL2Key(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the right trigger button.
+*/
 void QGamepadKeyNavigation::setButtonR2Key(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -429,6 +538,9 @@ void QGamepadKeyNavigation::setButtonR2Key(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the left stick button.
+*/
 void QGamepadKeyNavigation::setButtonL3Key(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -438,6 +550,9 @@ void QGamepadKeyNavigation::setButtonL3Key(Qt::Key key)
     }
 }
 
+/*!
+ * Sets the mapping of the right stick button.
+*/
 void QGamepadKeyNavigation::setButtonR3Key(Qt::Key key)
 {
     Q_D(QGamepadKeyNavigation);
@@ -446,8 +561,6 @@ void QGamepadKeyNavigation::setButtonR3Key(Qt::Key key)
         emit buttonR1KeyChanged(key);
     }
 }
-
-
 
 QT_END_NAMESPACE
 
