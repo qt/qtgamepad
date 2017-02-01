@@ -39,191 +39,174 @@
 ****************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.1
+import QtQuick.Window 2.0
 import QtGamepad 1.0
 
-ApplicationWindow {
+Window {
     id: applicationWindow1
     visible: true
     width: 800
     height: 600
     title: qsTr("QtGamepad Example")
+    color: "#363330"
 
-    Rectangle {
+    Item {
         id: background
-        color: "#363330"
         anchors.fill: parent
 
-        Item {
-            id: buttonL2Item
-            height: leftTrigger.height
-            width: leftTrigger.width + buttonL2Value.width
-            anchors.left: parent.left
-            anchors.leftMargin: 8
-            anchors.top: parent.top
-            anchors.topMargin: 8
-
-            ButtonImage {
-                id: leftTrigger
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.bottom: parent.bottom
-                source: "xboxControllerLeftTrigger.png"
-                active: gamepad.buttonL2 != 0
-            }
-
-            ProgressBar {
-                id: buttonL2Value
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.left: leftTrigger.right
-                orientation: 0
-                value: gamepad.buttonL2
-            }
-        }
-        ButtonImage {
-            id: buttonL1
-            anchors.left: buttonL2Item.left
-            anchors.top: buttonL2Item.bottom
-            anchors.topMargin: 8
-            source: "xboxControllerLeftShoulder.png"
-            active: gamepad.buttonL1
-        }
-
-
-        Item {
-            id: buttonR2Item
-            height: rightTrigger.height
-            width: rightTrigger.width + buttonR2Value.width
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-            anchors.top: parent.top
-            anchors.topMargin: 8
-
-            ButtonImage {
-                id: rightTrigger
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                source: "xboxControllerRightTrigger.png"
-                active: gamepad.buttonR2 != 0
-            }
-
-            ProgressBar {
-                id: buttonR2Value
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: rightTrigger.left
-                orientation: 0
-                value: gamepad.buttonR2
-            }
-        }
-        ButtonImage {
-            id: buttonR1
-            anchors.right: buttonR2Item.right
-            anchors.top: buttonR2Item.bottom
-            anchors.topMargin: 8
-            source: "xboxControllerRightShoulder.png"
-            active: gamepad.buttonR1
-        }
-
-        Item {
-            id: centerButtons
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            anchors.topMargin: 8
-            height: guideButton.height
-            width: guideButton.width + 16 + backButton.width + startButton.width
-            ButtonImage {
-                id: backButton
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: guideButton.left
-                anchors.rightMargin: 8
-                source: "xboxControllerBack.png"
-                active: gamepad.buttonSelect
-            }
-            ButtonImage {
-                id: guideButton
-                anchors.centerIn: parent
-                source: "xboxControllerButtonGuide.png"
-                active: gamepad.buttonGuide
-            }
-            ButtonImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: guideButton.right
-                anchors.leftMargin: 8
-                id: startButton
-                source: "xboxControllerStart.png"
-                active: gamepad.buttonStart
-            }
-        }
-
-
-
-
-        DPad {
-            id: dPad
-            gamepad: gamepad
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
+        ColumnLayout {
+            anchors.fill: parent
             anchors.margins: 8
+            RowLayout {
+                id: topRow
+                width: parent.width
+                ColumnLayout {
+                    id: buttonL2Item
+                    Layout.alignment: Qt.AlignLeft
+                    ButtonImage {
+                        id: leftTrigger
+                        Layout.alignment: Qt.AlignCenter
+                        source: "xboxControllerLeftTrigger.png"
+                        active: gamepad.buttonL2 != 0
+                    }
+                    ProgressBar {
+                        id: buttonL2Value
+                        width: leftTrigger.width
+                        value: gamepad.buttonL2
+                    }
+                }
+
+                Item {
+                    id: centerButtons
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                    height: guideButton.height
+                    width: guideButton.width + 16 + backButton.width + startButton.width
+                    ButtonImage {
+                        id: backButton
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: guideButton.left
+                        anchors.rightMargin: 8
+                        source: "xboxControllerBack.png"
+                        active: gamepad.buttonSelect
+                    }
+                    ButtonImage {
+                        id: guideButton
+                        anchors.centerIn: parent
+                        source: "xboxControllerButtonGuide.png"
+                        active: gamepad.buttonGuide
+                    }
+                    ButtonImage {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: guideButton.right
+                        anchors.leftMargin: 8
+                        id: startButton
+                        source: "xboxControllerStart.png"
+                        active: gamepad.buttonStart
+                    }
+                }
+
+
+                ColumnLayout {
+                    id: buttonR2Item
+                    Layout.alignment: Qt.AlignRight
+                    ButtonImage {
+                        id: rightTrigger
+                        Layout.alignment: Qt.AlignCenter
+                        source: "xboxControllerRightTrigger.png"
+                        active: gamepad.buttonR2 != 0
+                    }
+
+                    ProgressBar {
+                        id: buttonR2Value
+                        width: rightTrigger.width
+                        value: gamepad.buttonR2
+                    }
+                }
+            }
+
+            RowLayout {
+                id: middleRow
+                ButtonImage {
+                    id: buttonL1
+                    source: "xboxControllerLeftShoulder.png"
+                    active: gamepad.buttonL1
+                }
+                Item {
+                    id: spacer1
+                    Layout.fillWidth: true
+                }
+
+                ButtonImage {
+                    id: buttonR1
+                    source: "xboxControllerRightShoulder.png"
+                    active: gamepad.buttonR1
+                }
+            }
+
+            RowLayout {
+                id: bottomRow
+                width: parent.width
+                DPad {
+                    id: dPad
+                    Layout.alignment: Qt.AlignLeft
+                    gamepad: gamepad
+                }
+
+                LeftThumbstick {
+                    id: leftThumbstick
+                    Layout.alignment: Qt.AlignLeft
+                    gamepad: gamepad
+                }
+
+                Item {
+                    id: spacer2
+                    Layout.fillWidth: true
+                }
+
+                RightThumbstick {
+                    id: rightThumbstick
+                    Layout.alignment: Qt.AlignRight
+                    gamepad: gamepad
+                }
+
+                Item {
+                    width: 200
+                    height: 200
+                    Layout.alignment: Qt.AlignRight
+                    ButtonImage {
+                        id: buttonA
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        source: "xboxControllerButtonA.png";
+                        active: gamepad.buttonA
+                    }
+                    ButtonImage {
+                        id: buttonB
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "xboxControllerButtonB.png";
+                        active: gamepad.buttonB
+                    }
+                    ButtonImage {
+                        id: buttonX
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "xboxControllerButtonX.png";
+                        active: gamepad.buttonX
+                    }
+                    ButtonImage {
+                        id: buttonY
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        source: "xboxControllerButtonY.png";
+                        active: gamepad.buttonY
+                    }
+                }
+            }
         }
-
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.margins: 8
-            spacing: 16
-
-            LeftThumbstick {
-                id: leftThumbstick
-                gamepad: gamepad
-            }
-
-            RightThumbstick {
-                id: rightThumbstick
-                gamepad: gamepad
-            }
-        }
-
-
-        Item {
-            width: 200
-            height: 200
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
-            ButtonImage {
-                id: buttonA
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                source: "xboxControllerButtonA.png";
-                active: gamepad.buttonA
-            }
-            ButtonImage {
-                id: buttonB
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                source: "xboxControllerButtonB.png";
-                active: gamepad.buttonB
-            }
-            ButtonImage {
-                id: buttonX
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                source: "xboxControllerButtonX.png";
-                active: gamepad.buttonX
-            }
-            ButtonImage {
-                id: buttonY
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                source: "xboxControllerButtonY.png";
-                active: gamepad.buttonY
-            }
-        }
-
     }
 
     Connections {

@@ -40,10 +40,10 @@
 
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Window 2.0
 import QtGamepad 1.0
 
-ApplicationWindow {
+Window {
     visible: true
     width: 640
     height: 480

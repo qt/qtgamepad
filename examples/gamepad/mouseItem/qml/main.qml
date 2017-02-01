@@ -38,16 +38,27 @@
 **
 ****************************************************************************/
 
-
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Window 2.0
 import QtGamepad 1.0
 
-ApplicationWindow {
+Window {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("Gamepad Mouse Item")
+
+    Text {
+        id: instructionLabel
+        anchors.centerIn: parent
+        text: qsTr("Simulate mouse input using a Gamepad")
+    }
+    Text {
+        id: outputLabel
+        anchors.horizontalCenter: instructionLabel.horizontalCenter
+        anchors.top: instructionLabel.bottom
+        text: ""
+    }
 
     Connections {
         target: GamepadManager
@@ -61,9 +72,10 @@ ApplicationWindow {
         onButtonAChanged: {
             if (value == true) {
                 gamepadMouse.mouseButtonPressed(Qt.LeftButton);
-                console.log("fake clicked qt: " + gamepadMouse.mousePosition.x + "," + gamepadMouse.mousePosition.y);
+                outputLabel.text = "Mouse click at: " + gamepadMouse.mousePosition.x + "," + gamepadMouse.mousePosition.y;
             } else {
                 gamepadMouse.mouseButtonReleased(Qt.LeftButton);
+                outputLabel.text = "";
             }
         }
     }
@@ -76,18 +88,36 @@ ApplicationWindow {
 
         Rectangle {
             id: cursor
-            width: 4
-            height: 4
+            width: 9
+            height: 9
+            radius: 4.5
             x: gamepadMouse.mousePosition.x
             y: gamepadMouse.mousePosition.y
-            color: "red"
+            color: "transparent"
+            border.color: "red"
+            Rectangle {
+                x: cursor.width * 0.5 - 0.5
+                y: 1
+                width: 1
+                height: cursor.height - 2
+                color: "black"
+            }
+            Rectangle {
+                x: 1
+                y: cursor.height * 0.5 - 0.5
+                height: 1
+                width: cursor.width - 2
+                color: "black"
+            }
         }
     }
+
+
 
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            console.log("clicked qt: " + mouse.x + "," + mouse.y);
+            console.log("clicked at: " + mouse.x + "," + mouse.y);
         }
     }
 }
