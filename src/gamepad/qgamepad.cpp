@@ -394,8 +394,8 @@ int QGamepad::deviceId() const
 
 /*!
  * \property QGamepad::connected
- * This property holds the connectivity state of the gamepad device. If a gamepad is connected
- * this property will be true, otherwise false.
+ * This read-only property holds the connectivity state of the gamepad device.
+ * If a gamepad is connected, this property will be true, otherwise false.
  */
 bool QGamepad::isConnected() const
 {
@@ -406,7 +406,8 @@ bool QGamepad::isConnected() const
 /*!
  * \property QGamepad::name
  *
- * This property holds the reported name of the gamepad if one is available.
+ * This read-only property holds the reported name of the gamepad if one
+ * is available.
  */
 QString QGamepad::name() const
 {
@@ -417,8 +418,8 @@ QString QGamepad::name() const
 /*!
  * \property QGamepad::axisLeftX
  *
- * This property holds the value of the left thumbstick's X axis.
- * The range of axis values are from -1.0 to 1.0.
+ * This read-only property holds the value of the left thumbstick's X axis.
+ * The axis values range from -1.0 to 1.0.
  */
 double QGamepad::axisLeftX() const
 {
@@ -429,8 +430,8 @@ double QGamepad::axisLeftX() const
 /*!
  * \property QGamepad::axisLeftY
  *
- * This property holds the value of the left thumbstick's Y axis.
- * The range of axis values are from -1.0 to 1.0.
+ * This read-only property holds the value of the left thumbstick's Y axis.
+ * The axis values range from -1.0 to 1.0.
  */
 double QGamepad::axisLeftY() const
 {
@@ -441,8 +442,8 @@ double QGamepad::axisLeftY() const
 /*!
  * \property QGamepad::axisRightX
  *
- * This property holds the value of the right thumbstick's X axis.
- * The range of axis values are from -1.0 to 1.0.
+ * This read-only property holds the value of the right thumbstick's X axis.
+ * The axis values range from -1.0 to 1.0.
  */
 double QGamepad::axisRightX() const
 {
@@ -453,8 +454,8 @@ double QGamepad::axisRightX() const
 /*!
  * \property QGamepad::axisRightY
  *
- * This property holds the value of the right thumbstick's Y axis.
- * The range of axis values are from -1.0 to 1.0.
+ * This read-only property holds the value of the right thumbstick's Y axis.
+ * The axis values range from -1.0 to 1.0.
  */
 double QGamepad::axisRightY() const
 {
@@ -465,8 +466,8 @@ double QGamepad::axisRightY() const
 /*!
  * \property QGamepad::buttonA
  *
- * This property holds the state of the A button.  True when pressed, false when not
- * pressed.
+ * This read-only property holds the state of the A button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonA() const
 {
@@ -477,8 +478,8 @@ bool QGamepad::buttonA() const
 /*!
  * \property QGamepad::buttonB
  *
- * This property holds the state of the B button.  True when pressed, false when not
- * pressed.
+ * This read-only property holds the state of the B button.
+ * The value is \c true when pressed, and \c false when not pressed.
  *
  * \sa QGamepadManager::connectedGamepads()
  */
@@ -491,8 +492,8 @@ bool QGamepad::buttonB() const
 /*!
  * \property QGamepad::buttonX
  *
- * This property holds the state of the X button.  True when pressed, false when not
- * pressed.
+ * This read-only property holds the state of the X button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonX() const
 {
@@ -503,8 +504,8 @@ bool QGamepad::buttonX() const
 /*!
  * \property QGamepad::buttonY
  *
- * This property holds the state of the Y button.  True when pressed, false when not
- * pressed.
+ * This read-only property holds the state of the Y button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonY() const
 {
@@ -515,8 +516,8 @@ bool QGamepad::buttonY() const
 /*!
  * \property QGamepad::buttonL1
  *
- * This property holds the state of the left shoulder button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the left shoulder button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonL1() const
 {
@@ -527,8 +528,8 @@ bool QGamepad::buttonL1() const
 /*!
  * \property QGamepad::buttonR1
  *
- * This property holds the state of the right shoulder button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the right shoulder button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonR1() const
 {
@@ -539,7 +540,7 @@ bool QGamepad::buttonR1() const
 /*!
  * \property QGamepad::buttonL2
  *
- * This property holds the value of the left trigger button.
+ * This read-only property holds the value of the left trigger button.
  * This trigger value ranges from 0.0 when not pressed to 1.0
  * when pressed completely.
  */
@@ -552,7 +553,7 @@ double QGamepad::buttonL2() const
 /*!
  * \property QGamepad::buttonR2
  *
- * This property holds the value of the right trigger button.
+ * This read-only property holds the value of the right trigger button.
  * This trigger value ranges from 0.0 when not pressed to 1.0
  * when pressed completely.
  */
@@ -565,8 +566,9 @@ double QGamepad::buttonR2() const
 /*!
  * \property QGamepad::buttonSelect
  *
- * This property holds the state of the Select button.  True when pressed, false when not
- * pressed. This button can sometimes be labeled as the Back button on some gamepads.
+ * This read-only property holds the state of the Select button.
+ * The value is \c true when pressed, and \c false when not pressed.
+ * This button can sometimes be labeled as the Back button on some gamepads.
  */
 bool QGamepad::buttonSelect() const
 {
@@ -577,8 +579,9 @@ bool QGamepad::buttonSelect() const
 /*!
  * \property QGamepad::buttonStart
  *
- * This property holds the state of the Start button.  True when pressed, false when not
- * pressed. This button can sometimes be labeled as the Forward button on some gamepads.
+ * This read-only property holds the state of the Start button.
+ * The value is \c true when pressed, and \c false when not pressed.
+ * This button can sometimes be labeled as the Forward button on some gamepads.
  */
 bool QGamepad::buttonStart() const
 {
@@ -589,8 +592,9 @@ bool QGamepad::buttonStart() const
 /*!
  * \property QGamepad::buttonL3
  *
- * This property holds the state of the left stick button.  True when pressed, false when not
- * pressed.  This button is usually triggered by pressing the left joystick itself.
+ * This read-only property holds the state of the left stick button.
+ * The value is \c true when pressed, and \c false when not pressed.
+ * This button is usually triggered by pressing the left joystick itself.
  */
 bool QGamepad::buttonL3() const
 {
@@ -601,8 +605,9 @@ bool QGamepad::buttonL3() const
 /*!
  * \property QGamepad::buttonR3
  *
- * This property holds the state of the right stick button.  True when pressed, false when not
- * pressed.  This button is usually triggered by pressing the right joystick itself.
+ * This read-only property holds the state of the right stick button.
+ * The value is \c true when pressed, and \c false when not pressed.
+ * This button is usually triggered by pressing the right joystick itself.
  */
 bool QGamepad::buttonR3() const
 {
@@ -613,8 +618,8 @@ bool QGamepad::buttonR3() const
 /*!
  * \property QGamepad::buttonUp
  *
- * This property holds the state of the direction pad up button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the direction pad up button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonUp() const
 {
@@ -625,8 +630,8 @@ bool QGamepad::buttonUp() const
 /*!
  * \property QGamepad::buttonDown
  *
- * This property holds the state of the direction pad down button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the direction pad down button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonDown() const
 {
@@ -637,8 +642,8 @@ bool QGamepad::buttonDown() const
 /*!
  * \property QGamepad::buttonLeft
  *
- * This property holds the state of the direction pad left button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the direction pad left button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonLeft() const
 {
@@ -649,8 +654,8 @@ bool QGamepad::buttonLeft() const
 /*!
  * \property QGamepad::buttonRight
  *
- * This property holds the state of the direction pad right button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the direction pad right button.
+ * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonRight() const
 {
@@ -658,6 +663,12 @@ bool QGamepad::buttonRight() const
     return d->buttonRight;
 }
 
+/*!
+ * \property QGamepad::buttonCenter
+ *
+ * This read-only property holds the state of the center button.
+ * The value is \c true when pressed, and \c false when not pressed.
+ */
 bool QGamepad::buttonCenter() const
 {
     Q_D(const QGamepad);
@@ -667,8 +678,8 @@ bool QGamepad::buttonCenter() const
 /*!
  * \property QGamepad::buttonGuide
  *
- * This property holds the state of the guide button.
- * True when pressed, false when not pressed.
+ * This read-only property holds the state of the guide button.
+ * The value is \c true when pressed, and \c false when not pressed.
  * This button is typically the one in the center of the gamepad with a logo.
  * Some gamepads will not have a guide button.
  */
