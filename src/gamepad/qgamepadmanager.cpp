@@ -172,54 +172,91 @@ QGamepadManager::~QGamepadManager()
     d->gamepadBackend->deleteLater();
 }
 
+/*!
+    Returns the instance of the QGamepadManager.
+*/
 QGamepadManager *QGamepadManager::instance()
 {
     static QGamepadManager instance;
     return &instance;
 }
 
+/*!
+    Returns a boolean indicating whether the gamepad with
+    the specified \a deviceId is connected or not.
+*/
 bool QGamepadManager::isGamepadConnected(int deviceId) const
 {
     Q_D(const QGamepadManager);
     return d->connectedGamepads.contains(deviceId);
 }
 
+/*!
+    Returns a QList containing the \l {QGamepad::}{deviceId}
+    values of the connected gamepads.
+*/
 const QList<int> QGamepadManager::connectedGamepads() const
 {
     Q_D(const QGamepadManager);
     return d->connectedGamepads.toList();
 }
 
+/*!
+    Returns a boolean indicating whether configuration
+    is needed for the specified \a deviceId.
+*/
 bool QGamepadManager::isConfigurationNeeded(int deviceId) const
 {
     Q_D(const QGamepadManager);
     return d->gamepadBackend->isConfigurationNeeded(deviceId);
 }
 
+/*!
+    Configures the specified \a button on the gamepad with
+    this \a deviceId.
+    Returns \c true in case of success.
+*/
 bool QGamepadManager::configureButton(int deviceId, QGamepadManager::GamepadButton button)
 {
     Q_D(QGamepadManager);
     return d->gamepadBackend->configureButton(deviceId, button);
 }
 
+/*!
+    Configures \a axis on the gamepad with the specified \a deviceId.
+    Returns \c true in case of success.
+*/
 bool QGamepadManager::configureAxis(int deviceId, QGamepadManager::GamepadAxis axis)
 {
     Q_D(QGamepadManager);
     return d->gamepadBackend->configureAxis(deviceId, axis);
 }
 
+/*!
+    Configures \a button as the cancel button on the gamepad with
+    id \a deviceId.
+    Returns \c true in case of success.
+*/
 bool QGamepadManager::setCancelConfigureButton(int deviceId, QGamepadManager::GamepadButton button)
 {
     Q_D(QGamepadManager);
     return d->gamepadBackend->setCancelConfigureButton(deviceId, button);
 }
 
+/*!
+    Resets the configuration on the gamepad with the
+    specified \a deviceId.
+*/
 void QGamepadManager::resetConfiguration(int deviceId)
 {
     Q_D(QGamepadManager);
     d->gamepadBackend->resetConfiguration(deviceId);
 }
 
+/*!
+    Sets the name of the \a file that stores the button and axis
+    configuration data.
+*/
 void QGamepadManager::setSettingsFile(const QString &file)
 {
     Q_D(QGamepadManager);
