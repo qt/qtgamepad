@@ -138,7 +138,7 @@ void QXInputThread::dispatch(int idx, XINPUT_GAMEPAD *state)
         { XINPUT_GAMEPAD_X, QGamepadManager::ButtonX },
         { XINPUT_GAMEPAD_Y, QGamepadManager::ButtonY }
     };
-    for (int i = 0; i < sizeof(buttonMap) / sizeof(ButtonMap); ++i) {
+    for (uint i = 0; i < sizeof(buttonMap) / sizeof(ButtonMap); ++i) {
         const unsigned short xb = buttonMap[i].xbutton;
         unsigned short isDown = state->wButtons & xb;
         if (isDown != (m_controllers[idx].buttons & xb)) {
