@@ -359,7 +359,8 @@ void QGamepadKeyNavigation::setGamepad(QGamepad *gamepad)
 }
 
 /*!
- * Sets the mapping of the Up button.
+ * Sets the mapping of the Up button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setUpKey(Qt::Key key)
 {
@@ -371,7 +372,8 @@ void QGamepadKeyNavigation::setUpKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Down button.
+ * Sets the mapping of the Down button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setDownKey(Qt::Key key)
 {
@@ -383,7 +385,8 @@ void QGamepadKeyNavigation::setDownKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Left button.
+ * Sets the mapping of the Left button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setLeftKey(Qt::Key key)
 {
@@ -395,7 +398,8 @@ void QGamepadKeyNavigation::setLeftKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Right button.
+ * Sets the mapping of the Right button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setRightKey(Qt::Key key)
 {
@@ -407,7 +411,8 @@ void QGamepadKeyNavigation::setRightKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the A button.
+ * Sets the mapping of the A button with the keycode
+ * specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonAKey(Qt::Key key)
 {
@@ -419,7 +424,8 @@ void QGamepadKeyNavigation::setButtonAKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the B button.
+ * Sets the mapping of the B button with the keycode
+ * specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonBKey(Qt::Key key)
 {
@@ -431,7 +437,8 @@ void QGamepadKeyNavigation::setButtonBKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the X button.
+ * Sets the mapping of the X button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonXKey(Qt::Key key)
 {
@@ -443,7 +450,8 @@ void QGamepadKeyNavigation::setButtonXKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Y button.
+ * Sets the mapping of the Y button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonYKey(Qt::Key key)
 {
@@ -455,7 +463,8 @@ void QGamepadKeyNavigation::setButtonYKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Select button.
+ * Sets the mapping of the Select button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonSelectKey(Qt::Key key)
 {
@@ -467,7 +476,8 @@ void QGamepadKeyNavigation::setButtonSelectKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Start button.
+ * Sets the mapping of the Start button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonStartKey(Qt::Key key)
 {
@@ -479,7 +489,8 @@ void QGamepadKeyNavigation::setButtonStartKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the Guide button.
+ * Sets the mapping of the Guide button with the keycode
+ * specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonGuideKey(Qt::Key key)
 {
@@ -491,7 +502,8 @@ void QGamepadKeyNavigation::setButtonGuideKey(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the left shoulder button.
+ * Sets the mapping of the left shoulder button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonL1Key(Qt::Key key)
 {
@@ -503,7 +515,8 @@ void QGamepadKeyNavigation::setButtonL1Key(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the right shoulder button.
+ * Sets the mapping of the right shoulder button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonR1Key(Qt::Key key)
 {
@@ -515,7 +528,8 @@ void QGamepadKeyNavigation::setButtonR1Key(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the left trigger button.
+ * Sets the mapping of the left trigger button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonL2Key(Qt::Key key)
 {
@@ -527,7 +541,8 @@ void QGamepadKeyNavigation::setButtonL2Key(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the right trigger button.
+ * Sets the mapping of the right trigger button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonR2Key(Qt::Key key)
 {
@@ -539,7 +554,8 @@ void QGamepadKeyNavigation::setButtonR2Key(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the left stick button.
+ * Sets the mapping of the left stick button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonL3Key(Qt::Key key)
 {
@@ -551,7 +567,8 @@ void QGamepadKeyNavigation::setButtonL3Key(Qt::Key key)
 }
 
 /*!
- * Sets the mapping of the right stick button.
+ * Sets the mapping of the right stick button with the
+ * keycode specified in \a key.
 */
 void QGamepadKeyNavigation::setButtonR3Key(Qt::Key key)
 {
