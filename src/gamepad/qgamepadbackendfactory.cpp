@@ -38,22 +38,23 @@
 #include "qgamepadbackendplugin_p.h"
 #include "qgamepadbackend_p.h"
 
+#include <QtCore/qdebug.h>
 #include <QtCore/private/qfactoryloader_p.h>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_NO_LIBRARY
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QtGamepadBackendFactoryInterface_iid, QLatin1String("/gamepads"), Qt::CaseInsensitive))
+#if QT_CONFIG(library)
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QtGamepadBackendFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
 #endif
 
 QStringList QGamepadBackendFactory::keys(const QString &pluginPath)
 {
-#ifndef QT_NO_LIBRARY
     QStringList list;
     if (!pluginPath.isEmpty()) {
+#if QT_CONFIG(library)
         QCoreApplication::addLibraryPath(pluginPath);
         list = directLoader()->keyMap().values();
         if (!list.isEmpty()) {
@@ -64,25 +65,29 @@ QStringList QGamepadBackendFactory::keys(const QString &pluginPath)
             for (QStringList::iterator it = list.begin(); it != end; ++it)
                 (*it).append(postFix);
         }
+#else
+        qWarning("Cannot query QGamepadBackend plugins at %s: Library loading is disabled.",
+                 pluginPath.toLocal8Bit().constData());
+#endif
     }
     list.append(loader()->keyMap().values());
     return list;
-#else
-    return QStringList();
-#endif
 }
 
 QGamepadBackend *QGamepadBackendFactory::create(const QString &name, const QStringList &args, const QString &pluginPath)
 {
-#ifndef QT_NO_LIBRARY
     if (!pluginPath.isEmpty()) {
+#if QT_CONFIG(library)
         QCoreApplication::addLibraryPath(pluginPath);
         if (QGamepadBackend *ret = qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(directLoader(), name, args))
             return ret;
+#else
+        qWarning("Cannot load QGamepadBackend plugin from %s. Library loading is disabled.",
+                 pluginPath.toLocal8Bit().constData());
+#endif
     }
     if (QGamepadBackend *ret = qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(loader(), name, args))
         return ret;
-#endif
     return 0;
 }
 

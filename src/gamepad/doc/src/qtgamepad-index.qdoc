@@ -86,7 +86,7 @@
   present, and is sending events, via the \c lsinput and \c evtest utilities.
 
   PlayStation controllers will likely need the help of an additional tool like
-  \l{xboxdrv}{https://github.com/xboxdrv/xboxdrv}. Once installed, and having a
+  \l{https://github.com/xboxdrv/xboxdrv}{xboxdrv}. Once installed, and having a
   PS3 controller connected via USB, the following will ensure correct operation
   with QtGamepad:
 

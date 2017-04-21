@@ -78,8 +78,8 @@ public:
     bool handleGenericMotionEvent(jobject event) override;
 
 protected:
-    bool start();
-    void stop();
+    bool start() override;
+    void stop() override;
 
 public:
     struct Mapping {

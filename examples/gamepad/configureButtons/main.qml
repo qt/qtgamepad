@@ -35,10 +35,7 @@
 ****************************************************************************/
 
 import QtQuick 2.5
-import QtQuick.Controls 1.4
-
-import QtQuick 2.5
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.0
 import QtGamepad 1.0
@@ -47,6 +44,8 @@ import QtGamepad 1.0
 ApplicationWindow {
     visible: true
     title: qsTr("Configure gamepad")
+    width: 400
+    height: 600
 
     Component.onCompleted: {
         if (Qt.platform.os === "android")
@@ -74,541 +73,570 @@ ApplicationWindow {
         onConfigurationCanceled: pressButton(null)
     }
 
-    ColumnLayout {
-        anchors.fill: parent
+    Rectangle {
+        id: headerRectangle
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.left: parent.left
+        height: headerLayout.implicitHeight + 16
+        color: "white"
+        z: 1
 
-        RowLayout {
-            Layout.fillWidth: true
-            Text {
-                text: qsTr("Connected gamepads")
+        ColumnLayout {
+            id: headerLayout
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.margins: 8
+
+            Label {
+                text: qsTr("Gamepad configuration Utility")
+                font.pointSize: 16
             }
-            ComboBox {
-                model: GamepadManager.connectedGamepads
-                onCurrentIndexChanged: gamepad.deviceId[GamepadManager.connectedGamepads[currentIndex]]
-            }
-        }
 
-        Text {
-            Layout.fillWidth: true
-            text: qsTr("Start button cancel's current configuration")
-        }
-
-        RowLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            GroupBox {
-                title: qsTr("Configure Gamepad Buttons")
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+                Label {
+                    text: qsTr("Connected gamepads")
+                }
+                ComboBox {
+                    Layout.fillWidth: true
+                    model: GamepadManager.connectedGamepads
+                    onCurrentIndexChanged: gamepad.deviceId[GamepadManager.connectedGamepads[currentIndex]]
+                }
+            }
 
-                ColumnLayout {
-                    anchors.fill: parent
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("ButtonA")
-                            horizontalAlignment: Text.AlignRight
-                        }
+            Label {
+                text: qsTr("Start button cancel's current configuration")
+                Layout.fillWidth: true
+            }
+        }
+    }
 
-                        Text {
-                            text: gamepad.buttonA ? qsTr("DOWN") : qsTr("UP")
+    Flickable {
+        id: scrollArea
+        anchors.top: headerRectangle.bottom
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.margins: 8
+        contentHeight: contentLayout.implicitHeight
+        ScrollIndicator.vertical: ScrollIndicator { }
+        ColumnLayout {
+            id: contentLayout
+            width: parent.width
+            ColumnLayout {
+                GroupBox {
+                    title: qsTr("Configure Gamepad Buttons")
+                    Layout.fillWidth: true
+                    ColumnLayout {
+                        anchors.fill: parent
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
+                            Label {
+                                text: qsTr("ButtonA")
+                                horizontalAlignment: Text.AlignRight
+                            }
 
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonA);
+                            Label {
+                                text: gamepad.buttonA ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonA);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("ButtonB")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonB ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonB);
+                            Label {
+                                text: qsTr("ButtonB")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonB ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonB);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("ButtonX")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonX ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonX);
+                            Label {
+                                text: qsTr("ButtonX")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonX ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonX);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("ButtonY")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonY ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonY);
+                            Label {
+                                text: qsTr("ButtonY")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonY ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonY);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("ButtonStart")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonStart ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonStart);
+                            Label {
+                                text: qsTr("ButtonStart")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonStart ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonStart);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("ButtonSelect")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonSelect ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonSelect);
+                            Label {
+                                text: qsTr("ButtonSelect")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonSelect ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonSelect);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button L1")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonL1 ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonL1);
+                            Label {
+                                text: qsTr("Button L1")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonL1 ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonL1);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button R1")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonR1 ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonR1);
+                            Label {
+                                text: qsTr("Button R1")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonR1 ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonR1);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button L2")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonL2 ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonL2);
+                            Label {
+                                text: qsTr("Button L2")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonL2 ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonL2);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button R2")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonR2 ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonR2);
+                            Label {
+                                text: qsTr("Button R2")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonR2 ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonR2);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button L3")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonL3 ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonL3);
+                            Label {
+                                text: qsTr("Button L3")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonL3 ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonL3);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button R3")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonR3 ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonR3);
+                            Label {
+                                text: qsTr("Button R3")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonR3 ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonR3);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button Up")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonUp ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonUp);
+                            Label {
+                                text: qsTr("Button Up")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonUp ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonUp);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button Down")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
-                            text: gamepad.buttonDown ? qsTr("DOWN") : qsTr("UP")
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonDown  );
+                            Label {
+                                text: qsTr("Button Down")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                text: gamepad.buttonDown ? qsTr("DOWN") : qsTr("UP")
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonDown  );
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button Left")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
+                        RowLayout {
                             Layout.fillWidth: true
-                            text: gamepad.buttonLeft ? qsTr("DOWN") : qsTr("UP")
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonLeft);
+                            Label {
+                                text: qsTr("Button Left")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                text: gamepad.buttonLeft ? qsTr("DOWN") : qsTr("UP")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonLeft);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button Right")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
+                        RowLayout {
                             Layout.fillWidth: true
-                            text: gamepad.buttonRight ? qsTr("DOWN") : qsTr("UP")
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonRight);
+                            Label {
+                                text: qsTr("Button Right")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                text: gamepad.buttonRight ? qsTr("DOWN") : qsTr("UP")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonRight);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button Center")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
+                        RowLayout {
                             Layout.fillWidth: true
-                            text: gamepad.buttonCenter ? qsTr("DOWN") : qsTr("UP")
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonCenter);
+                            Label {
+                                text: qsTr("Button Center")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                text: gamepad.buttonCenter ? qsTr("DOWN") : qsTr("UP")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonCenter);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("Button Guide")
-                            horizontalAlignment: Text.AlignRight
-                        }
-                        Text {
+                        RowLayout {
                             Layout.fillWidth: true
-                            text: gamepad.buttonGuide ? qsTr("DOWN") : qsTr("UP")
-                            horizontalAlignment: Text.AlignHCenter
-                        }
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonGuide);
+                            Label {
+                                text: qsTr("Button Guide")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                text: gamepad.buttonGuide ? qsTr("DOWN") : qsTr("UP")
+                                horizontalAlignment: Text.AlignRight
+                            }
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureButton(gamepad.deviceId, GamepadManager.ButtonGuide);
+                                }
                             }
                         }
                     }
                 }
-            }
-            GroupBox {
-                title: qsTr("Gamepad Axies")
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                GroupBox {
+                    title: qsTr("Gamepad Axies")
+                    Layout.fillWidth: true
 
-                ColumnLayout {
-                    anchors.fill: parent
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("AxisLeftX")
-                            horizontalAlignment: Text.AlignRight
-                        }
-
-                        Text {
-                            text: gamepad.axisLeftX
+                    ColumnLayout {
+                        anchors.fill: parent
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
+                            Label {
+                                text: qsTr("AxisLeftX")
+                                horizontalAlignment: Text.AlignRight
+                            }
 
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisLeftX);
+                            Label {
+                                text: gamepad.axisLeftX
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisLeftX);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("AxisLeftY")
-                            horizontalAlignment: Text.AlignRight
-                        }
-
-                        Text {
-                            text: gamepad.axisLeftY
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
+                            Label {
+                                text: qsTr("AxisLeftY")
+                                horizontalAlignment: Text.AlignRight
+                            }
 
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisLeftY);
+                            Label {
+                                text: gamepad.axisLeftY
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisLeftY);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("AxisRightX")
-                            horizontalAlignment: Text.AlignRight
-                        }
-
-                        Text {
-                            text: gamepad.axisRightX
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
+                            Label {
+                                text: qsTr("AxisRightX")
+                                horizontalAlignment: Text.AlignRight
+                            }
 
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisRightX);
+                            Label {
+                                text: gamepad.axisRightX
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisRightX);
+                                }
                             }
                         }
-                    }
-                    RowLayout {
-                        Layout.fillWidth: true
-                        Text {
-                            text: qsTr("AxisRightY")
-                            horizontalAlignment: Text.AlignRight
-                        }
-
-                        Text {
-                            text: gamepad.axisRightY
+                        RowLayout {
                             Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignHCenter
-                        }
+                            Label {
+                                text: qsTr("AxisRightY")
+                                horizontalAlignment: Text.AlignRight
+                            }
 
-                        Button {
-                            text: qsTr("Configure")
-                            checkable: true
-                            enabled: !checked
-                            onCheckedChanged: {
-                                pressButton(this);
-                                if (checked)
-                                    GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisRightY);
+                            Label {
+                                text: gamepad.axisRightY
+                                Layout.fillWidth: true
+                                horizontalAlignment: Text.AlignRight
+                            }
+
+                            Button {
+                                text: qsTr("Configure")
+                                checkable: true
+                                enabled: !checked
+                                onCheckedChanged: {
+                                    pressButton(this);
+                                    if (checked)
+                                        GamepadManager.configureAxis(gamepad.deviceId, GamepadManager.AxisRightY);
+                                }
                             }
                         }
-                    }
 
-                    Item {
-                        Layout.fillHeight: true
+                        Item {
+                            Layout.fillHeight: true
+                        }
                     }
                 }
             }
