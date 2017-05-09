@@ -38,6 +38,8 @@
 #include <QtCore/QDebug>
 
 #include <SDL.h>
+// Reset bool redefinition from SDL header
+#undef bool
 
 QT_BEGIN_NAMESPACE
 
