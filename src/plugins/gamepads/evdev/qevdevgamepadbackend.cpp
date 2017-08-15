@@ -34,6 +34,9 @@
 **
 ****************************************************************************/
 
+#include <QtCore/qglobal.h>
+QT_WARNING_DISABLE_GCC("-Wmaybe-uninitialized") // GCC warnings don't make sense, so disable
+
 #include "qevdevgamepadbackend_p.h"
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QLoggingCategory>
