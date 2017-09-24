@@ -503,7 +503,7 @@ QT_BEGIN_NAMESPACE
 
 QDarwinGamepadBackend::QDarwinGamepadBackend(QObject *parent)
     : QGamepadBackend(parent)
-    , m_darwinGamepadManager(Q_NULLPTR)
+    , m_darwinGamepadManager(nullptr)
     , m_isMonitoringActive(false)
 {
     m_darwinGamepadManager = [[QT_MANGLE_NAMESPACE(DarwinGamepadManager) alloc] initWithBackend:this];
