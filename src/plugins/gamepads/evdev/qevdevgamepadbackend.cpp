@@ -331,6 +331,13 @@ bool QEvdevGamepadDevice::openDevice(const QByteArray &dev)
         }
 
         emit m_backend->gamepadAdded(m_productId);
+
+        // same as libevdev::libevdev_set_fd() in libevdev.c
+        char buffer[256];
+        memset(buffer, 0, sizeof(buffer));
+        if (ioctl(m_fd, EVIOCGNAME(sizeof(buffer) - 1), buffer) >= 0)
+            emit m_backend->gamepadNamed(m_productId, QString::fromUtf8(buffer));
+
     } else {
         QT_CLOSE(m_fd);
         m_fd = -1;

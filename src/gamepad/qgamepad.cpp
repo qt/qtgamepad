@@ -102,8 +102,10 @@ public:
     bool buttonGuide;
 
     void setConnected(bool isConnected);
+    void setName(const QString &name);
 
     void _q_handleGamepadConnected(int id);
+    void _q_handleGamepadNameChanged(int id, const QString &name);
     void _q_handleGamepadDisconnected(int id);
     void _q_handleGamepadAxisEvent(int id, QGamepadManager::GamepadAxis axis, double value);
     void _q_handleGamepadButtonPressEvent(int id, QGamepadManager::GamepadButton button, double value);
@@ -119,6 +121,15 @@ void QGamepadPrivate::setConnected(bool isConnected)
     }
 }
 
+void QGamepadPrivate::setName(const QString &theName)
+{
+    Q_Q(QGamepad);
+    if (name != theName) {
+        name = theName;
+        emit q->nameChanged(name);
+    }
+}
+
 /*!
  * \internal
  */\
@@ -127,6 +138,15 @@ void QGamepadPrivate::_q_handleGamepadConnected(int id)
     if (id == deviceId) {
         setConnected(true);
     }
+}
+
+/*!
+ * \internal
+ */\
+void QGamepadPrivate::_q_handleGamepadNameChanged(int id, const QString &name)
+{
+    if (id == deviceId)
+        setName(name);
 }
 
 /*!
@@ -363,12 +383,14 @@ QGamepad::QGamepad(int deviceId, QObject *parent)
     Q_D(QGamepad);
     d->gamepadManager = QGamepadManager::instance();
     connect(d->gamepadManager, SIGNAL(gamepadConnected(int)), this, SLOT(_q_handleGamepadConnected(int)));
+    connect(d->gamepadManager, SIGNAL(gamepadNameChanged(int, QString)), this, SLOT(_q_handleGamepadNameChanged(int, QString)));
     connect(d->gamepadManager, SIGNAL(gamepadDisconnected(int)), this, SLOT(_q_handleGamepadDisconnected(int)));
     connect(d->gamepadManager, SIGNAL(gamepadAxisEvent(int,QGamepadManager::GamepadAxis,double)), this, SLOT(_q_handleGamepadAxisEvent(int,QGamepadManager::GamepadAxis,double)));
     connect(d->gamepadManager, SIGNAL(gamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)), this, SLOT(_q_handleGamepadButtonPressEvent(int,QGamepadManager::GamepadButton,double)));
     connect(d->gamepadManager, SIGNAL(gamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)), this, SLOT(_q_handleGamepadButtonReleaseEvent(int,QGamepadManager::GamepadButton)));
 
     d->setConnected(d->gamepadManager->isGamepadConnected(deviceId));
+    d->setName(d->gamepadManager->gamepadName(deviceId));
 }
 
 /*!

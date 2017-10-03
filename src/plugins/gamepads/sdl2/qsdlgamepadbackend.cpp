@@ -193,8 +193,13 @@ void QSdlGamepadBackend::addController(int index)
         m_indexForController.insert(index, controller);
         int instanceID = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
         m_instanceIdForIndex.insert(instanceID, index);
+        const char *name = SDL_GameControllerName(controller);
+
         //qDebug() << "Controller " << index << " added with instanceId: " << instanceID;
         emit gamepadAdded(index);
+
+        if (name)
+            emit gamepadNamed(index, QString::fromUtf8(name));
     }
 }
 
