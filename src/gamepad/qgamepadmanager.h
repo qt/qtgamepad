@@ -34,8 +34,8 @@
 **
 ****************************************************************************/
 
-#ifndef JOYSTICKMANAGER_H
-#define JOYSTICKMANAGER_H
+#ifndef QGAMEPADMANAGER_H
+#define QGAMEPADMANAGER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
@@ -132,4 +132,4 @@ QT_END_NAMESPACE
 Q_DECLARE_METATYPE(QGamepadManager::GamepadButton)
 Q_DECLARE_METATYPE(QGamepadManager::GamepadAxis)
 
-#endif // JOYSTICKMANAGER_H
+#endif // QGAMEPADMANAGER_H

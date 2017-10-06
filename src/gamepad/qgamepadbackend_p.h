@@ -34,8 +34,8 @@
 **
 ****************************************************************************/
 
-#ifndef QGAMEPADBACKEND_H
-#define QGAMEPADBACKEND_H
+#ifndef QGAMEPADBACKEND_P_H
+#define QGAMEPADBACKEND_P_H
 
 //
 //  W A R N I N G
@@ -114,4 +114,4 @@ protected:
 
 QT_END_NAMESPACE
 
-#endif // QGAMEPADBACKEND_H
+#endif // QGAMEPADBACKEND_P_H
