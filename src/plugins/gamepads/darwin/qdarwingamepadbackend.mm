@@ -105,11 +105,8 @@
             break;
         }
     }
-#if QT_OSX_PLATFORM_SDK_EQUAL_OR_ABOVE(__MAC_10_11) || QT_IOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__IPHONE_9_0) || defined(Q_OS_TVOS)
+
     controller.playerIndex = GCControllerPlayerIndex(index);
-#else
-    controller.playerIndex = index;
-#endif
 
     QMetaObject::invokeMethod(backend, "darwinGamepadAdded", Qt::AutoConnection, Q_ARG(int, index));
 
