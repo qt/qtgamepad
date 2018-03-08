@@ -40,23 +40,21 @@
 #import <GameController/GameController.h>
 
 @interface QT_MANGLE_NAMESPACE(DarwinGamepadManager) : NSObject
+
+@property (nonatomic, strong) id connectObserver;
+@property (nonatomic, strong) id disconnectObserver;
+
+@end
+
+@implementation QT_MANGLE_NAMESPACE(DarwinGamepadManager)
 {
     QDarwinGamepadBackend *backend;
     NSMutableArray *connectedControllers;
 }
 
-@property (nonatomic, strong) id connectObserver;
-@property (nonatomic, strong) id disconnectObserver;
-
--(void)addMonitoredController:(GCController *)controller;
--(void)removeMonitoredController:(GCController *)controller;
-
-@end
-
-@implementation QT_MANGLE_NAMESPACE(DarwinGamepadManager)
-
--(id)initWithBackend:(QDarwinGamepadBackend *)gamepadBackend {
-    if (self = [super init]) {
+-(instancetype)initWithBackend:(QDarwinGamepadBackend *)gamepadBackend
+{
+    if ((self = [self init])) {
         backend = gamepadBackend;
         connectedControllers = [[NSMutableArray alloc] init];
         //Setup observers for monitoring controller connections/disconnections
