@@ -368,7 +368,7 @@ void QGamepadPrivate::_q_handleGamepadButtonReleaseEvent(int id, QGamepadManager
 /*!
    \class QGamepad
    \inmodule QtGamepad
-   \brief A gamepad device connected to a system
+   \brief A gamepad device connected to a system.
 
    QGamepad is used to access the current state of gamepad hardware connected
    to a system.
