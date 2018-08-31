@@ -62,10 +62,15 @@ public:
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("QtGamepad"));
 
+        //@uri QtGamepad
+
         qmlRegisterSingletonType<QGamepadManager>(uri, 1, 0, "GamepadManager", &gamepadmanager_singletontype_provider);
         qmlRegisterType<QGamepad>(uri, 1, 0, "Gamepad");
         qmlRegisterType<QGamepadKeyNavigation>(uri, 1, 0, "GamepadKeyNavigation");
         qmlRegisterType<QGamepadMouseItem>(uri, 1, 0, "GamepadMouseItem");
+
+        // Register the latest Qt version as QML type version
+        qmlRegisterModule(uri, 1, QT_VERSION_MINOR);
     }
 
     void initializeEngine(QQmlEngine *engine, const char *uri)
