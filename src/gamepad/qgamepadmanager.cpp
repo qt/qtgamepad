@@ -144,6 +144,17 @@ void QGamepadManagerPrivate::loadBackend()
  */
 
 /*!
+ * \qmltype GamepadManager
+ * \inqmlmodule QtGamepad
+ * \instantiates QGamepadManager
+ * \brief Queries attached gamepads and related events.
+ *
+ * GamepadManager QML type provides a high-level interface for
+ * querying the attached gamepads and events related to all of the
+ * connected devices.
+ */
+
+/*!
  * Constructor for QGamepadManager.
  */
 
@@ -213,7 +224,15 @@ QString QGamepadManager::gamepadName(int deviceId) const
 }
 
 /*!
-    Returns a QList containing the \l {QGamepad::}{deviceId}
+   \qmlproperty var GamepadManager::connectedGamepads
+   \readonly
+
+    Returns a list of integers containing the \l {QGamepad::}{deviceId}
+    values of the connected gamepads.
+*/
+
+/*!
+    Returns a list of integers containing the \l {QGamepad::}{deviceId}
     values of the connected gamepads.
 */
 const QList<int> QGamepadManager::connectedGamepads() const
