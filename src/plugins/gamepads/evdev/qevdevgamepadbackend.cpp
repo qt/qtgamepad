@@ -50,6 +50,19 @@ QT_BEGIN_NAMESPACE
 
 Q_LOGGING_CATEGORY(lcEGB, "qt.gamepad")
 
+#ifndef BTN_TRIGGER_HAPPY1
+# define BTN_TRIGGER_HAPPY1 0x2c0
+#endif
+#ifndef BTN_TRIGGER_HAPPY2
+# define BTN_TRIGGER_HAPPY2 0x2c1
+#endif
+#ifndef BTN_TRIGGER_HAPPY3
+# define BTN_TRIGGER_HAPPY3 0x2c2
+#endif
+#ifndef BTN_TRIGGER_HAPPY4
+# define BTN_TRIGGER_HAPPY4 0x2c3
+#endif
+
 QEvdevGamepadDevice::EvdevAxisInfo::EvdevAxisInfo()
     : QGamepadBackend::AxisInfo<int>(0, 1, QGamepadManager::AxisInvalid)
 {
