@@ -803,14 +803,14 @@ bool QGamepad::buttonUp() const
 /*!
  * \property QGamepad::buttonDown
  *
- * The of the direction pad down button.
+ * The state of the direction pad down button.
  * The value is \c true when pressed, and \c false when not pressed.
  */
 /*!
  * \qmlproperty bool Gamepad::buttonDown
  * \readonly
  *
- * The of the direction pad down button.
+ * The state of the direction pad down button.
  * The value is \c true when pressed, and \c false when not pressed.
  */
 bool QGamepad::buttonDown() const
