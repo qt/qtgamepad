@@ -1,0 +1,21 @@
+# Generated from jar.pro.
+
+#####################################################################
+## QtAndroidGamepad Binary:
+#####################################################################
+
+add_qt_executable(QtAndroidGamepad
+    GUI
+    OUTPUT_DIRECTORY "$$[QT_INSTALL_PREFIX]/jar"
+    INSTALL_DIRECTORY "$$[QT_INSTALL_PREFIX]/jar"
+    OUTPUT_DIRECTORY "$$MODULE_BASE_OUTDIR/jar"
+    PUBLIC_LIBRARIES
+        Qt::Gui
+)
+
+#### Keys ignored in scope 1:.:.:jar.pro:<TRUE>:
+# API_VERSION = "android-16"
+# JAVACLASSPATH = "$$PWD/src"
+# JAVASOURCES = "$$PWD/src/org/qtproject/qt5/android/gamepad/QtGamepad.java"
+# OTHER_FILES = "$$JAVASOURCES"
+# _LOADED = "qt_build_paths"
