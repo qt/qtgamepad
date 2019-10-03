@@ -1,0 +1,13 @@
+include_guard(GLOBAL)
+
+find_package(SDL2 CONFIG QUIET)
+if (SDL2_FOUND AND TARGET SDL2::SDL2)
+  add_library(WrapSDL2::WrapSDL2 INTERFACE IMPORTED)
+  target_link_libraries(WrapSDL2::WrapSDL2 INTERFACE SDL2::SDL2)
+  set(WrapSDL2_FOUND TRUE)
+elseif(SDL2_FOUND AND SDL2_LIBRARIES AND SDL2_INCLUDE_DIRS)
+  add_library(WrapSDL2::WrapSDL2 INTERFACE IMPORTED)
+  target_link_libraries(WrapSDL2::WrapSDL2 INTERFACE ${SDL2_LIBRARIES})
+  target_include_directories(WrapSDL2::WrapSDL2 INTERFACE ${SDL2_INCLUDE_DIRS})
+  set(WrapSDL2_FOUND TRUE)
+endif()

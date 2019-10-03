@@ -6,7 +6,7 @@
 
 #### Libraries
 
-qt_find_package(SDL2 PROVIDED_TARGETS SDL2::SDL2)
+qt_find_package(WrapSDL2 PROVIDED_TARGETS WrapSDL2::WrapSDL2)
 
 
 #### Tests
@@ -17,5 +17,5 @@ qt_find_package(SDL2 PROVIDED_TARGETS SDL2::SDL2)
 
 qt_feature("sdl2" PRIVATE
     LABEL "SDL2"
-    CONDITION SDL2_FOUND
+    CONDITION WrapSDL2_FOUND
 )

@@ -16,7 +16,7 @@ add_qt_plugin(sdl2gamepad
         Qt::Core
         Qt::Gamepad
         Qt::Gui
-        SDL2::SDL2
+        WrapSDL2::WrapSDL2
 )
 
 #### Keys ignored in scope 1:.:.:sdl2.pro:<TRUE>:
