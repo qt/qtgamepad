@@ -28,7 +28,7 @@ if(ANDROID)
         jar/QtAndroidGamepad.jar
     )
     set_property(TARGET Gamepad APPEND PROPERTY QT_ANDROID_LIB_DEPENDENCIES
-        plugins/gamepads/libandroidgamepad.so
+        plugins/gamepads/libplugins_gamepads_androidgamepad.so
     )
 endif()
 

@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(INSTALL_EXAMPLEDIR "examples")
+set(INSTALL_EXAMPLEDIR "examples/gamepad/configureButtons")
 
 find_package(Qt6 COMPONENTS Core)
 find_package(Qt6 COMPONENTS Gui)
@@ -28,6 +28,7 @@ target_link_libraries(configureButtons PUBLIC
     Qt::Quick
 )
 
+
 # Resources:
 set(qml_resource_files
     "main.qml"
@@ -39,7 +40,6 @@ qt6_add_resources(configureButtons "qml"
     FILES
         ${qml_resource_files}
 )
-
 
 install(TARGETS configureButtons
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"

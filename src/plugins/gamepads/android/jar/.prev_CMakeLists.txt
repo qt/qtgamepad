@@ -6,8 +6,7 @@
 
 add_qt_executable(QtAndroidGamepad
     GUI
-    OUTPUT_DIRECTORY "$$[QT_INSTALL_PREFIX]/jar"
-    INSTALL_DIRECTORY "$$[QT_INSTALL_PREFIX]/jar"
+    INSTALL_DIRECTORY "${INSTALL_DIRECTORY}/jar"
     OUTPUT_DIRECTORY "$$MODULE_BASE_OUTDIR/jar"
     PUBLIC_LIBRARIES
         Qt::Gui
