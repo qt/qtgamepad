@@ -4,7 +4,7 @@
 ## darwingamepad Plugin:
 #####################################################################
 
-add_qt_plugin(darwingamepad
+qt_add_plugin(darwingamepad
     TYPE gamepads
     CLASS_NAME QDarwinGamepadBackendPlugin
     SOURCES
@@ -23,4 +23,3 @@ add_qt_plugin(darwingamepad
 #### Keys ignored in scope 1:.:.:darwin.pro:<TRUE>:
 # OTHER_FILES = "darwin.json"
 # PLUGIN_EXTENDS = "gamepad"
-# _LOADED = "qt_plugin"

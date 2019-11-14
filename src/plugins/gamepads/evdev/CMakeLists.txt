@@ -4,7 +4,7 @@
 ## evdevgamepad Plugin:
 #####################################################################
 
-add_qt_plugin(evdevgamepad
+qt_add_plugin(evdevgamepad
     TYPE gamepads
     CLASS_NAME QEvdevGamepadBackendPlugin
     SOURCES
@@ -23,4 +23,3 @@ add_qt_plugin(evdevgamepad
 
 #### Keys ignored in scope 1:.:.:evdev.pro:<TRUE>:
 # OTHER_FILES = "evdev.json"
-# _LOADED = "qt_plugin"

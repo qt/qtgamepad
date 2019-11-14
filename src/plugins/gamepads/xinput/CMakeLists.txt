@@ -4,7 +4,7 @@
 ## xinputgamepad Plugin:
 #####################################################################
 
-add_qt_plugin(xinputgamepad
+qt_add_plugin(xinputgamepad
     TYPE gamepads
     CLASS_NAME QXInputGamepadBackendPlugin
     SOURCES
@@ -20,4 +20,3 @@ add_qt_plugin(xinputgamepad
 
 #### Keys ignored in scope 1:.:.:xinput.pro:<TRUE>:
 # OTHER_FILES = "xinput.json"
-# _LOADED = "qt_plugin"

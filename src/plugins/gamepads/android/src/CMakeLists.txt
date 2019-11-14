@@ -4,7 +4,7 @@
 ## androidgamepad Plugin:
 #####################################################################
 
-add_qt_plugin(androidgamepad
+qt_add_plugin(androidgamepad
     TYPE gamepads
     CLASS_NAME QAndroidGamepadBackendPlugin
     SOURCES
@@ -21,4 +21,3 @@ add_qt_plugin(androidgamepad
 
 #### Keys ignored in scope 1:.:.:src.pro:<TRUE>:
 # DISTFILES = "android.json"
-# _LOADED = "qt_plugin"

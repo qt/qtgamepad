@@ -4,7 +4,7 @@
 ## declarative_gamepad Plugin:
 #####################################################################
 
-add_qml_module(declarative_gamepad
+qt_add_qml_module(declarative_gamepad
     URI "QtGamepad"
     VERSION "1.${CMAKE_PROJECT_VERSION_MINOR}"
     CLASSNAME QGamepadModule
@@ -25,4 +25,3 @@ add_qml_module(declarative_gamepad
 # IMPORT_VERSION = "1.$$QT_MINOR_VERSION"
 # OTHER_FILES = "qmldir"
 # TARGETPATH = "QtGamepad"
-# _LOADED = "qml_plugin"

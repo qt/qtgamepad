@@ -4,7 +4,7 @@
 ## sdl2gamepad Plugin:
 #####################################################################
 
-add_qt_plugin(sdl2gamepad
+qt_add_plugin(sdl2gamepad
     TYPE gamepads
     CLASS_NAME QSdl2GamepadBackendPlugin
     SOURCES
@@ -21,4 +21,3 @@ add_qt_plugin(sdl2gamepad
 
 #### Keys ignored in scope 1:.:.:sdl2.pro:<TRUE>:
 # OTHER_FILES = "sdl2.json"
-# _LOADED = "qt_plugin"

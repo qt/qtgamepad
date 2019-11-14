@@ -4,7 +4,7 @@
 ## Gamepad Module:
 #####################################################################
 
-add_qt_module(Gamepad
+qt_add_module(Gamepad
     PLUGIN_TYPES gamepads
     SOURCES
         qgamepad.cpp qgamepad.h
@@ -34,8 +34,7 @@ endif()
 
 #### Keys ignored in scope 1:.:.:gamepad.pro:<TRUE>:
 # ANDROID_FEATURES = "android.hardware.gamepad"
-# _LOADED = "qt_module"
-add_qt_docs(Gamepad
+qt_add_docs(Gamepad
     doc/qtgamepad.qdocconf
 )
 
