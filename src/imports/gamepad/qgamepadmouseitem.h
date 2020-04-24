@@ -40,10 +40,10 @@
 #include <QtQuick/QQuickItem>
 #include <QtCore/QTimer>
 #include <QtCore/QElapsedTimer>
+#include <QtGamepad/qgamepad.h>
 
 QT_BEGIN_NAMESPACE
 
-class QGamepad;
 class QGamepadManager;
 class QGamepadMouseItem : public QQuickItem
 {
@@ -94,7 +94,7 @@ private slots:
     void processMouseButtonEvent(bool isPressed, Qt::MouseButton button = Qt::LeftButton);
 
 protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry);
 
 private:
     void sendGeneratedMouseEvent(QMouseEvent *event);
