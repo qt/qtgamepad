@@ -83,7 +83,7 @@ private:
     {
         EvdevAxisInfo();
         EvdevAxisInfo(int fd, quint16 abs, int minValue = 0, int maxValue = 1, QGamepadManager::GamepadAxis gamepadAxis = QGamepadManager::AxisInvalid);
-        double normalized(int value) const;
+        double normalized(int value) const override;
         void setAbsInfo(int fd, int abs);
         void restoreSavedData(int fd, int abs, const QVariantMap &value);
         QVariantMap dataToSave() const;

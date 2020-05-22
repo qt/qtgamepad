@@ -58,7 +58,7 @@ class QGamepadModule : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 public:
     QGamepadModule(QObject *parent = 0) : QQmlExtensionPlugin(parent) { }
-    void registerTypes(const char *uri)
+    void registerTypes(const char *uri) override
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("QtGamepad"));
 
@@ -73,7 +73,7 @@ public:
         qmlRegisterModule(uri, 1, QT_VERSION_MINOR);
     }
 
-    void initializeEngine(QQmlEngine *engine, const char *uri)
+    void initializeEngine(QQmlEngine *engine, const char *uri) override
     {
         Q_UNUSED(uri);
         Q_UNUSED(engine);
