@@ -39,7 +39,7 @@
 #include <QtCore/QEvent>
 #include <QtCore/QPair>
 #include <QtCore/QThread>
-#include <QtCore/QVector>
+#include <QtCore/QList>
 
 #include <functional>
 #include <vector>
@@ -506,9 +506,9 @@ bool QAndroidGamepadBackend::handleGenericMotionEvent(jobject event)
     }
 
     typedef QPair<QGamepadManager::GamepadAxis, double> GamepadAxisValue;
-    QVector<GamepadAxisValue> axisValues;
+    QList<GamepadAxisValue> axisValues;
     typedef QPair<QGamepadManager::GamepadButton, double> GamepadButtonValue;
-    QVector<GamepadButtonValue> buttonValues;
+    QList<GamepadButtonValue> buttonValues;
     auto setValue = [&axisValues, &buttonValues](Mapping::AndroidAxisInfo &axisInfo, double value) {
         if (axisInfo.setValue(value)) {
             if (axisInfo.gamepadAxis != QGamepadManager::AxisInvalid) {

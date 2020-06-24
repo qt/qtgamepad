@@ -40,7 +40,7 @@
 #include <QtGamepad/QGamepadManager>
 #include <QtGamepad/private/qgamepadbackend_p.h>
 #include <QtCore/QHash>
-#include <QtCore/QVector>
+#include <QtCore/QList>
 
 struct input_event;
 
@@ -130,7 +130,7 @@ private:
     QEvdevGamepadDevice *device(int deviceId);
 
     QDeviceDiscovery *m_discovery;
-    QVector<QEvdevGamepadDevice *> m_devices;
+    QList<QEvdevGamepadDevice *> m_devices;
 };
 
 QT_END_NAMESPACE
