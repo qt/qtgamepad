@@ -83,7 +83,7 @@ void QGamepadKeyNavigationPrivate::sendGeneratedKeyEvent(QKeyEvent *event)
 
 void QGamepadKeyNavigationPrivate::_q_processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value)
 {
-    Q_UNUSED(value)
+    Q_UNUSED(value);
     //If a gamepad has been set then, only use the events of that gamepad
     if (gamepad && gamepad->deviceId() != index)
         return;

@@ -293,7 +293,7 @@ void QAndroidGamepadBackend::addDevice(int deviceId)
 
 void QAndroidGamepadBackend::updateDevice(int deviceId)
 {
-    Q_UNUSED(deviceId)
+    Q_UNUSED(deviceId);
     //QMutexLocker lock(&m_mutex);
 }
 

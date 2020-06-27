@@ -110,14 +110,14 @@
 
     //Pause button handler
     [controller setControllerPausedHandler:^(GCController *controller) {
-        Q_UNUSED(controller)
+        Q_UNUSED(controller);
         QMetaObject::invokeMethod(backend, "handlePauseButton", Qt::AutoConnection, Q_ARG(int, index));
     }];
 
     if (controller.extendedGamepad) {
         //leftShoulder
         [controller.extendedGamepad.leftShoulder setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -131,7 +131,7 @@
         }];
         //rightShoulder
         [controller.extendedGamepad.rightShoulder setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -145,7 +145,7 @@
         }];
         //dpad
         [controller.extendedGamepad.dpad setValueChangedHandler:^(GCControllerDirectionPad *dpad, float xValue, float yValue) {
-            Q_UNUSED(dpad)
+            Q_UNUSED(dpad);
             if (xValue > 0) {
                 //right
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
@@ -191,7 +191,7 @@
         }];
         //buttonA
         [controller.extendedGamepad.buttonA setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -205,7 +205,7 @@
         }];
         //buttonB
         [controller.extendedGamepad.buttonB setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -219,7 +219,7 @@
         }];
         //buttonX
         [controller.extendedGamepad.buttonX setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -234,7 +234,7 @@
         //buttonY
         [controller.extendedGamepad.buttonY setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
             //Invoke slot
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -249,7 +249,7 @@
 
         //leftThumbstick
         [controller.extendedGamepad.leftThumbstick setValueChangedHandler:^(GCControllerDirectionPad *dpad, float xValue, float yValue) {
-            Q_UNUSED(dpad)
+            Q_UNUSED(dpad);
             QMetaObject::invokeMethod(backend, "darwinGamepadAxisMoved", Qt::AutoConnection,
                                       Q_ARG(int, index),
                                       Q_ARG(QGamepadManager::GamepadAxis, QGamepadManager::AxisLeftX),
@@ -261,7 +261,7 @@
         }];
         //rightTumbstick
         [controller.extendedGamepad.rightThumbstick setValueChangedHandler:^(GCControllerDirectionPad *dpad, float xValue, float yValue) {
-            Q_UNUSED(dpad)
+            Q_UNUSED(dpad);
             QMetaObject::invokeMethod(backend, "darwinGamepadAxisMoved", Qt::AutoConnection,
                                       Q_ARG(int, index),
                                       Q_ARG(QGamepadManager::GamepadAxis, QGamepadManager::AxisRightX),
@@ -273,7 +273,7 @@
         }];
         //leftTrigger
         [controller.extendedGamepad.leftTrigger setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -287,7 +287,7 @@
         }];
         //rightTrigger
         [controller.extendedGamepad.rightTrigger setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -303,7 +303,7 @@
     } else if (controller.gamepad) {
         //leftShoulder
         [controller.gamepad.leftShoulder setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -317,7 +317,7 @@
         }];
         //rightShoulder
         [controller.gamepad.rightShoulder setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -331,7 +331,7 @@
         }];
         //dpad
         [controller.gamepad.dpad setValueChangedHandler:^(GCControllerDirectionPad *dpad, float xValue, float yValue) {
-            Q_UNUSED(dpad)
+            Q_UNUSED(dpad);
             if (xValue > 0) {
                 //right
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
@@ -377,7 +377,7 @@
         }];
         //buttonA
         [controller.gamepad.buttonA setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -391,7 +391,7 @@
         }];
         //buttonB
         [controller.gamepad.buttonB setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -405,7 +405,7 @@
         }];
         //buttonX
         [controller.gamepad.buttonX setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -419,7 +419,7 @@
         }];
         //buttonY
         [controller.gamepad.buttonY setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -436,7 +436,7 @@
     else if (controller.microGamepad) {
         //leftThumbstick
         [controller.microGamepad.dpad setValueChangedHandler:^(GCControllerDirectionPad *dpad, float xValue, float yValue) {
-            Q_UNUSED(dpad)
+            Q_UNUSED(dpad);
             QMetaObject::invokeMethod(backend, "darwinGamepadAxisMoved", Qt::AutoConnection,
                                       Q_ARG(int, index),
                                       Q_ARG(QGamepadManager::GamepadAxis, QGamepadManager::AxisLeftX),
@@ -448,7 +448,7 @@
         }];
         //buttonA
         [controller.microGamepad.buttonA setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
@@ -462,7 +462,7 @@
         }];
         //buttonX
         [controller.microGamepad.buttonX setValueChangedHandler:^(GCControllerButtonInput *button, float value, BOOL pressed) {
-            Q_UNUSED(button)
+            Q_UNUSED(button);
             if (pressed) {
                 QMetaObject::invokeMethod(backend, "darwinGamepadButtonPressed", Qt::AutoConnection,
                                           Q_ARG(int, index),
