@@ -27,7 +27,7 @@ SOURCES += \
 
 
 ANDROID_BUNDLED_JAR_DEPENDENCIES = \
-    jar/QtAndroidGamepad.jar
+    jar/Qt$${QT_MAJOR_VERSION}AndroidGamepad.jar
 
 ANDROID_LIB_DEPENDENCIES = \
     plugins/gamepads/libplugins_gamepads_androidgamepad.so

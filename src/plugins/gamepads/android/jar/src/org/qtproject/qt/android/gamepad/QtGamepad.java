@@ -34,7 +34,7 @@
 **
 ****************************************************************************/
 
-package org.qtproject.qt5.android.gamepad;
+package org.qtproject.qt.android.gamepad;
 
 import android.app.Activity;
 import android.content.Context;

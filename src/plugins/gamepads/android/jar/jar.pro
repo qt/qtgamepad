@@ -1,4 +1,4 @@
-TARGET = QtAndroidGamepad
+TARGET = Qt$${QT_MAJOR_VERSION}AndroidGamepad
 
 load(qt_build_paths)
 CONFIG += java
@@ -9,7 +9,7 @@ API_VERSION = android-16
 
 JAVACLASSPATH += $$PWD/src
 
-JAVASOURCES += $$PWD/src/org/qtproject/qt5/android/gamepad/QtGamepad.java
+JAVASOURCES += $$PWD/src/org/qtproject/qt/android/gamepad/QtGamepad.java
 
 # install
 target.path = $$[QT_INSTALL_PREFIX]/jar

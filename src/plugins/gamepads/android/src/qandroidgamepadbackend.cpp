@@ -198,7 +198,7 @@ namespace {
         {"onInputDeviceChanged", "(JI)V", (void *)onInputDeviceChanged}
     };
 
-    const char qtGamePadClassName[] = "org/qtproject/qt5/android/gamepad/QtGamepad";
+    const char qtGamePadClassName[] = "org/qtproject/qt/android/gamepad/QtGamepad";
 
     inline void setAxisInfo(QJNIObjectPrivate &event, int axis, QAndroidGamepadBackend::Mapping::AndroidAxisInfo &info)
     {
@@ -620,7 +620,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void */*reserved*/)
         return JNI_ERR;
 
     // search for Java class which declares the native methods
-    jclass javaClass = env->FindClass("org/qtproject/qt5/android/gamepad/QtGamepad");
+    jclass javaClass = env->FindClass("org/qtproject/qt/android/gamepad/QtGamepad");
     if (!javaClass)
         return JNI_ERR;
 
