@@ -131,10 +131,10 @@ void QGamepadMouseItem::mouseButtonReleased(int button)
 
 void QGamepadMouseItem::updateMousePostion()
 {
-    //Get the delta from the last call
+    // Get the delta from the last call
     qint64 delta = m_deltaTimer.restart();
 
-    //Don't bother when there is not gamepad to read from
+    // Don't bother when there is not gamepad to read from
     if (!m_gamepad || !m_gamepad->isConnected())
         return;
 
@@ -147,7 +147,7 @@ void QGamepadMouseItem::updateMousePostion()
     } else if (m_joystick == QGamepadMouseItem::RightStick) {
         xVelocity = m_gamepad->axisRightX();
         yVelocity = m_gamepad->axisRightY();
-    } else { //The greatest of both
+    } else { // The greatest of both
         if (std::abs(m_gamepad->axisLeftX()) > std::abs(m_gamepad->axisRightX()))
             xVelocity = m_gamepad->axisLeftX();
         else
@@ -158,7 +158,7 @@ void QGamepadMouseItem::updateMousePostion()
             yVelocity = m_gamepad->axisRightY();
     }
 
-    //Check for deadzone limits]
+    // Check for deadzone limits]
     if (std::abs(xVelocity) < m_deadZoneSize)
         xVelocity = 0.0;
     if (std::abs(yVelocity) < m_deadZoneSize)
@@ -168,7 +168,7 @@ void QGamepadMouseItem::updateMousePostion()
 
     double newXPosition = m_mousePosition.x() + xVelocity * delta;
     double newYPosition = m_mousePosition.y() + yVelocity * delta;
-    //Check bounds
+    // Check bounds
     if (newXPosition < 0)
         newXPosition = 0;
     else if (newXPosition > width())

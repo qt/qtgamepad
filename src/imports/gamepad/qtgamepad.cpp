@@ -62,7 +62,7 @@ public:
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("QtGamepad"));
 
-        //@uri QtGamepad
+        // @uri QtGamepad
 
         qmlRegisterSingletonType<QGamepadManager>(uri, 1, 0, "GamepadManager", &gamepadmanager_singletontype_provider);
         qmlRegisterType<QGamepad>(uri, 1, 0, "Gamepad");

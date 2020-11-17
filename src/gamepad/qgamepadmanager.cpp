@@ -62,7 +62,7 @@ public:
     QGamepadBackend *gamepadBackend;
     QMap<int, QString> connectedGamepads;
 
-    //private slots
+    // private slots
     void _q_forwardGamepadConnected(int deviceId);
     void _q_forwardGamepadNameChanged(int deviceId, const QString &name);
     void _q_forwardGamepadDisconnected(int deviceId);
@@ -128,7 +128,7 @@ void QGamepadManagerPrivate::loadBackend()
     }
 
     if (!gamepadBackend) {
-        //Use dummy backend
+        // Use dummy backend
         gamepadBackend = new QGamepadBackend();
         qCDebug(gp) << "Using dummy backend";
     }

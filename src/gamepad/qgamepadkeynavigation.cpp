@@ -84,11 +84,11 @@ void QGamepadKeyNavigationPrivate::sendGeneratedKeyEvent(QKeyEvent *event)
 void QGamepadKeyNavigationPrivate::_q_processGamepadButtonPressEvent(int index, QGamepadManager::GamepadButton button, double value)
 {
     Q_UNUSED(value);
-    //If a gamepad has been set then, only use the events of that gamepad
+    // If a gamepad has been set then, only use the events of that gamepad
     if (gamepad && gamepad->deviceId() != index)
         return;
 
-    //Trigger buttons are a special case as they get multiple press events as the value changes
+    // Trigger buttons are a special case as they get multiple press events as the value changes
     if (button == QGamepadManager::ButtonL2 && buttonL2Pressed)
         return;
     else
@@ -104,11 +104,11 @@ void QGamepadKeyNavigationPrivate::_q_processGamepadButtonPressEvent(int index, 
 
 void QGamepadKeyNavigationPrivate::_q_processGamepadButtonReleaseEvent(int index, QGamepadManager::GamepadButton button)
 {
-    //If a gamepad has been set then, only use the events of that gamepad
+    // If a gamepad has been set then, only use the events of that gamepad
     if (gamepad && gamepad->deviceId() != index)
         return;
 
-    //Free the trigger buttons if necessary
+    // Free the trigger buttons if necessary
     if (button == QGamepadManager::ButtonL2)
         buttonL2Pressed = false;
     if (button == QGamepadManager::ButtonR2)
@@ -137,7 +137,7 @@ QGamepadKeyNavigation::QGamepadKeyNavigation(QObject *parent)
     Q_D(QGamepadKeyNavigation);
     d->gamepadManger = QGamepadManager::instance();
 
-    //Default keymap
+    // Default keymap
     d->keyMapping.insert(QGamepadManager::ButtonUp, Qt::Key_Up);
     d->keyMapping.insert(QGamepadManager::ButtonDown, Qt::Key_Down);
     d->keyMapping.insert(QGamepadManager::ButtonLeft, Qt::Key_Left);
