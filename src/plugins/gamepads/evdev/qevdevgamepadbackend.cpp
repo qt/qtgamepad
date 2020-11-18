@@ -40,6 +40,7 @@ QT_WARNING_DISABLE_GCC("-Wmaybe-uninitialized") // GCC warnings don't make sense
 #include "qevdevgamepadbackend_p.h"
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QLoggingCategory>
+#include <QtCore/QVariant>
 #include <QtDeviceDiscoverySupport/private/qdevicediscovery_p.h>
 #include <QtCore/private/qcore_unix_p.h>
 #include <linux/input.h>
