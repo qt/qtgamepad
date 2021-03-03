@@ -94,7 +94,7 @@ private slots:
     void processMouseButtonEvent(bool isPressed, Qt::MouseButton button = Qt::LeftButton);
 
 protected:
-    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 private:
     void sendGeneratedMouseEvent(QMouseEvent *event);

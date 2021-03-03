@@ -203,9 +203,9 @@ void QGamepadMouseItem::processMouseButtonEvent(bool isPressed, Qt::MouseButton 
     sendGeneratedMouseEvent(event);
 }
 
-void QGamepadMouseItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+void QGamepadMouseItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    QQuickItem::geometryChange(newGeometry, oldGeometry);
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 
     m_mousePosition = newGeometry.center();
 }
