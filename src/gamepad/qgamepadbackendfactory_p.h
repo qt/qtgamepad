@@ -58,8 +58,8 @@ class QGamepadBackend;
 class Q_GAMEPAD_EXPORT QGamepadBackendFactory
 {
 public:
-    static QStringList keys(const QString &pluginPath = QString());
-    static QGamepadBackend *create(const QString &name, const QStringList &args, const QString &pluginPath = QString());
+    static QStringList keys();
+    static QGamepadBackend *create(const QString &name, const QStringList &args);
 };
 
 QT_END_NAMESPACE
