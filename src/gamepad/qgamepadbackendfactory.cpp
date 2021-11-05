@@ -46,49 +46,15 @@
 QT_BEGIN_NAMESPACE
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader, (QtGamepadBackendFactoryInterface_iid, QLatin1String("/gamepads"), Qt::CaseInsensitive))
-#if QT_CONFIG(library)
-Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, directLoader, (QtGamepadBackendFactoryInterface_iid, QLatin1String(""), Qt::CaseInsensitive))
-#endif
 
-QStringList QGamepadBackendFactory::keys(const QString &pluginPath)
+QStringList QGamepadBackendFactory::keys()
 {
-    QStringList list;
-    if (!pluginPath.isEmpty()) {
-#if QT_CONFIG(library)
-        QCoreApplication::addLibraryPath(pluginPath);
-        list = directLoader()->keyMap().values();
-        if (!list.isEmpty()) {
-            const QString postFix = QStringLiteral(" (from ")
-                    + QDir::toNativeSeparators(pluginPath)
-                    + QLatin1Char(')');
-            const QStringList::iterator end = list.end();
-            for (QStringList::iterator it = list.begin(); it != end; ++it)
-                (*it).append(postFix);
-        }
-#else
-        qWarning("Cannot query QGamepadBackend plugins at %s: Library loading is disabled.",
-                 pluginPath.toLocal8Bit().constData());
-#endif
-    }
-    list.append(loader()->keyMap().values());
-    return list;
+    return loader->keyMap().values();
 }
 
-QGamepadBackend *QGamepadBackendFactory::create(const QString &name, const QStringList &args, const QString &pluginPath)
+QGamepadBackend *QGamepadBackendFactory::create(const QString &name, const QStringList &args)
 {
-    if (!pluginPath.isEmpty()) {
-#if QT_CONFIG(library)
-        QCoreApplication::addLibraryPath(pluginPath);
-        if (QGamepadBackend *ret = qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(directLoader(), name, args))
-            return ret;
-#else
-        qWarning("Cannot load QGamepadBackend plugin from %s. Library loading is disabled.",
-                 pluginPath.toLocal8Bit().constData());
-#endif
-    }
-    if (QGamepadBackend *ret = qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(loader(), name, args))
-        return ret;
-    return 0;
+    return qLoadPlugin<QGamepadBackend, QGamepadBackendPlugin>(loader(), name, args);
 }
 
 QT_END_NAMESPACE
