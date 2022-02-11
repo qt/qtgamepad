@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
+** Copyright (C) 2017 The Qt Company Ltd.
 ** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the Qt Gamepad module
@@ -52,6 +52,7 @@
 
 #include <QtCore/qplugin.h>
 #include <QtCore/qfactoryinterface.h>
+#include <QtCore/private/qglobal_p.h>
 
 QT_BEGIN_NAMESPACE
 
