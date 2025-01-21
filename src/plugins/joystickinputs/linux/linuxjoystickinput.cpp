@@ -97,9 +97,7 @@ static inline uint16_t BSWAP16(uint16_t x)
 
 static inline QString _hex_str(QChar c)
 {
-    QString str;
-    str = QString("%1").arg(c.unicode(), 0, 16);
-    return str;
+    return QString::number(c.unicode(), 16);
 }
 
 void LinuxJoystickInput::setupJoypadObject(const QString &device)
