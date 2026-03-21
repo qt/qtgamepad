@@ -56,29 +56,22 @@ private:
     };
 
     struct gamepad {
-        int id;
-        bool attached;
-        bool confirmed;
+        int id = -1;
+        bool attached = false;
+        bool confirmed = false;
         int key_map[MAX_KEY];
         int joy_axis[JOY_AXIS_COUNT];
 
         HatMask dpad;
 
-        int fd;
+        int fd = -1;
         QString devpath;
 
         input_absinfo *abs_info[MAX_ABS] = {};
 
-        bool force_feedback;
-        int ff_effect_id;
+        bool force_feedback = false;
+        int ff_effect_id = -1;
         bool vibrating = false;
-
-        gamepad() {
-            id = -1;
-            attached = false;
-            confirmed = false;
-            fd = -1;
-        }
     };
 
     void setupJoypadObject(const QString& name);
