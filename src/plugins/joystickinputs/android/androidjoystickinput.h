@@ -6,7 +6,7 @@
 
 #include <QtUniversalInput/private/qjoystickinput_p.h>
 #include <QtCore/QMutex>
-#include <QtCore/QJNIObject.h>
+#include <QtCore/QJniObject>
 #include <QtCore/qjnitypes.h>
 #include <QtCore/private/qjnihelpers_p.h>
 
