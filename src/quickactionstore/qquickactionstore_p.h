@@ -22,6 +22,18 @@
 
 QT_BEGIN_NAMESPACE
 
+// Expose the QUniversalInput enums (JoyButton, JoyAxis, HatMask, ...) to QML
+// so the event types can be configured with named values such as
+// UniversalInput.JoyButton.A. The QActionStore enums (Controller,
+// AxisDirection) are reachable through the ActionStore element itself.
+struct QUniversalInputForeign
+{
+    Q_GADGET
+    QML_FOREIGN(QUniversalInput)
+    QML_NAMED_ELEMENT(UniversalInput)
+    QML_UNCREATABLE("UniversalInput is only used to access its enums")
+};
+
 class QQuickInputActionEvent : public QObject
 {
     Q_OBJECT
@@ -38,61 +50,8 @@ class QQuickInputJoyButtonEvent : public QQuickInputActionEvent
     Q_PROPERTY(int device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(int button READ button WRITE setButton NOTIFY buttonChanged)
     Q_PROPERTY(bool isPressed READ isPressed WRITE setPressed NOTIFY isPressedChanged)
-    Q_ENUMS(JoyButton)
-    Q_ENUMS(Controller)
 
 public:
-    // Taken from quniversalinput.h
-    enum class JoyButton
-    {
-        Invalid = -1,
-        A = 0,
-        B = 1,
-        X = 2,
-        Y = 3,
-        Back = 4,
-        Guide = 5,
-        Start = 6,
-        LeftStick = 7,
-        RightStick = 8,
-        LeftShoulder = 9,
-        RightShoulder = 10,
-        DpadUp = 11,
-        DpadDown = 12,
-        DpadLeft = 13,
-        DpadRight = 14,
-        Misc1 = 15,
-        Paddle1 = 16,
-        Paddle2 = 17,
-        Paddle3 = 18,
-        Paddle4 = 19,
-        Touchpad = 20,
-        MAX = 128
-    };
-
-    // Taken from qactionstore.h
-    enum class Controller
-    {
-        All = -1,
-        Device0 = 0,
-        Device1 = 1,
-        Device2 = 2,
-        Device3 = 3,
-        Device4 = 4,
-        Device5 = 5,
-        Device6 = 6,
-        Device7 = 7,
-        Device8 = 8,
-        Device9 = 9,
-        Device10 = 10,
-        Device11 = 11,
-        Device12 = 12,
-        Device13 = 13,
-        Device14 = 14,
-        Device15 = 15,
-        Device16 = 16,
-    };
-
     QQuickInputJoyButtonEvent(QObject *parent = nullptr);
     ~QQuickInputJoyButtonEvent() override = default;
 
@@ -175,58 +134,8 @@ class QQuickInputJoyAxisEvent : public QQuickInputActionEvent
     Q_PROPERTY(int axis READ axis WRITE setAxis NOTIFY axisChanged)
     Q_PROPERTY(int direction READ direction WRITE setDirection NOTIFY directionChanged)
     Q_PROPERTY(float deadzone READ deadzone WRITE setDeadzone NOTIFY deadzoneChanged)
-    Q_ENUMS(JoyAxis)
-    Q_ENUMS(AxisDirection)
-    Q_ENUMS(Controller)
 
 public:
-    // Taken from quniversalinput.h
-    enum class JoyAxis
-    {
-        Invalid = -1,
-        LeftX = 0,
-        LeftY = 1,
-        RightX = 2,
-        RightY = 3,
-        TriggerLeft = 4,
-        TriggerRight = 5,
-        MAX = 10,
-    };
-
-    // Taken from qactionstore.h
-    enum class Controller
-    {
-        All = -1,
-        Device0 = 0,
-        Device1 = 1,
-        Device2 = 2,
-        Device3 = 3,
-        Device4 = 4,
-        Device5 = 5,
-        Device6 = 6,
-        Device7 = 7,
-        Device8 = 8,
-        Device9 = 9,
-        Device10 = 10,
-        Device11 = 11,
-        Device12 = 12,
-        Device13 = 13,
-        Device14 = 14,
-        Device15 = 15,
-        Device16 = 16,
-    };
-
-    // Taken from qactionstore.h
-    enum class AxisDirection
-    {
-        All = -1,
-        Up = 0,
-        Right = 1,
-        Down = 2,
-        Left = 3,
-        Max = 4,
-    };
-
     QQuickInputJoyAxisEvent(QObject *parent = nullptr);
     ~QQuickInputJoyAxisEvent() override = default;
 

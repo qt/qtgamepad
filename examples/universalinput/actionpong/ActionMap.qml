@@ -6,19 +6,19 @@ import QtActionStore
 
 ActionStore {
     id: actionStore
-    property int device: JoyAxisEvent.Device0
+    property int device: ActionStore.Controller.Device0
 
     InputAction {
         title: "MoveUp"
         JoyAxisEvent {
             device: actionStore.device
-            axis: JoyAxisEvent.LeftY
-            direction: JoyAxisEvent.Up
+            axis: UniversalInput.JoyAxis.LeftY
+            direction: ActionStore.AxisDirection.Up
             deadzone: 0
         }
         JoyButtonEvent {
             device: actionStore.device
-            button: JoyButtonEvent.DpadUp
+            button: UniversalInput.JoyButton.DpadUp
             isPressed: true
         }
         KeyboardEvent {
@@ -32,13 +32,13 @@ ActionStore {
         title: "MoveDown"
         JoyAxisEvent {
             device: actionStore.device
-            axis: JoyAxisEvent.LeftY
-            direction: JoyAxisEvent.Down
+            axis: UniversalInput.JoyAxis.LeftY
+            direction: ActionStore.AxisDirection.Down
             deadzone: 0
         }
         JoyButtonEvent {
             device: actionStore.device
-            button: JoyButtonEvent.DpadDown
+            button: UniversalInput.JoyButton.DpadDown
             isPressed: true
         }
         KeyboardEvent {

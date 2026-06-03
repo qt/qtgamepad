@@ -23,6 +23,9 @@ class QUniversalInputPrivate;
 class Q_UNIVERSALINPUT_EXPORT QUniversalInput : public QObject
 {
     Q_OBJECT
+    // The enums share value names (e.g. HatDirection::Up and HatMask::Up), so
+    // expose them to QML only through their scope, e.g. JoyButton.A.
+    Q_CLASSINFO("RegisterEnumClassesUnscoped", "false")
 public:
     enum class HatDirection {
         Up = 0,

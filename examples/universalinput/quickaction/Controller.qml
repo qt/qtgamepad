@@ -6,14 +6,14 @@ import QtActionStore
 
 ActionStore {
     id: actionStore
-    property int device: JoyAxisEvent.Device0
+    property int device: ActionStore.Controller.Device0
 
     InputAction {
         title: "Left"
 
         JoyAxisEvent {
-            axis: JoyAxisEvent.LeftX
-            direction: JoyAxisEvent.Left
+            axis: UniversalInput.JoyAxis.LeftX
+            direction: ActionStore.AxisDirection.Left
             deadzone: 0
         }
 
@@ -32,8 +32,8 @@ ActionStore {
         title: "Right"
 
         JoyAxisEvent {
-            axis: JoyAxisEvent.LeftX
-            direction: JoyAxisEvent.Right
+            axis: UniversalInput.JoyAxis.LeftX
+            direction: ActionStore.AxisDirection.Right
             deadzone: 0
         }
 
@@ -52,8 +52,8 @@ ActionStore {
         title: "Up"
 
         JoyAxisEvent {
-            axis: JoyAxisEvent.LeftY
-            direction: JoyAxisEvent.Up
+            axis: UniversalInput.JoyAxis.LeftY
+            direction: ActionStore.AxisDirection.Up
             deadzone: 0
         }
     }
@@ -62,8 +62,8 @@ ActionStore {
         title: "Down"
 
         JoyAxisEvent {
-            axis: JoyAxisEvent.LeftY
-            direction: JoyAxisEvent.Down
+            axis: UniversalInput.JoyAxis.LeftY
+            direction: ActionStore.AxisDirection.Down
             deadzone: 0
         }
     }
@@ -72,7 +72,7 @@ ActionStore {
         title: "Shoot"
 
         JoyButtonEvent {
-            button: JoyButtonEvent.RightShoulder
+            button: UniversalInput.JoyButton.RightShoulder
             isPressed: true
         }
     }
@@ -81,7 +81,7 @@ ActionStore {
         title: "Jump"
 
         JoyButtonEvent {
-            button: JoyButtonEvent.A
+            button: UniversalInput.JoyButton.A
             isPressed: true
         }
 
