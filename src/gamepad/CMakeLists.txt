@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 qt_internal_add_module(Gamepad
+    NO_PRIVATE_MODULE
     SOURCES
         qgamepad.cpp qgamepad.h
     DEFINES
@@ -13,7 +14,4 @@ qt_internal_add_module(Gamepad
         Qt::Core
         Qt::Gui
         Qt::UniversalInput
-    PRIVATE_MODULE_INTERFACE
-        Qt::CorePrivate
-        Qt::GuiPrivate
 )

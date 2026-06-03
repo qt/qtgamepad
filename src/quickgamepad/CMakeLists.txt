@@ -11,7 +11,7 @@ qt_internal_add_qml_module(QuickGamepad
         ${qml_files}
     LIBRARIES
         Qt::Core
-        Qt::GamepadPrivate
+        Qt::Gamepad
         Qt::Quick
         Qt::QuickPrivate
 )
