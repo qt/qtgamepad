@@ -179,13 +179,13 @@ public:
 
     static QUniversalInput *instance();
 
-    QString getJoyName(int device) const;
+    QString joyName(int device) const;
     bool isJoyConnected(int device) const;
     bool isGamepad(int device) const;
 
     // API used by platform specific plugins
     // Joypad/Joystick/Gamepads
-    int getUnusedJoyId();
+    int unusedJoyId();
     void updateJoyConnection(int index, bool isConnected, const QString &name, const QString &guid = QString());
 
     void joyButton(int device, JoyButton button, bool isPressed);
@@ -193,14 +193,14 @@ public:
     void joyHat(int device, HatMask value);
 
     // Force Feedback
-    QVector2D getJoyVibrationStrength(int device);
-    float getJoyVibrationDuration(int device);
-    quint64 getJoyVibrationTimestamp(int device);
+    QVector2D joyVibrationStrength(int device);
+    float joyVibrationDuration(int device);
+    quint64 joyVibrationTimestamp(int device);
     void addForce(int device, QVector2D strength, float duration);
 
     void setJoyAxis(int device, JoyAxis axis, float value);
 
-    void setMouseDisabled(bool disabled); // looking for better name. Is "make invisible and center"
+    void setMouseDisabled(bool disabled);
     bool isMouseDisabled() const;
     void mouseMove(const QVector2D &deltas);
 
@@ -226,7 +226,7 @@ private:
     void mappedHatEvents(const JoyDeviceMapping &mapping, HatDirection hat, JoyEvent events[size_t(HatDirection::Max)]);
 
     Q_DECLARE_PRIVATE(QUniversalInput)
-    Q_DISABLE_COPY(QUniversalInput)
+    Q_DISABLE_COPY_MOVE(QUniversalInput)
 };
 
 inline QUniversalInput::HatMask operator|(QUniversalInput::HatMask a, QUniversalInput::HatMask b)

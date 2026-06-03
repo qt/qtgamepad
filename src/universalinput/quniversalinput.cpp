@@ -155,7 +155,7 @@ QUniversalInput *QUniversalInput::instance()
     return &instance;
 }
 
-QString QUniversalInput::getJoyName(int device) const
+QString QUniversalInput::joyName(int device) const
 {
     Q_D(const QUniversalInput);
     // If the device does not exist, an empty Joypad
@@ -183,7 +183,7 @@ bool QUniversalInput::isGamepad(int device) const
     return joypad.mapping != -1;
 }
 
-int QUniversalInput::getUnusedJoyId()
+int QUniversalInput::unusedJoyId()
 {
     Q_D(QUniversalInput);
     for (int i = 0; i < JoypadsMax; i++)
@@ -365,7 +365,7 @@ void QUniversalInput::joyHat(int device, HatMask value)
     d->joypadNames[device].hatCurrent = int(value);
 }
 
-QVector2D QUniversalInput::getJoyVibrationStrength(int device)
+QVector2D QUniversalInput::joyVibrationStrength(int device)
 {
     Q_D(QUniversalInput);
     if (d->joystickVibrations.contains(device))
@@ -374,7 +374,7 @@ QVector2D QUniversalInput::getJoyVibrationStrength(int device)
         return QVector2D(0.0f, 0.0f);
 }
 
-float QUniversalInput::getJoyVibrationDuration(int device)
+float QUniversalInput::joyVibrationDuration(int device)
 {
     Q_D(QUniversalInput);
     if (d->joystickVibrations.contains(device))
@@ -383,7 +383,7 @@ float QUniversalInput::getJoyVibrationDuration(int device)
         return 0.0f;
 }
 
-quint64 QUniversalInput::getJoyVibrationTimestamp(int device)
+quint64 QUniversalInput::joyVibrationTimestamp(int device)
 {
     Q_D(QUniversalInput);
     if (d->joystickVibrations.contains(device))

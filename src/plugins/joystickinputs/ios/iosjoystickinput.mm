@@ -113,7 +113,7 @@ using JoyButton = QUniversalInput::JoyButton;
 - (void)addiOSJoypad:(GCController *)controller
 {
     //     get a new id for our controller
-    int joy_id = QUniversalInput::instance()->getUnusedJoyId();
+    int joy_id = QUniversalInput::instance()->unusedJoyId();
 
     if (joy_id == -1) {
         printf("Couldn't retrieve new joy id\n");

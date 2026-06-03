@@ -112,7 +112,7 @@ static inline QString _hex_str(QChar c)
 void LinuxJoystickInput::setupJoypadObject(const QString &device)
 {
     auto input = QUniversalInput::instance();
-    int id = input->getUnusedJoyId();
+    int id = input->unusedJoyId();
     if (id == -1) {
         qCWarning(lcUniversalInput) << "Could not find unused joypad";
         return;
@@ -381,9 +381,9 @@ void LinuxJoystickInput::processJoypads()
         }
 
         if (joy.force_feedback) {
-            uint64_t timestamp = input->getJoyVibrationTimestamp(joy.id);
-            float duration = input->getJoyVibrationDuration(joy.id) * 1000.f;
-            QVector2D strength = input->getJoyVibrationStrength(joy.id);
+            uint64_t timestamp = input->joyVibrationTimestamp(joy.id);
+            float duration = input->joyVibrationDuration(joy.id) * 1000.f;
+            QVector2D strength = input->joyVibrationStrength(joy.id);
             uint64_t currentTimestamp = QDateTime::currentMSecsSinceEpoch();
             if (currentTimestamp - timestamp <= duration) {
                 if (!joy.vibrating)

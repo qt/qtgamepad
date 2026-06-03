@@ -120,7 +120,7 @@ public Q_SLOTS:
 
 private:
     Q_DECLARE_PRIVATE(QActionStore)
-    Q_DISABLE_COPY(QActionStore)
+    Q_DISABLE_COPY_MOVE(QActionStore)
 };
 
 QT_END_NAMESPACE

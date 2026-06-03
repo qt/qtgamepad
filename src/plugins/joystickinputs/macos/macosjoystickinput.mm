@@ -284,7 +284,7 @@ bool MacOsJoystickInput::configure_joypad(IOHIDDeviceRef p_device_ref, Joypad *p
 
     auto input = QUniversalInput::instance();
 
-    int id = input->getUnusedJoyId();
+    int id = input->unusedJoyId();
     if (id == -1)
         return false;
 
@@ -478,10 +478,10 @@ void MacOsJoystickInput::processJoypads()
         }
 
         if (joy.forceFeedbackService) {
-            uint64_t timestamp = input->getJoyVibrationTimestamp(joy.id);
+            uint64_t timestamp = input->joyVibrationTimestamp(joy.id);
             if (timestamp > joy.forceFeedbackTimestamp) {
-                QVector2D strength = input->getJoyVibrationStrength(joy.id);
-                float duration = input->getJoyVibrationDuration(joy.id);
+                QVector2D strength = input->joyVibrationStrength(joy.id);
+                float duration = input->joyVibrationDuration(joy.id);
                 if (strength.x() == 0 && strength.y() == 0) {
                     joypad_vibration_stop(joy.id, timestamp);
                 } else {

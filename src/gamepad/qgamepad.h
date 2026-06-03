@@ -101,7 +101,7 @@ Q_SIGNALS:
 
 private:
     Q_DECLARE_PRIVATE(QGamepad)
-    Q_DISABLE_COPY(QGamepad)
+    Q_DISABLE_COPY_MOVE(QGamepad)
 };
 
 QT_END_NAMESPACE

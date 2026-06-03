@@ -234,7 +234,7 @@ QGamepad::QGamepad(int deviceId, QObject *parent)
                             d, &QGamepadPrivate::_q_handleGamepadButtonEvent);
 
     d->setConnected(input->isJoyConnected(deviceId));
-    d->setName(input->getJoyName(deviceId));
+    d->setName(input->joyName(deviceId));
 }
 
 QGamepad::~QGamepad()
@@ -722,7 +722,7 @@ void QGamepad::setDeviceId(int number)
         d->deviceId = number;
         emit deviceIdChanged();
         auto input = QUniversalInput::instance();
-        d->setName(input->getJoyName(d->deviceId));
+        d->setName(input->joyName(d->deviceId));
         d->setConnected(input->isJoyConnected(d->deviceId));
     }
 }

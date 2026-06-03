@@ -104,7 +104,7 @@ void WindowsJoystickInput::probeJoypads()
 
         dwResult = xinput_get_state(i, &x_joypads[i].state);
         if (dwResult == ERROR_SUCCESS) {
-            int id = input->getUnusedJoyId();
+            int id = input->unusedJoyId();
             if (id != -1 && !x_joypads[i].attached) {
                 x_joypads[i].attached = true;
                 x_joypads[i].id = id;
@@ -161,10 +161,10 @@ void WindowsJoystickInput::processJoypads()
             input->joyAxis(joy.id, JoyAxis::TriggerRight, axis_correct(joy.state.Gamepad.bRightTrigger, true, true));
             joy.last_packet = joy.state.dwPacketNumber;
         }
-        uint64_t timestamp = input->getJoyVibrationTimestamp(joy.id);
+        uint64_t timestamp = input->joyVibrationTimestamp(joy.id);
         if (timestamp > joy.ff_timestamp) {
-            QVector2D strength = input->getJoyVibrationStrength(joy.id);
-            float duration = input->getJoyVibrationDuration(joy.id);
+            QVector2D strength = input->joyVibrationStrength(joy.id);
+            float duration = input->joyVibrationDuration(joy.id);
             if (strength.x() == 0 && strength.y() == 0) {
                 joypad_vibration_stop_xinput(i, timestamp);
             } else {
@@ -306,7 +306,7 @@ bool WindowsJoystickInput::setup_dinput_joypad(const DIDEVICEINSTANCE *instance)
 
     HRESULT hr;
     auto input = QUniversalInput::instance();
-    int num = input->getUnusedJoyId();
+    int num = input->unusedJoyId();
 
     if (have_device(instance->guidInstance) || num == -1)
         return false;
