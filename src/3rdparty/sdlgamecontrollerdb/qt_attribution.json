@@ -2,7 +2,7 @@
     {
         "Id": "sdlgamecontrollerdb",
         "Name": "SDLGameControllerDB",
-        "QDocModule": "qtuniveralinput",
+        "QDocModule": "qtuniversalinput",
         "QtUsage": "Provides button and axis mappings for game controllers to the QGamepad layout.",
         "Description": "A community sourced database of game controller mappings to be used with SDL2 Game Controller functionality.",
         "Homepage": "https://github.com/mdqinc/SDL_GameControllerDB",
