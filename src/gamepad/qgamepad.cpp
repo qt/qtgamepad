@@ -70,7 +70,7 @@ void QGamepadPrivate::setName(const QString &theName)
 
 /*!
  * \internal
- */\
+ */
 void QGamepadPrivate::_q_handleGamepadConnectionChangedEvent(int index, bool isConnected)
 {
     if (index == deviceId)
@@ -79,7 +79,7 @@ void QGamepadPrivate::_q_handleGamepadConnectionChangedEvent(int index, bool isC
 
 /*!
  * \internal
- */\
+ */
 void QGamepadPrivate::_q_handleGamepadAxisEvent(int device, JoyAxis axis, float value)
 {
     Q_Q(QGamepad);
@@ -118,7 +118,7 @@ void QGamepadPrivate::_q_handleGamepadAxisEvent(int device, JoyAxis axis, float 
 
 /*!
  * \internal
- */\
+ */
 void QGamepadPrivate::_q_handleGamepadButtonEvent(int device, JoyButton button, bool isPressed)
 {
     Q_Q(QGamepad);
