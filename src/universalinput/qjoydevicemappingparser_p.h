@@ -27,7 +27,7 @@ QT_BEGIN_NAMESPACE
 
 using namespace Qt::Literals::StringLiterals;
 
-class QJoyDeviceMappingParser
+class Q_UNIVERSALINPUT_EXPORT QJoyDeviceMappingParser
 {
 public:
     QJoyDeviceMappingParser(const QString &filepath);

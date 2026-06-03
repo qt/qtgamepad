@@ -5,3 +5,6 @@ if(QT_BUILD_MINIMAL_STATIC_TESTS)
     return()
 endif()
 
+add_subdirectory(qjoydevicemappingparser)
+add_subdirectory(qactionstore)
+add_subdirectory(enums)
