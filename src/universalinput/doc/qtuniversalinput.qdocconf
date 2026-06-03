@@ -1,0 +1,51 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+
+project                 = QtUniversalInput
+description             = Qt Universal Input Reference Documentation
+version                 = $QT_VERSION
+
+examplesinstallpath     = universalinput
+
+qhp.projects            = QtUniversalInput
+
+qhp.QtUniversalInput.file                = qtuniversalinput.qhp
+qhp.QtUniversalInput.namespace           = org.qt-project.qtuniversalinput.$QT_VERSION_TAG
+qhp.QtUniversalInput.virtualFolder       = qtuniversalinput
+qhp.QtUniversalInput.indexTitle          = Qt Universal Input
+qhp.QtUniversalInput.indexRoot           =
+
+qhp.QtUniversalInput.subprojects         = manual classes qmltypes
+
+qhp.QtUniversalInput.subprojects.manual.title          = Qt Universal Input
+qhp.QtUniversalInput.subprojects.manual.indexTitle     = Qt Universal Input module topics
+qhp.QtUniversalInput.subprojects.manual.type           = manual
+
+qhp.QtUniversalInput.subprojects.classes.title         = C++ Classes
+qhp.QtUniversalInput.subprojects.classes.indexTitle    = Qt Universal Input C++ Classes
+qhp.QtUniversalInput.subprojects.classes.selectors     = class
+qhp.QtUniversalInput.subprojects.classes.sortPages     = true
+
+qhp.QtUniversalInput.subprojects.qmltypes.title        = QML Types
+qhp.QtUniversalInput.subprojects.qmltypes.indexTitle   = Qt Universal Input QML Types
+qhp.QtUniversalInput.subprojects.qmltypes.selectors    = qmlclass
+qhp.QtUniversalInput.subprojects.qmltypes.sortPages    = true
+
+# Scan the whole repository so that the QtGamepad compatibility module,
+# the QtUniversalInput module and the QML modules are all documented.
+headerdirs  += ../..
+sourcedirs  += ../..
+exampledirs += ../../../examples
+imagedirs   += images
+
+depends += qtcore qtgui qtqml qtquick qtdoc
+
+tagfile = qtuniversalinput.tags
+
+navigation.landingpage  = "Qt Universal Input"
+navigation.cppclassespage = "Qt Universal Input C++ Classes"
+navigation.qmltypespage = "Qt Universal Input QML Types"
+navigation.toctitles = "Qt Universal Input module topics"
+navigation.toctitles.inclusive = false
+
+# Allow zero warnings when testing documentation in CI
+warninglimit = 0

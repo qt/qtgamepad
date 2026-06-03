@@ -83,12 +83,14 @@ public:
     };
     Q_ENUM(JoyButton)
 
+    /*! \internal */
     enum {
         JoypadsMax = 16,
         JoyAxesMax = 10,
         JoyButtonsMax = 128,
     };
 
+    /*! \internal */
     struct Action {
         quint64 frame;
         bool isPressed;
@@ -96,12 +98,14 @@ public:
         float strength;
         float rawStrength;
     };
+    /*! \internal */
     struct VibrationInfo {
         float weakMagnitude;
         float strongMagnitude;
         float duration;
         quint64 timestamp;
     };
+    /*! \internal */
     struct VelocityTrack {
         QElapsedTimer frameTimer;
         QVector2D velocity;
@@ -115,6 +119,7 @@ public:
         VelocityTrack();
     };
 
+    /*! \internal */
     struct Joypad {
         QString name;
         QString uid;
@@ -139,12 +144,14 @@ public:
         PositiveHalfAxis = 1
     };
 
+    /*! \internal */
     struct JoyEvent {
         int type = TypeMax;
         int index = -1;
         float value = 0.0f;
     };
 
+    /*! \internal */
     struct JoyBinding {
         JoyType inputType;
         union {
@@ -175,6 +182,7 @@ public:
         } output;
     };
 
+    /*! \internal */
     struct JoyDeviceMapping {
         QString uid;
         QString name;

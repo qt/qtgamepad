@@ -211,7 +211,7 @@ void QGamepadPrivate::_q_handleGamepadButtonEvent(int device, JoyButton button, 
  *  \qmltype Gamepad
  *  \inqmlmodule QtGamepad
  *  \brief A gamepad device connected to a system.
- *  \instantiates QGamepad
+ *  \nativetype QGamepad
  *
  *  Gamepad QML type is used to access the current state of gamepad
  *  hardware connected to a system.
@@ -246,16 +246,12 @@ QGamepad::~QGamepad()
  *
  * This property holds the deviceId of the gamepad device. Multiple gamepad devices can be
  * connected at any given time, so setting this property defines which gamepad to use.
- *
- * \sa QGamepadManager::connectedGamepads()
  */
 /*!
  * \qmlproperty int Gamepad::deviceId
  *
  * This property holds the deviceId of the gamepad device. Multiple gamepad devices can be
  * connected at any given time, so setting this property defines which gamepad to use.
- *
- * \sa {GamepadManager::connectedGamepads}{GamepadManager.connectedGamepads}
  */
 int QGamepad::deviceId() const
 {
@@ -306,7 +302,7 @@ QString QGamepad::name() const
  * The axis values range from -1.0 to 1.0.
  */
 /*!
- * \qmlproperty float Gamepad::axisLeftX
+ * \qmlproperty real Gamepad::axisLeftX
  * \readonly
  *
  * The value of the left thumbstick's X axis.
@@ -325,7 +321,7 @@ float QGamepad::axisLeftX() const
  * The axis values range from -1.0 to 1.0.
  */
 /*!
- * \qmlproperty float Gamepad::axisLeftY
+ * \qmlproperty real Gamepad::axisLeftY
  * \readonly
  *
  * The value of the left thumbstick's Y axis.
@@ -344,7 +340,7 @@ float QGamepad::axisLeftY() const
  * The axis values range from -1.0 to 1.0.
  */
 /*!
- * \qmlproperty float Gamepad::axisRightX
+ * \qmlproperty real Gamepad::axisRightX
  * \readonly
  *
  * This value of the right thumbstick's X axis.
@@ -363,7 +359,7 @@ float QGamepad::axisRightX() const
  * The axis values range from -1.0 to 1.0.
  */
 /*!
- * \qmlproperty float Gamepad::axisRightY
+ * \qmlproperty real Gamepad::axisRightY
  * \readonly
  *
  * This value of the right thumbstick's Y axis.
@@ -497,7 +493,7 @@ bool QGamepad::buttonR1() const
  * when pressed completely.
  */
 /*!
- * \qmlproperty float Gamepad::buttonL2
+ * \qmlproperty real Gamepad::buttonL2
  * \readonly
  *
  * The value of the left trigger button.
@@ -518,7 +514,7 @@ float QGamepad::buttonL2() const
  * when pressed completely.
  */
 /*!
- * \qmlproperty float Gamepad::buttonR2
+ * \qmlproperty real Gamepad::buttonR2
  * \readonly
  *
  * The value of the right trigger button.

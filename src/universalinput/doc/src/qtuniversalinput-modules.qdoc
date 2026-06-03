@@ -1,0 +1,104 @@
+// Copyright (C) 2024 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+/*!
+    \module QtUniversalInput
+    \title Qt Universal Input C++ Classes
+    \ingroup modules
+    \qtcmakepackage UniversalInput
+    \qtvariable universalinput
+    \brief C++ classes for reading game controllers and joysticks.
+
+    To use these classes in your application, use the following include
+    statement:
+
+    \code
+    #include <QtUniversalInput/QtUniversalInput>
+    \endcode
+
+    To link against the module, add this line to your \l qmake \c .pro file:
+
+    \code
+    QT += universalinput
+    \endcode
+*/
+
+/*!
+    \module QtGamepad
+    \title Qt Gamepad C++ Classes
+    \ingroup modules
+    \qtcmakepackage Gamepad
+    \qtvariable gamepad
+    \brief A convenience class for reading a single gamepad.
+
+    QtGamepad is a thin compatibility layer on top of \l{Qt Universal Input
+    C++ Classes}{QtUniversalInput} that provides the QGamepad convenience
+    class.
+
+    To use this class in your application, use the following include
+    statement:
+
+    \code
+    #include <QtGamepad/QGamepad>
+    \endcode
+
+    To link against the module, add this line to your \l qmake \c .pro file:
+
+    \code
+    QT += gamepad
+    \endcode
+*/
+
+/*!
+    \qmlmodule QtUniversalInput
+    \title Qt Universal Input QML Types
+    \ingroup qmlmodules
+    \brief Provides QML types for reading game controllers and joysticks.
+
+    To import the QML types into your application, use the following import
+    statement in your .qml file:
+
+    \qml
+    import QtUniversalInput
+    \endqml
+
+    \generatelist {qmltypesbymodule QtUniversalInput}
+
+    \noautolist
+*/
+
+/*!
+    \qmlmodule QtActionStore
+    \title Qt Action Store QML Types
+    \ingroup qmlmodules
+    \brief Provides QML types for mapping input onto named actions.
+
+    To import the QML types into your application, use the following import
+    statement in your .qml file:
+
+    \qml
+    import QtActionStore
+    \endqml
+
+    \generatelist {qmltypesbymodule QtActionStore}
+
+    \noautolist
+*/
+
+/*!
+    \qmlmodule QtGamepad
+    \title Qt Gamepad QML Types
+    \ingroup qmlmodules
+    \brief Provides the Gamepad convenience type.
+
+    To import the QML type into your application, use the following import
+    statement in your .qml file:
+
+    \qml
+    import QtGamepad
+    \endqml
+
+    \generatelist {qmltypesbymodule QtGamepad}
+
+    \noautolist
+*/

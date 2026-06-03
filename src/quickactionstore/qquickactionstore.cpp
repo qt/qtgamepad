@@ -5,6 +5,139 @@
 
 QT_BEGIN_NAMESPACE
 
+/*!
+    \qmltype ActionEvent
+    \inqmlmodule QtActionStore
+    \nativetype QQuickInputActionEvent
+    \brief The base type for the input triggers of an InputAction.
+*/
+
+/*!
+    \qmltype JoyButtonEvent
+    \inqmlmodule QtActionStore
+    \nativetype QQuickInputJoyButtonEvent
+    \brief A gamepad button trigger for an InputAction.
+*/
+
+/*!
+    \qmlproperty int JoyButtonEvent::device
+    The device index this trigger listens to. Use the ActionStore.Controller
+    values, for example \c{ActionStore.Controller.Device0}.
+*/
+
+/*!
+    \qmlproperty int JoyButtonEvent::button
+    The button this trigger listens to. Use the UniversalInput.JoyButton
+    values, for example \c{UniversalInput.JoyButton.A}.
+*/
+
+/*!
+    \qmlproperty bool JoyButtonEvent::isPressed
+    The pressed state this trigger matches.
+*/
+
+/*!
+    \qmltype KeyboardEvent
+    \inqmlmodule QtActionStore
+    \nativetype QQuickInputKeyEvent
+    \brief A keyboard trigger for an InputAction.
+*/
+
+/*!
+    \qmlproperty int KeyboardEvent::key
+    The \l [CPP] {Qt::Key} this trigger listens to.
+*/
+
+/*!
+    \qmlproperty bool KeyboardEvent::isPressed
+    The pressed state this trigger matches.
+*/
+
+/*!
+    \qmltype MouseButtonEvent
+    \inqmlmodule QtActionStore
+    \nativetype QQuickInputMouseButtonEvent
+    \brief A mouse button trigger for an InputAction.
+*/
+
+/*!
+    \qmlproperty int MouseButtonEvent::button
+    The mouse button this trigger listens to.
+*/
+
+/*!
+    \qmlproperty bool MouseButtonEvent::isPressed
+    The pressed state this trigger matches.
+*/
+
+/*!
+    \qmltype JoyAxisEvent
+    \inqmlmodule QtActionStore
+    \nativetype QQuickInputJoyAxisEvent
+    \brief A gamepad axis trigger for an InputAction.
+*/
+
+/*!
+    \qmlproperty int JoyAxisEvent::device
+    The device index this trigger listens to, for example
+    \c{ActionStore.Controller.Device0}.
+*/
+
+/*!
+    \qmlproperty int JoyAxisEvent::axis
+    The axis this trigger listens to, for example
+    \c{UniversalInput.JoyAxis.LeftX}.
+*/
+
+/*!
+    \qmlproperty int JoyAxisEvent::direction
+    The axis direction this trigger matches, for example
+    \c{ActionStore.AxisDirection.Up}.
+*/
+
+/*!
+    \qmlproperty real JoyAxisEvent::deadzone
+    The magnitude the axis must exceed before the trigger activates.
+*/
+
+/*!
+    \qmltype InputAction
+    \inqmlmodule QtActionStore
+    \nativetype QQuickInputAction
+    \brief A named action with a list of input triggers.
+
+    InputAction groups one or more event triggers under a title. When any of
+    its triggers fires, the owning ActionStore emits its action signals with
+    this action's title.
+*/
+
+/*!
+    \qmlproperty string InputAction::title
+    The name of the action, reported by the ActionStore signals.
+*/
+
+/*!
+    \qmlproperty list<ActionEvent> InputAction::events
+    \qmldefault
+    The triggers that activate this action.
+*/
+
+/*!
+    \qmltype ActionStore
+    \inqmlmodule QtActionStore
+    \nativetype QQuickActionStore
+    \brief Maps raw input onto named actions for Qt Quick.
+
+    ActionStore is the QML counterpart of \l QActionStore. It holds a list of
+    InputAction items and emits action signals when their triggers fire.
+*/
+
+/*!
+    \qmlproperty list<InputAction> ActionStore::actions
+    \qmldefault
+    The actions managed by this store.
+*/
+
 // Events
 
 QQuickInputActionEvent::QQuickInputActionEvent(QObject *parent)

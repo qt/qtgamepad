@@ -51,6 +51,7 @@ public:
     };
     Q_ENUM(AxisDirection)
 
+    /*! \internal */
     struct JoyButtonAction
     {
         Controller device = Controller::All;
@@ -58,6 +59,7 @@ public:
         bool isPressed = false;
     };
 
+    /*! \internal */
     struct JoyAxisAction
     {
         Controller device = Controller::All;
@@ -66,18 +68,21 @@ public:
         float deadzone = 0.5f;
     };
 
+    /*! \internal */
     struct KeyEventAction
     {
         Qt::Key key = Qt::Key_unknown;
         bool isPressed = false;
     };
 
+    /*! \internal */
     struct MouseButtonAction
     {
         Qt::MouseButton button = Qt::NoButton;
         bool isPressed = false;
     };
 
+    /*! \internal */
     struct Action
     {
         QString name = u""_s;

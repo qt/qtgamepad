@@ -25,6 +25,18 @@ QQuickUniversalInputPrivate::QQuickUniversalInputPrivate()
 
 }
 
+/*!
+    \qmltype UniversalInput
+    \inqmlmodule QtUniversalInput
+    \nativetype QQuickUniversalInput
+    \brief Provides access to connected joysticks and gamepads from QML.
+
+    UniversalInput exposes the state of connected input devices to Qt Quick. It
+    also provides the JoyButton, JoyAxis and HatFlag enumerations for use in QML,
+    for example \c{UniversalInput.JoyButton.A}.
+
+    For higher level, named actions use the \l ActionStore type.
+*/
 QQuickUniversalInput::QQuickUniversalInput(QObject *parent)
     : QObject(*new QQuickUniversalInputPrivate, parent)
 {

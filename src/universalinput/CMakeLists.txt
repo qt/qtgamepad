@@ -41,3 +41,7 @@ qt_internal_add_resource(UniversalInput "qtuniversalinputresources"
     FILES
         "../3rdparty/sdlgamecontrollerdb/gamecontrollerdb.txt"
 )
+
+qt_internal_add_docs(UniversalInput
+    doc/qtuniversalinput.qdocconf
+)

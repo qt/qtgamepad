@@ -31,6 +31,209 @@ using HatMask = QUniversalInput::HatMask;
 using JoyAxis = QUniversalInput::JoyAxis;
 using JoyButton = QUniversalInput::JoyButton;
 
+/*!
+    \class QUniversalInput
+    \inmodule QtUniversalInput
+    \since 6.12
+    \brief The QUniversalInput class provides access to connected joysticks and
+    gamepads.
+
+    QUniversalInput is a process-wide singleton, accessed through instance(),
+    that reports the live state of the joysticks and gamepads connected to the
+    system. Devices are identified by an integer device index. Where a device
+    is recognized by the bundled game controller database it is exposed as a
+    gamepad with a common button and axis layout; isGamepad() reports whether a
+    given device has such a mapping.
+
+    Input is delivered through the joyButtonEvent(), joyAxisEvent() and
+    joyConnectionChanged() signals. For higher level, named actions use
+    \l QActionStore, and for a simple single-gamepad convenience API use
+    \l QGamepad.
+
+    \sa QActionStore, QGamepad
+*/
+
+/*!
+    \enum QUniversalInput::JoyButton
+
+    This enum represents the buttons on a gamepad using a layout modelled on a
+    common controller.
+
+    \value Invalid An invalid or unknown button.
+    \value A The bottom face button.
+    \value B The right face button.
+    \value X The left face button.
+    \value Y The top face button.
+    \value Back The back, select or share button.
+    \value Guide The guide or system button.
+    \value Start The start button.
+    \value LeftStick The left stick when pressed in.
+    \value RightStick The right stick when pressed in.
+    \value LeftShoulder The left shoulder button.
+    \value RightShoulder The right shoulder button.
+    \value DpadUp The up direction of the directional pad.
+    \value DpadDown The down direction of the directional pad.
+    \value DpadLeft The left direction of the directional pad.
+    \value DpadRight The right direction of the directional pad.
+    \value Misc1 A miscellaneous button.
+    \value Paddle1 The first paddle button.
+    \value Paddle2 The second paddle button.
+    \value Paddle3 The third paddle button.
+    \value Paddle4 The fourth paddle button.
+    \value Touchpad The touchpad when pressed.
+*/
+
+/*!
+    \enum QUniversalInput::JoyAxis
+
+    This enum represents the analog axes of a gamepad.
+
+    \value Invalid An invalid or unknown axis.
+    \value LeftX The horizontal axis of the left stick.
+    \value LeftY The vertical axis of the left stick.
+    \value RightX The horizontal axis of the right stick.
+    \value RightY The vertical axis of the right stick.
+    \value TriggerLeft The left analog trigger.
+    \value TriggerRight The right analog trigger.
+*/
+
+/*!
+    \enum QUniversalInput::HatDirection
+
+    This enum represents the individual directions of a hat (directional pad).
+
+    \value Up The up direction.
+    \value Right The right direction.
+    \value Down The down direction.
+    \value Left The left direction.
+    \value Max The number of directions.
+*/
+
+/*!
+    \enum QUniversalInput::HatFlag
+
+    This enum holds the individual flags that make up a \c HatMask. Because a
+    hat can be pressed diagonally, the flags can be combined, for example
+    \c{HatFlag::Up | HatFlag::Right}.
+
+    \value Center No direction is pressed.
+    \value Up The up direction is pressed.
+    \value Right The right direction is pressed.
+    \value Down The down direction is pressed.
+    \value Left The left direction is pressed.
+*/
+
+/*!
+    \typedef QUniversalInput::HatMask
+
+    A \l QFlags combination of \l HatFlag values describing the current state of
+    a hat (directional pad).
+*/
+
+/*!
+    \enum QUniversalInput::JoyType
+
+    This enum describes the kind of input a mapping entry refers to.
+
+    \value TypeButton A button.
+    \value TypeAxis An axis.
+    \value TypeHat A hat (directional pad).
+    \value TypeMax The number of input types.
+*/
+
+/*!
+    \enum QUniversalInput::JoyAxisRange
+
+    This enum describes which part of an axis a mapping entry uses.
+
+    \value NegativeHalfAxis Only the negative half of the axis.
+    \value FullAxis The full range of the axis.
+    \value PositiveHalfAxis Only the positive half of the axis.
+*/
+
+/*!
+    \fn QUniversalInput *QUniversalInput::instance()
+
+    Returns the process-wide QUniversalInput singleton, creating it on first
+    use.
+*/
+
+/*!
+    \fn QString QUniversalInput::joyName(int device) const
+
+    Returns the human-readable name of the joystick at index \a device, or an
+    empty string if no such device is connected.
+*/
+
+/*!
+    \fn bool QUniversalInput::isJoyConnected(int device) const
+
+    Returns \c true if a joystick is connected at index \a device.
+*/
+
+/*!
+    \fn bool QUniversalInput::isGamepad(int device) const
+
+    Returns \c true if the device at index \a device is recognized as a gamepad,
+    that is, it has a mapping in the game controller database.
+*/
+
+/*!
+    \fn void QUniversalInput::setMouseDisabled(bool disabled)
+
+    Sets whether relative mouse mode is enabled to \a disabled. When enabled,
+    pointer motion is reported through mouseMovedWithDeltas() rather than as
+    absolute cursor positions.
+
+    \sa isMouseDisabled(), mouseMovedWithDeltas()
+*/
+
+/*!
+    \fn bool QUniversalInput::isMouseDisabled() const
+
+    Returns \c true if relative mouse mode is enabled.
+
+    \sa setMouseDisabled()
+*/
+
+/*!
+    \fn void QUniversalInput::joyConnectionChanged(int index, bool isConnected)
+
+    This signal is emitted when the joystick at \a index is connected or
+    disconnected, as given by \a isConnected.
+*/
+
+/*!
+    \fn void QUniversalInput::joyButtonEvent(int device, QUniversalInput::JoyButton button, bool isPressed)
+
+    This signal is emitted when \a button on the device at index \a device
+    changes state, as given by \a isPressed.
+*/
+
+/*!
+    \fn void QUniversalInput::joyAxisEvent(int device, QUniversalInput::JoyAxis axis, float value)
+
+    This signal is emitted when \a axis on the device at index \a device changes
+    to \a value, in the range -1.0 to 1.0.
+*/
+
+/*!
+    \fn void QUniversalInput::mouseDisabledChanged()
+
+    This signal is emitted when the relative mouse mode changes.
+
+    \sa setMouseDisabled()
+*/
+
+/*!
+    \fn void QUniversalInput::mouseMovedWithDeltas(const QVector2D &deltas)
+
+    This signal is emitted in relative mouse mode when the pointer moves by
+    \a deltas.
+
+    \sa setMouseDisabled()
+*/
+
 static JoyAxis combineDevice(JoyAxis value, int device)
 {
     return JoyAxis(static_cast<int>(value) | (device << 20));
@@ -184,6 +387,7 @@ bool QUniversalInput::isGamepad(int device) const
     return joypad.mapping != -1;
 }
 
+/*! \internal */
 int QUniversalInput::unusedJoyId()
 {
     Q_D(QUniversalInput);
@@ -193,6 +397,7 @@ int QUniversalInput::unusedJoyId()
     return -1;
 }
 
+/*! \internal */
 void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QString &name, const QString &guid)
 {
     Q_D(QUniversalInput);
@@ -235,6 +440,7 @@ void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QSt
     Q_EMIT joyConnectionChanged(index, isConnected);
 }
 
+/*! \internal */
 void QUniversalInput::joyButton(int device, JoyButton button, bool isPressed)
 {
     Q_D(QUniversalInput);
@@ -263,6 +469,7 @@ void QUniversalInput::joyButton(int device, JoyButton button, bool isPressed)
         sendAxisEvent(device, JoyAxis(map.index), isPressed ? map.value : 0.0f);
 }
 
+/*! \internal */
 void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
 {
     Q_D(QUniversalInput);
@@ -324,6 +531,7 @@ void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
     }
 }
 
+/*! \internal */
 void QUniversalInput::joyHat(int device, HatMask value)
 {
     Q_D(QUniversalInput);
@@ -366,6 +574,7 @@ void QUniversalInput::joyHat(int device, HatMask value)
     d->joypadNames[device].hatCurrent = int(value);
 }
 
+/*! \internal */
 QVector2D QUniversalInput::joyVibrationStrength(int device)
 {
     Q_D(QUniversalInput);
@@ -375,6 +584,7 @@ QVector2D QUniversalInput::joyVibrationStrength(int device)
         return QVector2D(0.0f, 0.0f);
 }
 
+/*! \internal */
 float QUniversalInput::joyVibrationDuration(int device)
 {
     Q_D(QUniversalInput);
@@ -384,6 +594,7 @@ float QUniversalInput::joyVibrationDuration(int device)
         return 0.0f;
 }
 
+/*! \internal */
 quint64 QUniversalInput::joyVibrationTimestamp(int device)
 {
     Q_D(QUniversalInput);
@@ -393,6 +604,7 @@ quint64 QUniversalInput::joyVibrationTimestamp(int device)
         return 0;
 }
 
+/*! \internal */
 void QUniversalInput::addForce(int device, QVector2D strength, float duration)
 {
     Q_D(QUniversalInput);
@@ -403,6 +615,7 @@ void QUniversalInput::addForce(int device, QVector2D strength, float duration)
     d->joystickVibrations[device].timestamp = QDateTime::currentMSecsSinceEpoch();
 }
 
+/*! \internal */
 void QUniversalInput::setJoyAxis(int device, JoyAxis axis, float value)
 {
     Q_D(QUniversalInput);
@@ -445,6 +658,7 @@ bool QUniversalInput::isMouseDisabled() const
     return d->mouseDisabled;
 }
 
+/*! \internal */
 void QUniversalInput::mouseMove(const QVector2D &deltas)
 {
     Q_EMIT mouseMovedWithDeltas(deltas);
@@ -605,6 +819,7 @@ void QUniversalInput::mappedHatEvents(const JoyDeviceMapping &mapping, HatDirect
     }
 }
 
+/*! \internal */
 QDebug operator<<(QDebug debug, const JoyButton &joyButton)
 {
     QDebugStateSaver saver(debug);
@@ -640,6 +855,7 @@ QDebug operator<<(QDebug debug, const JoyButton &joyButton)
     return debug;
 }
 
+/*! \internal */
 QDebug operator<<(QDebug debug, const JoyAxis &axis)
 {
     QDebugStateSaver saver(debug);
@@ -660,6 +876,7 @@ QDebug operator<<(QDebug debug, const JoyAxis &axis)
     return debug;
 }
 
+/*! \internal */
 QDebug operator<<(QDebug debug, const QUniversalInput::JoyAxisRange &range)
 {
     QDebugStateSaver saver(debug);
@@ -676,6 +893,7 @@ QDebug operator<<(QDebug debug, const QUniversalInput::JoyAxisRange &range)
     return debug;
 }
 
+/*! \internal */
 QDebug operator<<(QDebug debug, const HatDirection &hatDirection)
 {
     QDebugStateSaver saver(debug);
@@ -692,6 +910,7 @@ QDebug operator<<(QDebug debug, const HatDirection &hatDirection)
     return debug;
 }
 
+/*! \internal */
 QDebug operator<<(QDebug debug, const QUniversalInput::JoyBinding &binding)
 {
     QDebugStateSaver saver(debug);
@@ -729,6 +948,7 @@ QDebug operator<<(QDebug debug, const QUniversalInput::JoyBinding &binding)
     return debug;
 }
 
+/*! \internal */
 QDebug operator<<(QDebug debug, const QUniversalInput::JoyDeviceMapping &mapping)
 {
     QDebugStateSaver saver(debug);
