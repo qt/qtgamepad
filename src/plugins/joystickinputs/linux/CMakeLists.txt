@@ -12,6 +12,6 @@ qt_internal_add_plugin(LinuxJoystickInputPlugin
         Qt::Gui
         Qt::UniversalInput
         Qt::UniversalInputPrivate
-        # todo: do the dependency check in cmake
+        # ### should check for libudev availability in CMake
         udev
 )

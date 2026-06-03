@@ -31,10 +31,6 @@ target_link_libraries(simple PUBLIC
     Qt::Gamepad
 )
 
-#DISTFILES += android/AndroidManifest.xml
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-#target.path = $$[QT_INSTALL_EXAMPLES]/gamepad/simple
-
 install(TARGETS simple
     RUNTIME DESTINATION "${INSTALL_EXAMPLEDIR}"
     BUNDLE DESTINATION "${INSTALL_EXAMPLEDIR}"
