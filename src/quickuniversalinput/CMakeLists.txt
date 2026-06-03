@@ -9,7 +9,7 @@ qt_internal_add_qml_module(QuickUniversalInput
         qquickuniversalinput.cpp qquickuniversalinput_p.h
     QML_FILES
         ${qml_files}
-    PUBLIC_LIBRARIES
+    LIBRARIES
         Qt::Core
         Qt::Quick
         Qt::QuickPrivate
