@@ -15,6 +15,7 @@ QT_BEGIN_NAMESPACE
 
 // Bring the QUniversalInput input enums into scope for this file.
 using HatDirection = QUniversalInput::HatDirection;
+using HatFlag = QUniversalInput::HatFlag;
 using HatMask = QUniversalInput::HatMask;
 using JoyAxis = QUniversalInput::JoyAxis;
 using JoyButton = QUniversalInput::JoyButton;
@@ -403,7 +404,7 @@ static HatMask process_hat_value(int p_min, int p_max, int p_value, bool p_offse
 {
     int range = (p_max - p_min + 1);
     int value = p_value - p_min;
-        HatMask hat_value = HatMask::Center;
+        HatMask hat_value = HatFlag::Center;
     if (range == 4)
         value *= 2;
 
@@ -412,31 +413,31 @@ static HatMask process_hat_value(int p_min, int p_max, int p_value, bool p_offse
 
     switch (value) {
         case 0:
-            hat_value = HatMask::Up;
+            hat_value = HatFlag::Up;
             break;
         case 1:
-            hat_value = (HatMask::Up | HatMask::Right);
+            hat_value = (HatFlag::Up | HatFlag::Right);
             break;
         case 2:
-            hat_value = HatMask::Right;
+            hat_value = HatFlag::Right;
             break;
         case 3:
-            hat_value = (HatMask::Down | HatMask::Right);
+            hat_value = (HatFlag::Down | HatFlag::Right);
             break;
         case 4:
-            hat_value = HatMask::Down;
+            hat_value = HatFlag::Down;
             break;
         case 5:
-            hat_value = (HatMask::Down | HatMask::Left);
+            hat_value = (HatFlag::Down | HatFlag::Left);
             break;
         case 6:
-            hat_value = HatMask::Left;
+            hat_value = HatFlag::Left;
             break;
         case 7:
-            hat_value = (HatMask::Up | HatMask::Left);
+            hat_value = (HatFlag::Up | HatFlag::Left);
             break;
         default:
-            hat_value = HatMask::Center;
+            hat_value = HatFlag::Center;
             break;
     }
     return hat_value;

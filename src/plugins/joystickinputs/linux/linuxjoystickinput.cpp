@@ -27,6 +27,7 @@ Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
 // Bring the QUniversalInput input enums into scope for this file.
 using HatDirection = QUniversalInput::HatDirection;
+using HatFlag = QUniversalInput::HatFlag;
 using HatMask = QUniversalInput::HatMask;
 using JoyAxis = QUniversalInput::JoyAxis;
 using JoyButton = QUniversalInput::JoyButton;
@@ -314,12 +315,12 @@ void LinuxJoystickInput::processJoypads()
                 case ABS_HAT0X:
                     if (event.value != 0) {
                         if (event.value < 0) {
-                            joy.dpad = HatMask::Left;
+                            joy.dpad = HatFlag::Left;
                         } else {
-                            joy.dpad = HatMask::Right;
+                            joy.dpad = HatFlag::Right;
                         }
                     } else {
-                        joy.dpad = HatMask::Center;
+                        joy.dpad = HatFlag::Center;
                     }
                     input->joyHat(i, joy.dpad);
                     break;
@@ -327,12 +328,12 @@ void LinuxJoystickInput::processJoypads()
                 case ABS_HAT0Y:
                     if (event.value != 0) {
                         if (event.value < 0) {
-                            joy.dpad = HatMask::Up;
+                            joy.dpad = HatFlag::Up;
                         } else {
-                            joy.dpad = HatMask::Down;
+                            joy.dpad = HatFlag::Down;
                         }
                     } else {
-                        joy.dpad = HatMask::Center;
+                        joy.dpad = HatFlag::Center;
                     }
                     input->joyHat(i, joy.dpad);
                     break;

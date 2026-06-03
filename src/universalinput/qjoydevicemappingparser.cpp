@@ -139,7 +139,7 @@ static Hat hatFromString(const QString &hat)
 {
     int hatMask = hat[hat.length() - 1].digitValue();
     int log2hatMask = qFloor(qLn(hatMask) / qLn(2));
-    return {HatDirection(log2hatMask), HatMask(hatMask)};
+    return {HatDirection(log2hatMask), HatMask::fromInt(hatMask)};
 }
 
 QUniversalInput::JoyType QJoyDeviceMappingParser::toJoyType(const QString &type) const

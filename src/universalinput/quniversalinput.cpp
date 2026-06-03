@@ -26,6 +26,7 @@ Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 // The input enums live in QUniversalInput; alias them for the free
 // helper functions and debug operators in this file.
 using HatDirection = QUniversalInput::HatDirection;
+using HatFlag = QUniversalInput::HatFlag;
 using HatMask = QUniversalInput::HatMask;
 using JoyAxis = QUniversalInput::JoyAxis;
 using JoyButton = QUniversalInput::JoyButton;
@@ -562,20 +563,16 @@ void QUniversalInput::mappedHatEvents(const JoyDeviceMapping &mapping, HatDirect
         const JoyBinding binding = mapping.bindings[i];
         if (binding.inputType == TypeHat && binding.input.hat.hat == hat) {
             HatDirection hat_direction;
-            switch (binding.input.hat.hat_mask) {
-            case HatMask::Up:
+            const HatMask hatMask = binding.input.hat.hat_mask;
+            if (hatMask == HatFlag::Up)
                 hat_direction = HatDirection::Up;
-                break;
-            case HatMask::Right:
+            else if (hatMask == HatFlag::Right)
                 hat_direction = HatDirection::Right;
-                break;
-            case HatMask::Down:
+            else if (hatMask == HatFlag::Down)
                 hat_direction = HatDirection::Down;
-                break;
-            case HatMask::Left:
+            else if (hatMask == HatFlag::Left)
                 hat_direction = HatDirection::Left;
-                break;
-            default:
+            else {
                 qCWarning(lcUniversalInput, "Joypad button mapping error.");
                 continue;
             }
@@ -690,24 +687,6 @@ QDebug operator<<(QDebug debug, const HatDirection &hatDirection)
     case HatDirection::Left: debug.nospace() << "Left"; break;
     default:
         debug.nospace() << "(" << static_cast<int>(hatDirection) << ")";
-        break;
-    }
-    return debug;
-}
-
-QDebug operator<<(QDebug debug, const HatMask &hatMask)
-{
-    QDebugStateSaver saver(debug);
-    debug.nospace() << "HatMask::";
-
-    switch (hatMask) {
-    case HatMask::Center: debug.nospace() << "Center"; break;
-    case HatMask::Up: debug.nospace() << "Up"; break;
-    case HatMask::Right: debug.nospace() << "Right"; break;
-    case HatMask::Down: debug.nospace() << "Down"; break;
-    case HatMask::Left: debug.nospace() << "Left"; break;
-    default:
-        debug.nospace() << "(" << static_cast<int>(hatMask) << ")";
         break;
     }
     return debug;

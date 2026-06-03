@@ -15,6 +15,7 @@
 #include <QtUniversalInput/private/qtuniversalinputglobal_p.h>
 
 // Bring the QUniversalInput input enums into scope for this file.
+using HatFlag = QUniversalInput::HatFlag;
 using HatMask = QUniversalInput::HatMask;
 using JoyAxis = QUniversalInput::JoyAxis;
 using JoyButton = QUniversalInput::JoyButton;
@@ -44,18 +45,18 @@ Q_DECLARE_JNI_NATIVE_METHOD(joyAxis)
 
 static void joyHat(JNIEnv *, jclass, int deviceId, int hatX, int hatY)
 {
-    HatMask hat = HatMask::Center;
+    HatMask hat = HatFlag::Center;
     if (hatX != 0) {
         if (hatX < 0)
-            hat |= HatMask::Left;
+            hat |= HatFlag::Left;
         else
-            hat |= HatMask::Right;
+            hat |= HatFlag::Right;
     }
     if (hatY != 0) {
         if (hatY < 0)
-            hat |= HatMask::Up;
+            hat |= HatFlag::Up;
         else
-            hat |= HatMask::Down;
+            hat |= HatFlag::Down;
     }
 
     QUniversalInput::instance()->joyHat(deviceId, hat);

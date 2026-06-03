@@ -39,6 +39,7 @@ Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
 // Bring the QUniversalInput input enums into scope for this file.
 using HatDirection = QUniversalInput::HatDirection;
+using HatFlag = QUniversalInput::HatFlag;
 using HatMask = QUniversalInput::HatMask;
 using JoyAxis = QUniversalInput::JoyAxis;
 using JoyButton = QUniversalInput::JoyButton;
@@ -456,38 +457,38 @@ void WindowsJoystickInput::close_joypad(int id)
 
 void WindowsJoystickInput::post_hat(int p_device, DWORD p_dpad)
 {
-    HatMask dpad_val = (HatMask)0;
+    HatMask dpad_val;
 
     // Should be -1 when centered, but according to docs:
     // "Some drivers report the centered position of the POV indicator as 65,535. Determine whether the indicator is centered as follows:
     //  BOOL POVCentered = (LOWORD(dwPOV) == 0xFFFF);"
     // https://docs.microsoft.com/en-us/previous-versions/windows/desktop/ee416628(v%3Dvs.85)#remarks
     if (LOWORD(p_dpad) == 0xFFFF)
-        dpad_val = (HatMask)HatMask::Center;
+        dpad_val = HatFlag::Center;
 
     if (p_dpad == 0) {
-        dpad_val = (HatMask)HatMask::Up;
+        dpad_val = HatFlag::Up;
 
     } else if (p_dpad == 4500) {
-        dpad_val = (HatMask)(HatMask::Up | HatMask::Right);
+        dpad_val = (HatFlag::Up | HatFlag::Right);
 
     } else if (p_dpad == 9000) {
-        dpad_val = (HatMask)HatMask::Right;
+        dpad_val = HatFlag::Right;
 
     } else if (p_dpad == 13500) {
-        dpad_val = (HatMask)(HatMask::Right | HatMask::Down);
+        dpad_val = (HatFlag::Right | HatFlag::Down);
 
     } else if (p_dpad == 18000) {
-        dpad_val = (HatMask)HatMask::Down;
+        dpad_val = HatFlag::Down;
 
     } else if (p_dpad == 22500) {
-        dpad_val = (HatMask)(HatMask::Down | HatMask::Left);
+        dpad_val = (HatFlag::Down | HatFlag::Left);
 
     } else if (p_dpad == 27000) {
-        dpad_val = (HatMask)HatMask::Left;
+        dpad_val = HatFlag::Left;
 
     } else if (p_dpad == 31500) {
-        dpad_val = (HatMask)(HatMask::Left | HatMask::Up);
+        dpad_val = (HatFlag::Left | HatFlag::Up);
     }
     QUniversalInput::instance()->joyHat(p_device, dpad_val);
 }

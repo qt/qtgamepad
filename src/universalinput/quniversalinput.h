@@ -36,14 +36,15 @@ public:
     };
     Q_ENUM(HatDirection)
 
-    enum class HatMask {
-        Center = 0,
-        Up = 1,
-        Right = 2,
-        Down = 4,
-        Left = 8,
+    enum class HatFlag {
+        Center = 0x0,
+        Up = 0x1,
+        Right = 0x2,
+        Down = 0x4,
+        Left = 0x8,
     };
-    Q_ENUM(HatMask)
+    Q_DECLARE_FLAGS(HatMask, HatFlag)
+    Q_FLAG(HatMask)
 
     enum class JoyAxis {
         Invalid = -1,
@@ -120,7 +121,7 @@ public:
         bool isConnected = false;
         bool lastButtons[JoyButtonsMax] = { false };
         float lastAxis[JoyAxesMax] = { 0.0f };
-        HatMask lastHat = HatMask::Center;
+        HatMask lastHat = HatFlag::Center;
         int mapping = -1;
         int hatCurrent = 0;
     };
@@ -232,38 +233,12 @@ private:
     Q_DISABLE_COPY_MOVE(QUniversalInput)
 };
 
-inline QUniversalInput::HatMask operator|(QUniversalInput::HatMask a, QUniversalInput::HatMask b)
-{
-    return static_cast<QUniversalInput::HatMask>(static_cast<int>(a) | static_cast<int>(b));
-}
-
-inline QUniversalInput::HatMask operator&(QUniversalInput::HatMask a, QUniversalInput::HatMask b)
-{
-    return static_cast<QUniversalInput::HatMask>(static_cast<int>(a) & static_cast<int>(b));
-}
-
-inline QUniversalInput::HatMask &operator&=(QUniversalInput::HatMask &a, QUniversalInput::HatMask b)
-{
-    a = a & b;
-    return a;
-}
-
-inline QUniversalInput::HatMask &operator|=(QUniversalInput::HatMask &a, QUniversalInput::HatMask b)
-{
-    a = a | b;
-    return a;
-}
-
-inline QUniversalInput::HatMask operator~(QUniversalInput::HatMask a)
-{
-    return static_cast<QUniversalInput::HatMask>(~static_cast<int>(a));
-}
+Q_DECLARE_OPERATORS_FOR_FLAGS(QUniversalInput::HatMask)
 
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyButton &joyButton);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyAxis &axis);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyAxisRange &range);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::HatDirection &hatDirection);
-Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::HatMask &hatMask);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyBinding &binding);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyDeviceMapping &mapping);
 
