@@ -1,0 +1,65 @@
+version = 1
+
+[[annotations]]
+path = ["src/plugins/**.json"]
+precedence = "closest"
+comment = "plugin metadata"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only"
+
+[[annotations]]
+path = [".cmake.conf", "**.yaml", ".tag", "**.pro", "**.pri",
+        "qt_cmdline.cmake", "**ci_config_linux.json"]
+precedence = "closest"
+comment = "build system"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = ["**/.gitattributes", "**.gitignore", "**.gitreview"]
+precedence = "closest"
+comment = "infrastructure"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR BSD-3-Clause"
+
+[[annotations]]
+path = ["**.qdocconf", "**/README*", "CONTRIBUTING.md",
+        "src/universalinput/doc/images/**"]
+precedence = "closest"
+comment = "documentation"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only"
+
+[[annotations]]
+path = ["examples/**/AndroidManifest.xml"]
+precedence = "closest"
+comment = "example"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR BSD-3-Clause"
+
+[[annotations]]
+path = ["src/**/AndroidManifest.xml"]
+precedence = "closest"
+comment = "android"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only"
+
+[[annotations]]
+path = ["**.toml", "licenseRule.json"]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR BSD-3-Clause"
+
+[[annotations]]
+path = ["**/qt_attribution.json"]
+precedence = "override"
+SPDX-FileCopyrightText = "Copyright (C) The Qt Company Ltd."
+SPDX-License-Identifier = "LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only"
+
+[[annotations]]
+path = ["src/universalinput/GODOT_LICENSE.txt"]
+precedence = "override"
+comment = "license text of the Godot Engine, which this module's input API is based on"
+SPDX-FileCopyrightText = ["Copyright (c) 2014-present Godot Engine contributors",
+                          "Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur."]
+SPDX-License-Identifier = "MIT"
