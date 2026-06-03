@@ -12,6 +12,13 @@
 #include <QtCore/QLoggingCategory>
 #include <QtUniversalInput/QUniversalInput>
 
+#include <QtUniversalInput/private/qtuniversalinputglobal_p.h>
+
+// Bring the QUniversalInput input enums into scope for this file.
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 using namespace QtJniTypes;
 
 Q_DECLARE_JNI_CLASS(KeyEvent, "android/view/KeyEvent")

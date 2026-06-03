@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
         qDebug() << "joyConnectionChanged!";
         qDebug() << "joy" << joyId << "connected:" << connected;
     });
-    QObject::connect(input, &QUniversalInput::joyButtonEvent, [&input](int device, JoyButton button, bool pressed) {
+    QObject::connect(input, &QUniversalInput::joyButtonEvent, [&input](int device, QUniversalInput::JoyButton button, bool pressed) {
         qDebug() << "Device: " << device << "button: " << int(button) << ( pressed ? "pressed" : "released");
         input->addForce(0, QVector2D(1, 1), 1.0f);
     });
-    QObject::connect(input, &QUniversalInput::joyAxisEvent, [](int device, JoyAxis axis, float value) {
+    QObject::connect(input, &QUniversalInput::joyAxisEvent, [](int device, QUniversalInput::JoyAxis axis, float value) {
         qDebug() << "Device: " << device << "axis: " << int(axis) << "value: " << value;
     });
 

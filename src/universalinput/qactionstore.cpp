@@ -9,6 +9,12 @@
 
 QT_BEGIN_NAMESPACE
 
+// Bring the QUniversalInput input enums into scope for this file.
+using HatDirection = QUniversalInput::HatDirection;
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 class QActionStorePrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QActionStore)
@@ -31,8 +37,10 @@ QActionStore::QActionStore(QObject *parent)
     d->q_ptr = this;
 
     auto input = QUniversalInput::instance();
-    connect(input, SIGNAL(joyAxisEvent(int, JoyAxis, float)), this, SLOT(_q_handleJoyAxisEvent(int, JoyAxis, float)));
-    connect(input, SIGNAL(joyButtonEvent(int, JoyButton, bool)), this, SLOT(_q_handleJoyButtonEvent(int, JoyButton, bool)));
+    QObjectPrivate::connect(input, &QUniversalInput::joyAxisEvent,
+                            d, &QActionStorePrivate::_q_handleJoyAxisEvent);
+    QObjectPrivate::connect(input, &QUniversalInput::joyButtonEvent,
+                            d, &QActionStorePrivate::_q_handleJoyButtonEvent);
 
     if (parent)
         parent->installEventFilter(this);

@@ -23,6 +23,13 @@ QT_BEGIN_NAMESPACE
 
 Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
+// The input enums live in QUniversalInput; alias them for the free
+// helper functions and debug operators in this file.
+using HatDirection = QUniversalInput::HatDirection;
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 static JoyAxis combineDevice(JoyAxis value, int device)
 {
     return JoyAxis(static_cast<int>(value) | (device << 20));
@@ -214,11 +221,11 @@ void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QSt
         js.mapping = mapping;
     } else {
         js.isConnected = false;
-        for (int i = 0; i < static_cast<int>(JoyButton::MAX); i++) {
+        for (int i = 0; i < JoyButtonsMax; i++) {
             JoyButton c = combineDevice(static_cast<JoyButton>(i), index);
             d->joystickButtonsPressed.remove(c);
         }
-        for (int i = 0; i < static_cast<int>(JoyAxis::MAX); i++)
+        for (int i = 0; i < JoyAxesMax; i++)
             setJoyAxis(index, static_cast<JoyAxis>(i), 0.0f);
 
     }
@@ -233,7 +240,7 @@ void QUniversalInput::joyButton(int device, JoyButton button, bool isPressed)
     QMutexLocker locker(&d->mutex);
 
     Joypad &joy = d->joypadNames[device];
-    Q_ASSERT(int(button) < int(JoyButton::MAX));
+    Q_ASSERT(int(button) < JoyButtonsMax);
 
     if (joy.lastButtons[size_t(button)] == isPressed)
         return;
@@ -260,7 +267,7 @@ void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
 
-    Q_ASSERT(int(axis) < int(JoyAxis::MAX));
+    Q_ASSERT(int(axis) < JoyAxesMax);
 
     Joypad &joy = d->joypadNames[device];
 

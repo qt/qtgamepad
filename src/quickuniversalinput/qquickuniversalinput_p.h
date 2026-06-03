@@ -40,8 +40,8 @@ public:
 
 Q_SIGNALS:
     void joyConnectionChanged(int index, bool isConnected);
-    void joyButtonEvent(int device, JoyButton button, bool isPressed);
-    void joyAxisEvent(int device, JoyAxis axis, float value);
+    void joyButtonEvent(int device, QUniversalInput::JoyButton button, bool isPressed);
+    void joyAxisEvent(int device, QUniversalInput::JoyAxis axis, float value);
 
     void mouseDisabledChanged();
     void mouseDeltaChanged(const QVector2D& delta);
@@ -49,9 +49,9 @@ Q_SIGNALS:
 public Q_SLOTS:
     void addForce(int device, const QVector2D& force, float duration);
 
-    void joyButton(int device, JoyButton button, bool isPressed);
-    void joyAxis(int device, JoyAxis axis, float value);
-    void joyHat(int device, HatMask value);
+    void joyButton(int device, QUniversalInput::JoyButton button, bool isPressed);
+    void joyAxis(int device, QUniversalInput::JoyAxis axis, float value);
+    void joyHat(int device, QUniversalInput::HatMask value);
 
 
 private:

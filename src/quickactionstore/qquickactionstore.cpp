@@ -238,11 +238,11 @@ QActionStore::Action QQuickInputAction::action() const
 
     for (auto *event : m_events) {
         if (auto *joyButtonEvent = qobject_cast<QQuickInputJoyButtonEvent *>(event))
-            builder.addButton(QActionStore::Controller(joyButtonEvent->device()), JoyButton(joyButtonEvent->button()), joyButtonEvent->isPressed());
+            builder.addButton(QActionStore::Controller(joyButtonEvent->device()), QUniversalInput::JoyButton(joyButtonEvent->button()), joyButtonEvent->isPressed());
         if (auto *keyEvent = qobject_cast<QQuickInputKeyEvent *>(event))
             builder.addKey(keyEvent->key(), keyEvent->isPressed());
         if (auto *joyAxisEvent = qobject_cast<QQuickInputJoyAxisEvent *>(event))
-            builder.addAxis(QActionStore::Controller(joyAxisEvent->device()), JoyAxis(joyAxisEvent->axis()), QActionStore::AxisDirection(joyAxisEvent->direction()), joyAxisEvent->deadzone());
+            builder.addAxis(QActionStore::Controller(joyAxisEvent->device()), QUniversalInput::JoyAxis(joyAxisEvent->axis()), QActionStore::AxisDirection(joyAxisEvent->direction()), joyAxisEvent->deadzone());
         if (auto *mouseButtonEvent = qobject_cast<QQuickInputMouseButtonEvent *>(event))
             builder.addMouseButton(Qt::MouseButton(mouseButtonEvent->button()), mouseButtonEvent->isPressed());
     }

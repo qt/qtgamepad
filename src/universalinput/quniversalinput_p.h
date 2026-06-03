@@ -48,8 +48,8 @@ public:
 
 
     QSet<Qt::Key> keysPressed;
-    QSet<JoyButton> joystickButtonsPressed;
-    QMap<JoyAxis, qreal> joystickAxes;
+    QSet<QUniversalInput::JoyButton> joystickButtonsPressed;
+    QMap<QUniversalInput::JoyAxis, qreal> joystickAxes;
 
     QVector3D gravity;
     QVector3D acceleration;

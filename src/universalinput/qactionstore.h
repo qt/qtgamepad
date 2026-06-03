@@ -15,8 +15,6 @@ class QActionStorePrivate;
 class Q_UNIVERSALINPUT_EXPORT QActionStore : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Controller)
-    Q_ENUMS(AxisDirection)
 public:
     enum class Controller
     {
@@ -40,6 +38,7 @@ public:
         Device16 = 16,
         DeviceMAX = 17,
     };
+    Q_ENUM(Controller)
 
     enum class AxisDirection
     {
@@ -50,18 +49,19 @@ public:
         Left = 3,
         Max = 4,
     };
+    Q_ENUM(AxisDirection)
 
     struct JoyButtonAction
     {
         Controller device = Controller::All;
-        JoyButton button = JoyButton::Invalid;
+        QUniversalInput::JoyButton button = QUniversalInput::JoyButton::Invalid;
         bool isPressed = false;
     };
 
     struct JoyAxisAction
     {
         Controller device = Controller::All;
-        JoyAxis axis = JoyAxis::Invalid;
+        QUniversalInput::JoyAxis axis = QUniversalInput::JoyAxis::Invalid;
         AxisDirection direction = AxisDirection::Max;
         float deadzone = 0.5f;
     };
@@ -90,8 +90,8 @@ public:
     struct Q_UNIVERSALINPUT_EXPORT ActionBuilder
     {
         ActionBuilder(const QString &name);
-        ActionBuilder &addAxis(Controller device, JoyAxis axis, AxisDirection direction, float deadzone);
-        ActionBuilder &addButton(Controller device, JoyButton button, bool isPressed = true);
+        ActionBuilder &addAxis(Controller device, QUniversalInput::JoyAxis axis, AxisDirection direction, float deadzone);
+        ActionBuilder &addButton(Controller device, QUniversalInput::JoyButton button, bool isPressed = true);
         ActionBuilder &addKey(Qt::Key key, bool isPressed = true);
         ActionBuilder &addMouseButton(Qt::MouseButton button, bool isPressed = true);
 
@@ -111,8 +111,8 @@ Q_SIGNALS:
     void actionEvent(const QString &action);
     void actionKeyEvent(const QString &action, Qt::Key key, bool isPressed);
     void actionMouseButtonEvent(const QString &action, Qt::MouseButton button, bool isPressed);
-    void actionJoyButtonEvent(const QString &action, int device, JoyButton button, bool isPressed);
-    void actionJoyAxisEvent(const QString &action, int device, JoyAxis axis, float value);
+    void actionJoyButtonEvent(const QString &action, int device, QUniversalInput::JoyButton button, bool isPressed);
+    void actionJoyAxisEvent(const QString &action, int device, QUniversalInput::JoyAxis axis, float value);
 
 public Q_SLOTS:
     void sendKeyEvent(Qt::Key key, bool isPressed = true);
@@ -121,10 +121,6 @@ public Q_SLOTS:
 private:
     Q_DECLARE_PRIVATE(QActionStore)
     Q_DISABLE_COPY(QActionStore)
-
-private:
-    Q_PRIVATE_SLOT(d_func(), void _q_handleJoyAxisEvent(int, JoyAxis, float))
-    Q_PRIVATE_SLOT(d_func(), void _q_handleJoyButtonEvent(int, JoyButton, bool))
 };
 
 QT_END_NAMESPACE

@@ -10,6 +10,12 @@ QT_BEGIN_NAMESPACE
 
 Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
+// Bring the QUniversalInput input enums into scope for this file.
+using HatDirection = QUniversalInput::HatDirection;
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 QJoyDeviceMappingParser::QJoyDeviceMappingParser(const QString &filepath)
     : m_filepath(filepath), m_file(filepath), m_stream(&m_file)
 {

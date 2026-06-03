@@ -5,6 +5,11 @@
 
 QT_BEGIN_NAMESPACE
 
+// Bring the QUniversalInput input enums into scope for this file.
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 // ActionHandler
 
 QQuickActionHandler::QQuickActionHandler(QObject *parent)

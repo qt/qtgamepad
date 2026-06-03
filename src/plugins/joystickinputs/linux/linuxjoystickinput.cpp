@@ -25,6 +25,12 @@ QT_BEGIN_NAMESPACE
 
 Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
+// Bring the QUniversalInput input enums into scope for this file.
+using HatDirection = QUniversalInput::HatDirection;
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 // GODOT begin
 #define LONG_BITS (sizeof(long) * 8)
 #define NBITS(x) ((((x)-1) / LONG_BITS) + 1)

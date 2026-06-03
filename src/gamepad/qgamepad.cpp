@@ -7,6 +7,12 @@
 
 QT_BEGIN_NAMESPACE
 
+// Bring the QUniversalInput input enums into scope for this file.
+using HatDirection = QUniversalInput::HatDirection;
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 class QGamepadPrivate : public QObjectPrivate
 {
     Q_DECLARE_PUBLIC(QGamepad)
@@ -217,13 +223,16 @@ void QGamepadPrivate::_q_handleGamepadButtonEvent(int device, JoyButton button, 
 QGamepad::QGamepad(int deviceId, QObject *parent)
     : QObject(*new QGamepadPrivate(deviceId), parent)
 {
-    auto* input = QUniversalInput::instance();
-
-    connect(input, SIGNAL(joyConnectionChanged(int,bool)), this, SLOT(_q_handleGamepadConnectionChangedEvent(int, bool)));
-    connect(input, SIGNAL(joyAxisEvent(int,JoyAxis,float)), this, SLOT(_q_handleGamepadAxisEvent(int, JoyAxis, float)));
-    connect(input, SIGNAL(joyButtonEvent(int,JoyButton,bool)), this, SLOT(_q_handleGamepadButtonEvent(int, JoyButton, bool)));
+    auto *input = QUniversalInput::instance();
 
     Q_D(QGamepad);
+    QObjectPrivate::connect(input, &QUniversalInput::joyConnectionChanged,
+                            d, &QGamepadPrivate::_q_handleGamepadConnectionChangedEvent);
+    QObjectPrivate::connect(input, &QUniversalInput::joyAxisEvent,
+                            d, &QGamepadPrivate::_q_handleGamepadAxisEvent);
+    QObjectPrivate::connect(input, &QUniversalInput::joyButtonEvent,
+                            d, &QGamepadPrivate::_q_handleGamepadButtonEvent);
+
     d->setConnected(input->isJoyConnected(deviceId));
     d->setName(input->getJoyName(deviceId));
 }

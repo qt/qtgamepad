@@ -62,7 +62,7 @@ private:
         int key_map[MAX_KEY];
         int joy_axis[JOY_AXIS_COUNT];
 
-        HatMask dpad;
+        QUniversalInput::HatMask dpad;
 
         int fd = -1;
         QString devpath;

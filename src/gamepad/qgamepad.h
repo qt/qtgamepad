@@ -102,9 +102,6 @@ Q_SIGNALS:
 private:
     Q_DECLARE_PRIVATE(QGamepad)
     Q_DISABLE_COPY(QGamepad)
-    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadConnectionChangedEvent(int, bool))
-    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadAxisEvent(int, JoyAxis, float))
-    Q_PRIVATE_SLOT(d_func(), void _q_handleGamepadButtonEvent(int, JoyButton, bool))
 };
 
 QT_END_NAMESPACE

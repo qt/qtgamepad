@@ -9,6 +9,11 @@
 
 #include "iosjoystickinput.h"
 
+// Bring the QUniversalInput input enums into scope for this file.
+using HatMask = QUniversalInput::HatMask;
+using JoyAxis = QUniversalInput::JoyAxis;
+using JoyButton = QUniversalInput::JoyButton;
+
 #import <GameController/GameController.h>
 
 @interface JoypadIOSObserver : NSObject

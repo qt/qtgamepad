@@ -19,88 +19,70 @@
 
 QT_BEGIN_NAMESPACE
 
-enum class HatDirection {
-    Up = 0,
-    Right = 1,
-    Down = 2,
-    Left = 3,
-    Max = 4,
-};
-
-enum class HatMask {
-    Center = 0,
-    Up = 1,
-    Right = 2,
-    Down = 4,
-    Left = 8,
-};
-
-enum class JoyAxis {
-    Invalid = -1,
-    LeftX = 0,
-    LeftY = 1,
-    RightX = 2,
-    RightY = 3,
-    TriggerLeft = 4,
-    TriggerRight = 5,
-    MAX = 10,
-};
-
-enum class JoyButton {
-    Invalid = -1,
-    A = 0,
-    B = 1,
-    X = 2,
-    Y = 3,
-    Back = 4,
-    Guide = 5,
-    Start = 6,
-    LeftStick = 7,
-    RightStick = 8,
-    LeftShoulder = 9,
-    RightShoulder = 10,
-    DpadUp = 11,
-    DpadDown = 12,
-    DpadLeft = 13,
-    DpadRight = 14,
-    Misc1 = 15,
-    Paddle1 = 16,
-    Paddle2 = 17,
-    Paddle3 = 18,
-    Paddle4 = 19,
-    Touchpad = 20,
-    MAX = 128
-};
-
-inline HatMask operator|(HatMask a, HatMask b) {
-    return static_cast<HatMask>(static_cast<int>(a) | static_cast<int>(b));
-}
-
-inline HatMask operator&(HatMask a, HatMask b) {
-    return static_cast<HatMask>(static_cast<int>(a) & static_cast<int>(b));
-}
-
-inline HatMask &operator&=(HatMask &a, HatMask b) {
-    a = a & b;
-    return a;
-}
-
-inline HatMask &operator|=(HatMask &a, HatMask b) {
-    a = a | b;
-    return a;
-}
-
-inline HatMask operator~(HatMask a) {
-    return static_cast<HatMask>(~static_cast<int>(a));
-}
-
 class QUniversalInputPrivate;
 class Q_UNIVERSALINPUT_EXPORT QUniversalInput : public QObject
 {
     Q_OBJECT
 public:
+    enum class HatDirection {
+        Up = 0,
+        Right = 1,
+        Down = 2,
+        Left = 3,
+        Max = 4,
+    };
+    Q_ENUM(HatDirection)
+
+    enum class HatMask {
+        Center = 0,
+        Up = 1,
+        Right = 2,
+        Down = 4,
+        Left = 8,
+    };
+    Q_ENUM(HatMask)
+
+    enum class JoyAxis {
+        Invalid = -1,
+        LeftX = 0,
+        LeftY = 1,
+        RightX = 2,
+        RightY = 3,
+        TriggerLeft = 4,
+        TriggerRight = 5,
+    };
+    Q_ENUM(JoyAxis)
+
+    enum class JoyButton {
+        Invalid = -1,
+        A = 0,
+        B = 1,
+        X = 2,
+        Y = 3,
+        Back = 4,
+        Guide = 5,
+        Start = 6,
+        LeftStick = 7,
+        RightStick = 8,
+        LeftShoulder = 9,
+        RightShoulder = 10,
+        DpadUp = 11,
+        DpadDown = 12,
+        DpadLeft = 13,
+        DpadRight = 14,
+        Misc1 = 15,
+        Paddle1 = 16,
+        Paddle2 = 17,
+        Paddle3 = 18,
+        Paddle4 = 19,
+        Touchpad = 20,
+    };
+    Q_ENUM(JoyButton)
+
     enum {
         JoypadsMax = 16,
+        JoyAxesMax = 10,
+        JoyButtonsMax = 128,
     };
 
     struct Action {
@@ -133,8 +115,8 @@ public:
         QString name;
         QString uid;
         bool isConnected = false;
-        bool lastButtons[size_t(JoyButton::MAX)] = { false };
-        float lastAxis[size_t(JoyAxis::MAX)] = { 0.0f };
+        bool lastButtons[JoyButtonsMax] = { false };
+        float lastAxis[JoyAxesMax] = { 0.0f };
         HatMask lastHat = HatMask::Center;
         int mapping = -1;
         int hatCurrent = 0;
@@ -247,11 +229,38 @@ private:
     Q_DISABLE_COPY(QUniversalInput)
 };
 
-Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const JoyButton &joyButton);
-Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const JoyAxis &axis);
+inline QUniversalInput::HatMask operator|(QUniversalInput::HatMask a, QUniversalInput::HatMask b)
+{
+    return static_cast<QUniversalInput::HatMask>(static_cast<int>(a) | static_cast<int>(b));
+}
+
+inline QUniversalInput::HatMask operator&(QUniversalInput::HatMask a, QUniversalInput::HatMask b)
+{
+    return static_cast<QUniversalInput::HatMask>(static_cast<int>(a) & static_cast<int>(b));
+}
+
+inline QUniversalInput::HatMask &operator&=(QUniversalInput::HatMask &a, QUniversalInput::HatMask b)
+{
+    a = a & b;
+    return a;
+}
+
+inline QUniversalInput::HatMask &operator|=(QUniversalInput::HatMask &a, QUniversalInput::HatMask b)
+{
+    a = a | b;
+    return a;
+}
+
+inline QUniversalInput::HatMask operator~(QUniversalInput::HatMask a)
+{
+    return static_cast<QUniversalInput::HatMask>(~static_cast<int>(a));
+}
+
+Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyButton &joyButton);
+Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyAxis &axis);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyAxisRange &range);
-Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const HatDirection &hatDirection);
-Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const HatMask &hatMask);
+Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::HatDirection &hatDirection);
+Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::HatMask &hatMask);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyBinding &binding);
 Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::JoyDeviceMapping &mapping);
 
@@ -259,7 +268,9 @@ Q_UNIVERSALINPUT_EXPORT QDebug operator<<(QDebug debug, const QUniversalInput::J
 
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(JoyButton)
-Q_DECLARE_METATYPE(JoyAxis)
+Q_DECLARE_METATYPE(QUniversalInput::JoyButton)
+Q_DECLARE_METATYPE(QUniversalInput::JoyAxis)
+Q_DECLARE_METATYPE(QUniversalInput::HatDirection)
+Q_DECLARE_METATYPE(QUniversalInput::HatMask)
 
 #endif // QUNIVERSALINPUT_H
