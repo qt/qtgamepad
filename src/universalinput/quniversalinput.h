@@ -214,7 +214,7 @@ public:
     QVector2D getJoyVibrationStrength(int device);
     float getJoyVibrationDuration(int device);
     quint64 getJoyVibrationTimestamp(int device);
-    void addForce(int deivce, QVector2D strength, float duration);
+    void addForce(int device, QVector2D strength, float duration);
 
     void setJoyAxis(int device, JoyAxis axis, float value);
 

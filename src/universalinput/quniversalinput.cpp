@@ -371,13 +371,13 @@ quint64 QUniversalInput::getJoyVibrationTimestamp(int device)
         return 0;
 }
 
-void QUniversalInput::addForce(int deivce, QVector2D strength, float duration) {
+void QUniversalInput::addForce(int device, QVector2D strength, float duration) {
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
-    d->joystickVibrations[deivce].weakMagnitude = strength.x();
-    d->joystickVibrations[deivce].strongMagnitude = strength.y();
-    d->joystickVibrations[deivce].duration = duration; // sec
-    d->joystickVibrations[deivce].timestamp = QDateTime::currentMSecsSinceEpoch();
+    d->joystickVibrations[device].weakMagnitude = strength.x();
+    d->joystickVibrations[device].strongMagnitude = strength.y();
+    d->joystickVibrations[device].duration = duration; // sec
+    d->joystickVibrations[device].timestamp = QDateTime::currentMSecsSinceEpoch();
 }
 
 void QUniversalInput::setJoyAxis(int device, JoyAxis axis, float value)
