@@ -32,13 +32,12 @@ set_source_files_properties(../3rdparty/sdlgamecontrollerdb/gamecontrollerdb.txt
     QT_RESOURCE_ALIAS gamecontrollerdb.txt
 )
 
+# Embed the SDL game controller database. The QT_RESOURCE_ALIAS above
+# makes it available at
+# :/qt-project.org/qtuniversalinput/gamecontrollerdb.txt
 qt_internal_add_resource(UniversalInput "qtuniversalinputresources"
     PREFIX
         "/qt-project.org/qtuniversalinput/"
     FILES
         "../3rdparty/sdlgamecontrollerdb/gamecontrollerdb.txt"
 )
-
-
-
-# file *should* be :/qt-project.org/qtuniversalinput/gamecontrollerdb.txt
