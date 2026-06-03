@@ -73,23 +73,25 @@ enum class JoyButton {
 };
 
 inline HatMask operator|(HatMask a, HatMask b) {
-    return (HatMask)((int)a | (int)b);
+    return static_cast<HatMask>(static_cast<int>(a) | static_cast<int>(b));
 }
 
 inline HatMask operator&(HatMask a, HatMask b) {
-    return (HatMask)((int)a & (int)b);
+    return static_cast<HatMask>(static_cast<int>(a) & static_cast<int>(b));
 }
 
 inline HatMask &operator&=(HatMask &a, HatMask b) {
-    return (HatMask &)((int &)a &= (int)b);
+    a = a & b;
+    return a;
 }
 
 inline HatMask &operator|=(HatMask &a, HatMask b) {
-    return (HatMask &)((int &)a |= (int)b);
+    a = a | b;
+    return a;
 }
 
 inline HatMask operator~(HatMask a) {
-    return (HatMask)(~(int)a);
+    return static_cast<HatMask>(~static_cast<int>(a));
 }
 
 class QUniversalInputPrivate;
