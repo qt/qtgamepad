@@ -62,8 +62,8 @@ void QActionStorePrivate::_q_handleJoyAxisEvent(int device, JoyAxis axis, float 
         auto key = actions.keys()[j];
         auto action = actions[key];
         for (auto axisAction : action.axes) {
-            const auto absValue = abs(value);
-            if (axisAction.axis == axis && ((int)axisAction.device == device || axisAction.device == QActionStore::Controller::All) && absValue >= axisAction.deadzone) {
+            const auto absValue = qAbs(value);
+            if (axisAction.axis == axis && (static_cast<int>(axisAction.device) == device || axisAction.device == QActionStore::Controller::All) && absValue >= axisAction.deadzone) {
                 switch (axisAction.direction) {
                 case QActionStore::AxisDirection::Left:
                 case QActionStore::AxisDirection::Up:
@@ -98,12 +98,12 @@ void QActionStorePrivate::_q_handleJoyAxisEvent(int device, JoyAxis axis, float 
 
 void QActionStorePrivate::_q_handleJoyButtonEvent(int device, JoyButton button, bool isPressed)
 {
-    for (auto j = 0; j < actions.size(); j++) {
+    for (int j = 0; j < actions.size(); j++) {
         auto key = actions.keys()[j];
         auto action = actions[key];
 
         for (auto buttonAction : action.buttons) {
-            if (buttonAction.button == button && buttonAction.isPressed == isPressed && ((int)buttonAction.device == device || buttonAction.device == QActionStore::Controller::All)) {
+            if (buttonAction.button == button && buttonAction.isPressed == isPressed && (static_cast<int>(buttonAction.device) == device || buttonAction.device == QActionStore::Controller::All)) {
                 Q_EMIT q_func()->actionEvent(action.name);
                 Q_EMIT q_func()->actionJoyButtonEvent(action.name, device, button, isPressed);
             }
@@ -119,7 +119,7 @@ void QActionStorePrivate::_q_handleJoyButtonEvent(int device, JoyButton button, 
 void QActionStore::sendKeyEvent(Qt::Key key, bool isPressed)
 {
     Q_D(QActionStore);
-    for (auto j = 0; j < d->actions.size(); j++) {
+    for (int j = 0; j < d->actions.size(); j++) {
         auto aKey = d->actions.keys()[j];
         auto action = d->actions[aKey];
         for (auto keyAction : action.keys) {

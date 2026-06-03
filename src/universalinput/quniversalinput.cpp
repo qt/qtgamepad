@@ -45,7 +45,8 @@ static QByteArray hexStr(quint8 byte)
     return QByteArray(ret);
 }
 
-QUniversalInputPrivate::QUniversalInputPrivate() {
+QUniversalInputPrivate::QUniversalInputPrivate()
+{
 
 }
 
@@ -83,7 +84,8 @@ void QUniversalInputPrivate::loadMappingDatabase()
         mappingDatabase.push_back(mapping.value());
 }
 
-void QUniversalInput::VelocityTrack::update(const QVector2D &valueDelta) {
+void QUniversalInput::VelocityTrack::update(const QVector2D &valueDelta)
+{
     float delta_t = frameTimer.restart() / 1000.0f;
 
     if (delta_t > maxRefFrame) {
@@ -115,14 +117,16 @@ void QUniversalInput::VelocityTrack::reset()
     accumTime = 0.0f;
 }
 
-QUniversalInput::VelocityTrack::VelocityTrack() {
+QUniversalInput::VelocityTrack::VelocityTrack()
+{
     minRefFrame = 0.1f;
     maxRefFrame = 3.0f;
     frameTimer.start();
     reset();
 }
 
-void QUniversalInput::loadPlugins(){
+void QUniversalInput::loadPlugins()
+{
     Q_D(QUniversalInput);
     d->_q_init();
 }
@@ -172,7 +176,8 @@ bool QUniversalInput::isGamepad(int device) const
     return joypad.mapping != -1;
 }
 
-int QUniversalInput::getUnusedJoyId() {
+int QUniversalInput::getUnusedJoyId()
+{
     Q_D(QUniversalInput);
     for (int i = 0; i < JoypadsMax; i++)
         if (!d->joypadNames.contains(i) || !d->joypadNames[i].isConnected)
@@ -180,7 +185,8 @@ int QUniversalInput::getUnusedJoyId() {
     return -1;
 }
 
-void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QString &name, const QString &guid) {
+void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QString &name, const QString &guid)
+{
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
 
@@ -221,7 +227,8 @@ void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QSt
     Q_EMIT joyConnectionChanged(index, isConnected);
 }
 
-void QUniversalInput::joyButton(int device, JoyButton button, bool isPressed) {
+void QUniversalInput::joyButton(int device, JoyButton button, bool isPressed)
+{
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
 
@@ -378,7 +385,8 @@ quint64 QUniversalInput::getJoyVibrationTimestamp(int device)
         return 0;
 }
 
-void QUniversalInput::addForce(int device, QVector2D strength, float duration) {
+void QUniversalInput::addForce(int device, QVector2D strength, float duration)
+{
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
     d->joystickVibrations[device].weakMagnitude = strength.x();
@@ -413,7 +421,8 @@ void QUniversalInput::sendAxisEvent(int device, JoyAxis axis, float value)
 }
 
 // mouse disable
-void QUniversalInput::setMouseDisabled(bool disabled) {
+void QUniversalInput::setMouseDisabled(bool disabled)
+{
     Q_D(QUniversalInput);
     if (d->mouseDisabled == disabled)
         return;
@@ -422,7 +431,8 @@ void QUniversalInput::setMouseDisabled(bool disabled) {
     Q_EMIT mouseDisabledChanged();
 }
 
-bool QUniversalInput::isMouseDisabled() const {
+bool QUniversalInput::isMouseDisabled() const
+{
     Q_D(const QUniversalInput);
     return d->mouseDisabled;
 }

@@ -220,7 +220,7 @@ public:
 
     void setMouseDisabled(bool disabled); // looking for better name. Is "make invisible and center"
     bool isMouseDisabled() const;
-    void mouseMove(const QVector2D& deltas);
+    void mouseMove(const QVector2D &deltas);
 
 Q_SIGNALS:
     void joyConnectionChanged(int index, bool isConnected);
@@ -228,7 +228,7 @@ Q_SIGNALS:
     void joyAxisEvent(int device, JoyAxis axis, float value);
 
     void mouseDisabledChanged();
-    void mouseMovedWithDeltas(const QVector2D& deltas);
+    void mouseMovedWithDeltas(const QVector2D &deltas);
 
 private Q_SLOTS:
     void loadPlugins();
