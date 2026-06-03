@@ -10,6 +10,7 @@
 #include "linuxjoystickinput.h"
 
 #include <QtCore/QDir>
+#include <QtCore/QLoggingCategory>
 
 #include <libudev.h>
 #include <sys/types.h>
@@ -21,6 +22,8 @@
 using namespace Qt::Literals::StringLiterals;
 
 QT_BEGIN_NAMESPACE
+
+Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
 // GODOT begin
 #define LONG_BITS (sizeof(long) * 8)
@@ -35,7 +38,7 @@ LinuxJoystickInput::LinuxJoystickInput()
 {
     m_udev = udev_new();
     if (!m_udev) {
-        qWarning() << "Could not initialize udev";
+        qCWarning(lcUniversalInput) << "Could not initialize udev";
         m_udev = nullptr; // ensure udev is nullptr
     }
 
@@ -58,7 +61,7 @@ LinuxJoystickInput::~LinuxJoystickInput()
 void LinuxJoystickInput::probeJoypads()
 {
     if (!m_udev) {
-        qWarning() << "Could not probe joypads, udev is not initialized";
+        qCWarning(lcUniversalInput) << "Could not probe joypads, udev is not initialized";
         return;
     }
 
@@ -105,7 +108,7 @@ void LinuxJoystickInput::setupJoypadObject(const QString &device)
     auto input = QUniversalInput::instance();
     int id = input->getUnusedJoyId();
     if (id == -1) {
-        qWarning() << "Could not find unused joypad";
+        qCWarning(lcUniversalInput) << "Could not find unused joypad";
         return;
     }
 
@@ -113,7 +116,6 @@ void LinuxJoystickInput::setupJoypadObject(const QString &device)
     // tries to open the device to check if it's a joystick
     int fd = open(device.toUtf8().constData(), O_RDWR | O_NONBLOCK);
     if (fd == -1) {
-        // qWarning() << "Could not open device" << device << "for reading";
         // race condition? the only one that can be opened is xbox360 controller
         return;
     }
@@ -293,7 +295,6 @@ void LinuxJoystickInput::processJoypads()
             // event may be tainted and out of MAX_KEY range, which will cause
             // joy.key_map[event.code] to crash
             if (event.code >= MAX_KEY) {
-                qDebug() << "Joypad event code out of range:" << event.code;
                 continue;
             }
 
@@ -416,7 +417,7 @@ void LinuxJoystickInput::joypadVibrationStart(gamepad &p_joypad, float p_weak_ma
     play.code = effect.id;
     play.value = 1;
     if (write(p_joypad.fd, (const void *)&play, sizeof(play)) == -1)
-        qWarning() << "Couldn't write to Joypad device.";
+        qCWarning(lcUniversalInput) << "Couldn't write to Joypad device.";
 
     p_joypad.ff_effect_id = effect.id;
 

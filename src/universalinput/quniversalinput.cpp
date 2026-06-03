@@ -15,9 +15,13 @@
 #include "qmouseinput_p.h"
 #include "qmouseinputfactory_p.h"
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
+#include <QtCore/QDebug>
+#include <QtCore/QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
+
+Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
 static JoyAxis _combine_device(JoyAxis p_value, int p_device) {
     return JoyAxis((int)p_value | (p_device << 20));
@@ -395,7 +399,6 @@ void QUniversalInput::sendButtonEvent(int device, JoyButton index, bool pressed)
     Q_UNUSED(index);
     Q_UNUSED(pressed);
     Q_EMIT joyButtonEvent(device, index, pressed);
-    // qDebug() << "Button event" << device << int(index) << pressed;
 }
 
 void QUniversalInput::sendAxisEvent(int device, JoyAxis axis, float value)
@@ -403,7 +406,6 @@ void QUniversalInput::sendAxisEvent(int device, JoyAxis axis, float value)
     Q_UNUSED(device);
     Q_UNUSED(axis);
     Q_UNUSED(value);
-    // qDebug() << "Axis event" << device << int(axis) << value;
     Q_EMIT joyAxisEvent(device, axis, value);
 }
 
@@ -458,7 +460,7 @@ QUniversalInput::JoyEvent QUniversalInput::mappedButtonEvent(const JoyDeviceMapp
                 }
                 return event;
             default:
-                qWarning("Joypad button mapping error.");
+                qCWarning(lcUniversalInput, "Joypad button mapping error.");
             }
         }
     }
@@ -526,7 +528,7 @@ QUniversalInput::JoyEvent QUniversalInput::mappedAxisEvent(const JoyDeviceMappin
                     }
                     return event;
                 default:
-                    qWarning("Joypad axis mapping error.");
+                    qCWarning(lcUniversalInput, "Joypad axis mapping error.");
                 }
             }
         }
@@ -554,7 +556,7 @@ void QUniversalInput::mappedHatEvents(const JoyDeviceMapping &mapping, HatDirect
                 hat_direction = HatDirection::Left;
                 break;
             default:
-                qWarning("Joypad button mapping error.");
+                qCWarning(lcUniversalInput, "Joypad button mapping error.");
                 continue;
             }
 
@@ -580,7 +582,7 @@ void QUniversalInput::mappedHatEvents(const JoyDeviceMapping &mapping, HatDirect
                 }
                 break;
             default:
-                qWarning("Joypad button mapping error.");
+                qCWarning(lcUniversalInput, "Joypad button mapping error.");
             }
         }
     }

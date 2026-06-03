@@ -4,14 +4,17 @@
 #include "qjoydevicemappingparser_p.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
+
+Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
 QJoyDeviceMappingParser::QJoyDeviceMappingParser(const QString &filepath)
     : m_filepath(filepath), m_file(filepath), m_stream(&m_file)
 {
     if (!m_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning() << "QJoyDeviceMappingParser could not open file" << m_filepath;
+        qCWarning(lcUniversalInput) << "QJoyDeviceMappingParser could not open file" << m_filepath;
         return;
     }
 }
@@ -61,7 +64,6 @@ static Axis axisFromString(const QString &axisStr)
     } else if (axis == u"righttrigger"_s) {
         joyAxis = JoyAxis::TriggerRight;
     } else {
-        qDebug() << "QJoyDeviceMappingParser::axisFromString:" << axis;
     }
 
     return {joyAxis, axisRange, false};
@@ -117,7 +119,7 @@ static JoyButton buttonFromString(const QString &button)
         if (ok)
             return static_cast<JoyButton>(index);
     }
-    qWarning() << "QJoyDeviceMappingParser::buttonFromString: Unknown button" << button;
+    qCWarning(lcUniversalInput) << "QJoyDeviceMappingParser::buttonFromString: Unknown button" << button;
     return JoyButton::Invalid;
 }
 
@@ -145,7 +147,7 @@ QUniversalInput::JoyType QJoyDeviceMappingParser::toJoyType(const QString &type)
     if (m_hatRegex.match(type).hasMatch())
         return QUniversalInput::JoyType::TypeHat;
 
-    qWarning() << "QJoyDeviceMappingParser::toJoyType: Unknown type" << type;
+    qCWarning(lcUniversalInput) << "QJoyDeviceMappingParser::toJoyType: Unknown type" << type;
     return QUniversalInput::JoyType::TypeMax;
 }
 
@@ -182,7 +184,7 @@ QUniversalInput::JoyBinding QJoyDeviceMappingParser::parseBinding(const QString 
         break;
     }
     default:
-        qWarning() << "QJoyDeviceMappingParser::parseBinding: Unknown input type" << input;
+        qCWarning(lcUniversalInput) << "QJoyDeviceMappingParser::parseBinding: Unknown input type" << input;
         break;
     }
 
@@ -202,7 +204,7 @@ QUniversalInput::JoyBinding QJoyDeviceMappingParser::parseBinding(const QString 
         break;
     }
     default:
-        qWarning() << "QJoyDeviceMappingParser::parseBinding: Unknown output type" << output;
+        qCWarning(lcUniversalInput) << "QJoyDeviceMappingParser::parseBinding: Unknown output type" << output;
         break;
     }
 

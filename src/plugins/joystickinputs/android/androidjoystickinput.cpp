@@ -9,9 +9,8 @@
 
 #include "androidjoystickinput.h"
 #include <QtCore/qnativeinterface.h>
+#include <QtCore/QLoggingCategory>
 #include <QtUniversalInput/QUniversalInput>
-
-
 
 using namespace QtJniTypes;
 
@@ -26,7 +25,6 @@ Q_DECLARE_JNI_NATIVE_METHOD(joyConnectionChanged)
 
 static void joyButton(JNIEnv *, jclass, int deviceId, int button, bool pressed)
 {
-    qDebug() << "joyButton" << deviceId << button << pressed;
     QUniversalInput::instance()->joyButton(deviceId, JoyButton(button), pressed);
 }
 Q_DECLARE_JNI_NATIVE_METHOD(joyButton)
@@ -59,6 +57,8 @@ Q_DECLARE_JNI_NATIVE_METHOD(joyHat)
 
 QT_BEGIN_NAMESPACE
 
+Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
+
 const char keyEventClass[] = "android/view/KeyEvent";
 inline int keyField(const char *field)
 {
@@ -73,14 +73,12 @@ static void initJNI()
         return;
     initialized = true;
 
-    qWarning() << "initJNI called in Qt Joystick Input Handler";
-
     if (!QtJoystickInputHandler::registerNativeMethods({
                                                         Q_JNI_NATIVE_METHOD(joyConnectionChanged),
                                                         Q_JNI_NATIVE_METHOD(joyButton),
                                                         Q_JNI_NATIVE_METHOD(joyAxis),
                                                         Q_JNI_NATIVE_METHOD(joyHat)}))
-        qCritical("Failed to register native methods for QtJoystickInputHandler");
+        qCCritical(lcUniversalInput, "Failed to register native methods for QtJoystickInputHandler");
 }
 
 AndroidJoystickInput::AndroidJoystickInput()

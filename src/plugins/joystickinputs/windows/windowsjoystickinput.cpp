@@ -15,6 +15,7 @@
 #include <QtGui/QWindow>
 
 #include <QtCore/QDateTime>
+#include <QtCore/QLoggingCategory>
 
 #include <system_error>
 
@@ -33,6 +34,8 @@ DWORD WINAPI _xinput_set_state(DWORD dwUserIndex, XINPUT_VIBRATION *pVibration)
 }
 
 QT_BEGIN_NAMESPACE
+
+Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
 // Function to convert HRESULT to QString
 static QString convertHRESULTToQString(HRESULT hr)
@@ -61,10 +64,10 @@ WindowsJoystickInput::WindowsJoystickInput()
     if (result == DI_OK) {
         probeJoypads();
     } else {
-        qWarning() << "Couldn't initialize DirectInput. Error: " << convertHRESULTToQString(result);
+        qCWarning(lcUniversalInput) << "Couldn't initialize DirectInput. Error: " << convertHRESULTToQString(result);
         if (result == DIERR_OUTOFMEMORY) {
-            qWarning("The Windows DirectInput subsystem could not allocate sufficient memory.");
-            qWarning("Rebooting your PC may solve this issue.");
+            qCWarning(lcUniversalInput, "The Windows DirectInput subsystem could not allocate sufficient memory.");
+            qCWarning(lcUniversalInput, "Rebooting your PC may solve this issue.");
         }
         // Ensure dinput is still a nullptr.
         dinput = nullptr;
@@ -85,7 +88,7 @@ WindowsJoystickInput::~WindowsJoystickInput()
 void WindowsJoystickInput::probeJoypads()
 {
     if (dinput == nullptr) {
-        qWarning("DirectInput not initialized. Rebooting your PC may solve this issue.");
+        qCWarning(lcUniversalInput, "DirectInput not initialized. Rebooting your PC may solve this issue.");
         return;
     }
     DWORD dwResult;
@@ -255,7 +258,7 @@ bool WindowsJoystickInput::is_xinput_device(const GUID *p_guid)
 
     dev_list = (PRAWINPUTDEVICELIST)::malloc(sizeof(RAWINPUTDEVICELIST) * dev_list_count);
     if (dev_list == nullptr) {
-        qWarning("Out of memory.");
+        qCWarning(lcUniversalInput, "Out of memory.");
         return false;
     }
 
@@ -291,7 +294,7 @@ static inline uint16_t BSWAP16(uint16_t x)
 bool WindowsJoystickInput::setup_dinput_joypad(const DIDEVICEINSTANCE *instance)
 {
     if (dinput == nullptr) {
-        qWarning("DirectInput not initialized. Rebooting your PC may solve this issue.");
+        qCWarning(lcUniversalInput, "DirectInput not initialized. Rebooting your PC may solve this issue.");
         return false;
     }
 
@@ -319,7 +322,7 @@ bool WindowsJoystickInput::setup_dinput_joypad(const DIDEVICEINSTANCE *instance)
     char uid[128];
 
     if (memcmp(&guid.Data4[2], "PIDVID", 6) != 0) {
-        qWarning("DirectInput device not recognized.");
+        qCWarning(lcUniversalInput, "DirectInput device not recognized.");
         return false;
     }
 
@@ -550,7 +553,7 @@ void WindowsJoystickInput::load_xinput()
     }
 
     if (!xinput_dll.isLoaded()) {
-        qWarning("Could not find XInput, using DirectInput only");
+        qCWarning(lcUniversalInput, "Could not find XInput, using DirectInput only");
         return;
     }
 
