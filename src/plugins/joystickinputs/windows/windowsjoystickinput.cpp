@@ -20,11 +20,15 @@
 
 DWORD WINAPI _xinput_get_state(DWORD dwUserIndex, XINPUT_STATE *pState)
 {
+    Q_UNUSED(dwUserIndex);
+    Q_UNUSED(pState);
     return ERROR_DEVICE_NOT_CONNECTED;
 }
 
 DWORD WINAPI _xinput_set_state(DWORD dwUserIndex, XINPUT_VIBRATION *pVibration)
 {
+    Q_UNUSED(dwUserIndex);
+    Q_UNUSED(pVibration);
     return ERROR_DEVICE_NOT_CONNECTED;
 }
 
