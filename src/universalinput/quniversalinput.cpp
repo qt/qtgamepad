@@ -23,21 +23,24 @@ QT_BEGIN_NAMESPACE
 
 Q_STATIC_LOGGING_CATEGORY(lcUniversalInput, "qt.universalinput")
 
-static JoyAxis _combine_device(JoyAxis p_value, int p_device) {
-    return JoyAxis((int)p_value | (p_device << 20));
+static JoyAxis combineDevice(JoyAxis value, int device)
+{
+    return JoyAxis(static_cast<int>(value) | (device << 20));
 }
 
-static JoyButton _combine_device(JoyButton p_value, int p_device) {
-    return JoyButton((int)p_value | (p_device << 20));
+static JoyButton combineDevice(JoyButton value, int device)
+{
+    return JoyButton(static_cast<int>(value) | (device << 20));
 }
 
-static QByteArray _hex_str(quint8 p_byte) {
+static QByteArray hexStr(quint8 byte)
+{
     static const char *dict = "0123456789abcdef";
     char ret[3];
     ret[2] = 0;
 
-    ret[0] = dict[p_byte >> 4];
-    ret[1] = dict[p_byte & 0xf];
+    ret[0] = dict[byte >> 4];
+    ret[1] = dict[byte & 0xf];
 
     return QByteArray(ret);
 }
@@ -191,7 +194,7 @@ void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QSt
             int uidlen = int(qMin(name.length(), 16LL));
             QByteArray localName = name.toLocal8Bit();
             for (int i = 0; i < uidlen; i++)
-                uidname = uidname + _hex_str(localName[i]);
+                uidname = uidname + hexStr(localName[i]);
         }
         js.uid = QString::fromLocal8Bit(uidname);
         js.isConnected = true;
@@ -205,12 +208,12 @@ void QUniversalInput::updateJoyConnection(int index, bool isConnected, const QSt
         js.mapping = mapping;
     } else {
         js.isConnected = false;
-        for (int i = 0; i < (int)JoyButton::MAX; i++) {
-            JoyButton c = _combine_device((JoyButton)i, index);
+        for (int i = 0; i < static_cast<int>(JoyButton::MAX); i++) {
+            JoyButton c = combineDevice(static_cast<JoyButton>(i), index);
             d->joystickButtonsPressed.remove(c);
         }
-        for (int i = 0; i < (int)JoyAxis::MAX; i++)
-            setJoyAxis(index, (JoyAxis)i, 0.0f);
+        for (int i = 0; i < static_cast<int>(JoyAxis::MAX); i++)
+            setJoyAxis(index, static_cast<JoyAxis>(i), 0.0f);
 
     }
     d->joypadNames[index] = js;
@@ -268,25 +271,25 @@ void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
 
     if (map.type == TypeButton) {
         bool pressed = map.value > 0.5;
-        if (pressed != d->joystickButtonsPressed.contains(_combine_device(JoyButton(map.index), device)))
+        if (pressed != d->joystickButtonsPressed.contains(combineDevice(JoyButton(map.index), device)))
             sendButtonEvent(device, JoyButton(map.index), pressed);
 
         // Ensure opposite D-Pad button is also released.
         switch (JoyButton(map.index)) {
         case JoyButton::DpadUp:
-            if (d->joystickButtonsPressed.contains(_combine_device(JoyButton::DpadDown, device)))
+            if (d->joystickButtonsPressed.contains(combineDevice(JoyButton::DpadDown, device)))
                 sendButtonEvent(device, JoyButton::DpadDown, false);
             break;
         case JoyButton::DpadDown:
-            if (d->joystickButtonsPressed.contains(_combine_device(JoyButton::DpadUp, device)))
+            if (d->joystickButtonsPressed.contains(combineDevice(JoyButton::DpadUp, device)))
                 sendButtonEvent(device, JoyButton::DpadUp, false);
             break;
         case JoyButton::DpadLeft:
-            if (d->joystickButtonsPressed.contains(_combine_device(JoyButton::DpadRight, device)))
+            if (d->joystickButtonsPressed.contains(combineDevice(JoyButton::DpadRight, device)))
                 sendButtonEvent(device, JoyButton::DpadRight, false);
             break;
         case JoyButton::DpadRight:
-            if (d->joystickButtonsPressed.contains(_combine_device(JoyButton::DpadLeft, device)))
+            if (d->joystickButtonsPressed.contains(combineDevice(JoyButton::DpadLeft, device)))
                 sendButtonEvent(device, JoyButton::DpadLeft, false);
             break;
         default:
@@ -336,7 +339,7 @@ void QUniversalInput::joyHat(int device, HatMask value)
 
     int cur_val = d->joypadNames[device].hatCurrent;
 
-    for (int hat_direction = 0, hat_mask = 1; hat_direction < (int)HatDirection::Max; hat_direction++, hat_mask <<= 1) {
+    for (int hat_direction = 0, hat_mask = 1; hat_direction < static_cast<int>(HatDirection::Max); hat_direction++, hat_mask <<= 1) {
         if ((int(value) & hat_mask) != (cur_val & hat_mask)) {
             if (map[hat_direction].type == TypeButton)
                 sendButtonEvent(device, JoyButton(map[hat_direction].index), int(value) & hat_mask);
@@ -389,7 +392,7 @@ void QUniversalInput::setJoyAxis(int device, JoyAxis axis, float value)
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
 
-    JoyAxis c = _combine_device(axis, device);
+    JoyAxis c = combineDevice(axis, device);
     d->joystickAxes[c] = value;
 }
 
@@ -441,10 +444,10 @@ QUniversalInput::JoyEvent QUniversalInput::mappedButtonEvent(const JoyDeviceMapp
             event.type = binding.outputType;
             switch (binding.outputType) {
             case TypeButton:
-                event.index = (int)binding.output.button;
+                event.index = static_cast<int>(binding.output.button);
                 return event;
             case TypeAxis:
-                event.index = (int)binding.output.axis.axis;
+                event.index = static_cast<int>(binding.output.axis.axis);
                 switch (binding.output.axis.range) {
                 case PositiveHalfAxis:
                     event.value = 1;
@@ -495,7 +498,7 @@ QUniversalInput::JoyEvent QUniversalInput::mappedAxisEvent(const JoyDeviceMappin
                 }
                 switch (binding.outputType) {
                 case TypeButton:
-                    event.index = (int)binding.output.button;
+                    event.index = static_cast<int>(binding.output.button);
                     switch (binding.input.axis.range) {
                     case PositiveHalfAxis:
                         event.value = shifted_positive_value;
@@ -511,7 +514,7 @@ QUniversalInput::JoyEvent QUniversalInput::mappedAxisEvent(const JoyDeviceMappin
                     }
                     return event;
                 case TypeAxis:
-                    event.index = (int)binding.output.axis.axis;
+                    event.index = static_cast<int>(binding.output.axis.axis);
                     event.value = value;
                     if (binding.output.axis.range != binding.input.axis.range) {
                         switch (binding.output.axis.range) {
