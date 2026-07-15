@@ -88,8 +88,10 @@ void LinuxJoystickInput::probeJoypads()
             QString devnode_str = devnode;
 
             // check if exists
-            if (std::find(m_attached_devices.begin(), m_attached_devices.end(), devnode_str) != m_attached_devices.end())
+            if (std::find(m_attached_devices.begin(), m_attached_devices.end(), devnode_str) != m_attached_devices.end()) {
+                udev_device_unref(dev);
                 continue;
+            }
 
             if (!devnode_str.contains(ignore_str))
                 setupJoypadObject(devnode_str);
