@@ -13,8 +13,6 @@
 #include <QtUniversalInput/private/qjoystickinput_p.h>
 
 #include <QtCore/QElapsedTimer>
-#include <QtCore/QLibrary>
-#include <QtCore/QThread>
 
 #include <vector>
 
@@ -27,6 +25,8 @@ struct input_absinfo;
 
 QT_BEGIN_NAMESPACE
 
+class QSocketNotifier;
+
 class LinuxJoystickInput : public QJoystickInput
 {
     Q_OBJECT
@@ -36,6 +36,7 @@ public:
 
     void probeJoypads();
     void processJoypads();
+    void processJoypad(int id);
 
 protected:
     void timerEvent(QTimerEvent *event) override;
@@ -65,6 +66,7 @@ private:
         QUniversalInput::HatMask dpad;
 
         int fd = -1;
+        QSocketNotifier *notifier = nullptr;
         QString devpath;
 
         input_absinfo *abs_info[MAX_ABS] = {};

@@ -11,6 +11,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QLoggingCategory>
+#include <QtCore/QSocketNotifier>
 
 #include <libudev.h>
 #include <sys/types.h>
@@ -174,6 +175,12 @@ void LinuxJoystickInput::setupJoypadObject(const QString &device)
 
     setupJoypadProperties(&joy);
 
+    // Wake up and read events only when the device has data ready, rather than
+    // polling. This keeps CPU usage at zero while idle and delivers events with
+    // the lowest possible latency.
+    joy.notifier = new QSocketNotifier(fd, QSocketNotifier::Read, this);
+    connect(joy.notifier, &QSocketNotifier::activated, this, [this, id] { processJoypad(id); });
+
     char uid[64];
     sprintf(uid, "%04x%04x", BSWAP16(inpid.bustype), 0);
     if (inpid.vendor && inpid.product && inpid.version) {
@@ -265,6 +272,14 @@ void LinuxJoystickInput::closeJoypad(gamepad &p_joypad, int p_id)
     auto input = QUniversalInput::instance();
 
     if (p_joypad.fd != -1) {
+        // closeJoypad() may be reached from within the notifier's own callback
+        // (a read error while processing events), so disable it right away and
+        // defer deletion until control returns to the event loop.
+        if (p_joypad.notifier) {
+            p_joypad.notifier->setEnabled(false);
+            p_joypad.notifier->deleteLater();
+            p_joypad.notifier = nullptr;
+        }
         close(p_joypad.fd);
         p_joypad.fd = -1;
         m_attached_devices.erase(std::find(m_attached_devices.begin(), m_attached_devices.end(), p_joypad.devpath));
@@ -286,103 +301,6 @@ void LinuxJoystickInput::processJoypads()
         if (!joy.attached)
             continue;
 
-        // get joypad events
-        input_event event;
-        std::vector<input_event> events;
-        while (read(joy.fd, &event, sizeof(event)) > 0) {
-            events.push_back(event);
-        }
-
-        if (errno != EAGAIN) {
-            closeJoypad(joy, i);
-            continue;
-        }
-
-        // GODOT begin
-
-        for (const auto& event : events) {
-            // event may be tainted and out of MAX_KEY range, which will cause
-            // joy.key_map[event.code] to crash
-            if (event.code >= MAX_KEY) {
-                continue;
-            }
-
-            switch (event.type) {
-            case EV_KEY:
-                input->joyButton(joy.id, (JoyButton)joy.key_map[event.code], event.value);
-                break;
-
-            case EV_ABS:
-                switch (event.code) {
-                case ABS_HAT0X:
-                    if (event.value != 0) {
-                        if (event.value < 0) {
-                            joy.dpad = HatFlag::Left;
-                        } else {
-                            joy.dpad = HatFlag::Right;
-                        }
-                    } else {
-                        joy.dpad = HatFlag::Center;
-                    }
-                    input->joyHat(i, joy.dpad);
-                    break;
-
-                case ABS_HAT0Y:
-                    if (event.value != 0) {
-                        if (event.value < 0) {
-                            joy.dpad = HatFlag::Up;
-                        } else {
-                            joy.dpad = HatFlag::Down;
-                        }
-                    } else {
-                        joy.dpad = HatFlag::Center;
-                    }
-                    input->joyHat(i, joy.dpad);
-                    break;
-
-                default:
-                    if (event.code >= MAX_ABS) {
-                        continue;
-                    }
-                    if (joy.abs_info[event.code]) {
-                        // using the min/max values from the device
-                        auto min = joy.abs_info[event.code]->minimum;
-                        auto max = joy.abs_info[event.code]->maximum;
-
-                        float value = event.value;
-                        value = axisCorrect(value, min, max);
-
-                        JoyAxis axis = JoyAxis::Invalid;
-
-                        switch (event.code) {
-                        case ABS_X:
-                            axis = JoyAxis::LeftX;
-                            break;
-                        case ABS_Y:
-                            axis = JoyAxis::LeftY;
-                            break;
-                        case ABS_RX:
-                            axis = JoyAxis::RightX;
-                            break;
-                        case ABS_RY:
-                            axis = JoyAxis::RightY;
-                            break;
-                        case ABS_Z:
-                            axis = JoyAxis::TriggerLeft;
-                            break;
-                        case ABS_RZ:
-                            axis = JoyAxis::TriggerRight;
-                            break;
-                        }
-
-                        input->joyAxis(joy.id, axis, value);
-                    }
-                    break;
-                }
-                break;
-            }
-        }
-
         if (joy.force_feedback) {
             uint64_t timestamp = input->joyVibrationTimestamp(joy.id);
             float duration = input->joyVibrationDuration(joy.id) * 1000.f;
@@ -395,9 +313,118 @@ void LinuxJoystickInput::processJoypads()
                 joypadVibrationStop(joy, 0);
             }
         }
-
-        // GODOT end
     }
+}
+
+// Reads and dispatches all pending events for a single joypad. Driven by the
+// device's QSocketNotifier, so this only runs when there is data to read.
+void LinuxJoystickInput::processJoypad(int id)
+{
+    auto input = QUniversalInput::instance();
+
+    gamepad& joy = m_joypads[id];
+    if (!joy.attached)
+        return;
+
+    // get joypad events
+    input_event event;
+    std::vector<input_event> events;
+    errno = 0;
+    while (read(joy.fd, &event, sizeof(event)) > 0) {
+        events.push_back(event);
+    }
+
+    if (errno != EAGAIN) {
+        closeJoypad(joy, id);
+        return;
+    }
+
+    // GODOT begin
+
+    for (const auto& event : events) {
+        // event may be tainted and out of MAX_KEY range, which will cause
+        // joy.key_map[event.code] to crash
+        if (event.code >= MAX_KEY) {
+            continue;
+        }
+
+        switch (event.type) {
+        case EV_KEY:
+            input->joyButton(joy.id, (JoyButton)joy.key_map[event.code], event.value);
+            break;
+
+        case EV_ABS:
+            switch (event.code) {
+            case ABS_HAT0X:
+                if (event.value != 0) {
+                    if (event.value < 0) {
+                        joy.dpad = HatFlag::Left;
+                    } else {
+                        joy.dpad = HatFlag::Right;
+                    }
+                } else {
+                    joy.dpad = HatFlag::Center;
+                }
+                input->joyHat(joy.id, joy.dpad);
+                break;
+
+            case ABS_HAT0Y:
+                if (event.value != 0) {
+                    if (event.value < 0) {
+                        joy.dpad = HatFlag::Up;
+                    } else {
+                        joy.dpad = HatFlag::Down;
+                    }
+                } else {
+                    joy.dpad = HatFlag::Center;
+                }
+                input->joyHat(joy.id, joy.dpad);
+                break;
+
+            default:
+                if (event.code >= MAX_ABS) {
+                    continue;
+                }
+                if (joy.abs_info[event.code]) {
+                    // using the min/max values from the device
+                    auto min = joy.abs_info[event.code]->minimum;
+                    auto max = joy.abs_info[event.code]->maximum;
+
+                    float value = event.value;
+                    value = axisCorrect(value, min, max);
+
+                    JoyAxis axis = JoyAxis::Invalid;
+
+                    switch (event.code) {
+                    case ABS_X:
+                        axis = JoyAxis::LeftX;
+                        break;
+                    case ABS_Y:
+                        axis = JoyAxis::LeftY;
+                        break;
+                    case ABS_RX:
+                        axis = JoyAxis::RightX;
+                        break;
+                    case ABS_RY:
+                        axis = JoyAxis::RightY;
+                        break;
+                    case ABS_Z:
+                        axis = JoyAxis::TriggerLeft;
+                        break;
+                    case ABS_RZ:
+                        axis = JoyAxis::TriggerRight;
+                        break;
+                    }
+
+                    input->joyAxis(joy.id, axis, value);
+                }
+                break;
+            }
+            break;
+        }
+    }
+
+    // GODOT end
 }
 
 void LinuxJoystickInput::joypadVibrationStart(gamepad &p_joypad, float p_weak_magnitude, float p_strong_magnitude, float p_duration, uint64_t p_timestamp)
