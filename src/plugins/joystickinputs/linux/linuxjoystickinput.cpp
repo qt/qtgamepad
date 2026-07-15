@@ -12,6 +12,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QSocketNotifier>
+#include <QtCore/QTimer>
 
 #include <libudev.h>
 #include <sys/types.h>
@@ -50,16 +51,23 @@ LinuxJoystickInput::LinuxJoystickInput()
         m_udev = nullptr; // ensure udev is nullptr
     }
 
+    // Pick up devices that are already connected, then watch for hotplug
+    // events instead of re-enumerating on a timer.
     probeJoypads();
+    setupMonitor();
 
-    m_elapsedTimer.start();
-
-    // ### Replace with Thread later
-    startTimer(1);
+    // Rumble is requested from the main thread via QUniversalInput::addForce();
+    // start/stop the effect on demand rather than polling for it.
+    connect(QUniversalInput::instance(), &QUniversalInput::joyVibrationRequested,
+            this, &LinuxJoystickInput::onVibrationRequested);
 }
 
 LinuxJoystickInput::~LinuxJoystickInput()
 {
+    if (m_udevMonitor)
+        udev_monitor_unref(m_udevMonitor);
+    m_udevMonitor = nullptr;
+
     if (m_udev)
         udev_unref(m_udev);
 
@@ -280,6 +288,11 @@ void LinuxJoystickInput::closeJoypad(gamepad &p_joypad, int p_id)
             p_joypad.notifier->deleteLater();
             p_joypad.notifier = nullptr;
         }
+        if (p_joypad.vibrationStopTimer) {
+            p_joypad.vibrationStopTimer->stop();
+            p_joypad.vibrationStopTimer->deleteLater();
+            p_joypad.vibrationStopTimer = nullptr;
+        }
         close(p_joypad.fd);
         p_joypad.fd = -1;
         m_attached_devices.erase(std::find(m_attached_devices.begin(), m_attached_devices.end(), p_joypad.devpath));
@@ -290,30 +303,6 @@ void LinuxJoystickInput::closeJoypad(gamepad &p_joypad, int p_id)
 static inline float axisCorrect(int value, int min, int max)
 {
     return 2.0f * (value - min) / (max - min) - 1.0f;
-}
-
-void LinuxJoystickInput::processJoypads()
-{
-    auto input = QUniversalInput::instance();
-
-    for (int i = 0; i < JOYPADS_MAX; i++) {
-        gamepad& joy = m_joypads[i];
-        if (!joy.attached)
-            continue;
-
-        if (joy.force_feedback) {
-            uint64_t timestamp = input->joyVibrationTimestamp(joy.id);
-            float duration = input->joyVibrationDuration(joy.id) * 1000.f;
-            QVector2D strength = input->joyVibrationStrength(joy.id);
-            uint64_t currentTimestamp = QDateTime::currentMSecsSinceEpoch();
-            if (currentTimestamp - timestamp <= duration) {
-                if (!joy.vibrating)
-                    joypadVibrationStart(joy, strength.x(), strength.y(), duration, timestamp);
-            } else if (joy.vibrating) {
-                joypadVibrationStop(joy, 0);
-            }
-        }
-    }
 }
 
 // Reads and dispatches all pending events for a single joypad. Driven by the
@@ -456,6 +445,7 @@ void LinuxJoystickInput::joypadVibrationStart(gamepad &p_joypad, float p_weak_ma
         qCWarning(lcUniversalInput) << "Couldn't write to Joypad device.";
 
     p_joypad.ff_effect_id = effect.id;
+    p_joypad.vibrating = true;
 
     // GODOT end
 }
@@ -477,11 +467,82 @@ void LinuxJoystickInput::joypadVibrationStop(gamepad &p_joypad, uint64_t p_times
     // GODOT end
 }
 
-void LinuxJoystickInput::timerEvent(QTimerEvent *event)
+void LinuxJoystickInput::setupMonitor()
 {
-    Q_UNUSED(event);
-    probeJoypads();
-    processJoypads();
+    if (!m_udev)
+        return;
+
+    // Watch for input devices being plugged in or removed, so we no longer have
+    // to re-enumerate everything on a timer.
+    m_udevMonitor = udev_monitor_new_from_netlink(m_udev, "udev");
+    if (!m_udevMonitor) {
+        qCWarning(lcUniversalInput) << "Could not create udev monitor";
+        return;
+    }
+    udev_monitor_filter_add_match_subsystem_devtype(m_udevMonitor, "input", nullptr);
+    udev_monitor_enable_receiving(m_udevMonitor);
+
+    m_monitorNotifier = new QSocketNotifier(udev_monitor_get_fd(m_udevMonitor),
+                                            QSocketNotifier::Read, this);
+    connect(m_monitorNotifier, &QSocketNotifier::activated,
+            this, &LinuxJoystickInput::onUdevEvent);
+}
+
+void LinuxJoystickInput::onUdevEvent()
+{
+    udev_device *dev = udev_monitor_receive_device(m_udevMonitor);
+    if (!dev)
+        return;
+
+    const char *action = udev_device_get_action(dev);
+    const char *devnode = udev_device_get_devnode(dev);
+
+    if (action && devnode) {
+        const QString devnode_str = QString::fromUtf8(devnode);
+        if (!devnode_str.contains(ignore_str)) {
+            if (qstrcmp(action, "add") == 0) {
+                if (std::find(m_attached_devices.begin(), m_attached_devices.end(), devnode_str)
+                    == m_attached_devices.end())
+                    setupJoypadObject(devnode_str);
+            } else if (qstrcmp(action, "remove") == 0) {
+                closeJoypad(devnode_str.toUtf8().constData());
+            }
+        }
+    }
+
+    udev_device_unref(dev);
+}
+
+void LinuxJoystickInput::onVibrationRequested(int device)
+{
+    if (device < 0 || device >= JOYPADS_MAX)
+        return;
+
+    auto input = QUniversalInput::instance();
+    gamepad &joy = m_joypads[device];
+    if (!joy.attached || !joy.force_feedback)
+        return;
+
+    const float duration = input->joyVibrationDuration(device) * 1000.f; // ms
+    if (duration <= 0.f) {
+        joypadVibrationStop(joy, 0);
+        return;
+    }
+
+    const QVector2D strength = input->joyVibrationStrength(device);
+    const uint64_t timestamp = input->joyVibrationTimestamp(device);
+    joypadVibrationStart(joy, strength.x(), strength.y(), duration, timestamp);
+
+    // Stop the effect once its duration elapses. A single-shot timer honours the
+    // requested duration without any periodic polling.
+    if (!joy.vibrationStopTimer) {
+        joy.vibrationStopTimer = new QTimer(this);
+        joy.vibrationStopTimer->setSingleShot(true);
+        connect(joy.vibrationStopTimer, &QTimer::timeout, this, [this, device] {
+            joypadVibrationStop(m_joypads[device], 0);
+        });
+    }
+    joy.vibrationStopTimer->start(int(duration));
 }
 
 

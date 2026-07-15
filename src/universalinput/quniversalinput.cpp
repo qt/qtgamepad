@@ -620,11 +620,16 @@ quint64 QUniversalInput::joyVibrationTimestamp(int device)
 void QUniversalInput::addForce(int device, QVector2D strength, float duration)
 {
     Q_D(QUniversalInput);
-    QMutexLocker locker(&d->mutex);
-    d->joystickVibrations[device].weakMagnitude = strength.x();
-    d->joystickVibrations[device].strongMagnitude = strength.y();
-    d->joystickVibrations[device].duration = duration; // sec
-    d->joystickVibrations[device].timestamp = QDateTime::currentMSecsSinceEpoch();
+    {
+        QMutexLocker locker(&d->mutex);
+        d->joystickVibrations[device].weakMagnitude = strength.x();
+        d->joystickVibrations[device].strongMagnitude = strength.y();
+        d->joystickVibrations[device].duration = duration; // sec
+        d->joystickVibrations[device].timestamp = QDateTime::currentMSecsSinceEpoch();
+    }
+    // Notify the backend so it can start rumbling immediately, rather than
+    // relying on it to poll the vibration state.
+    Q_EMIT joyVibrationRequested(device);
 }
 
 /*! \internal */

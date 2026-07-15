@@ -226,6 +226,7 @@ Q_SIGNALS:
     void joyConnectionChanged(int index, bool isConnected);
     void joyButtonEvent(int device, JoyButton button, bool isPressed);
     void joyAxisEvent(int device, JoyAxis axis, float value);
+    void joyVibrationRequested(int device);
 
     void mouseDisabledChanged();
     void mouseMovedWithDeltas(const QVector2D &deltas);

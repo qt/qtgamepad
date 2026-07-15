@@ -12,8 +12,6 @@
 
 #include <QtUniversalInput/private/qjoystickinput_p.h>
 
-#include <QtCore/QElapsedTimer>
-
 #include <vector>
 
 // for JoypadEvent
@@ -21,11 +19,13 @@
 #include <quniversalinput.h>
 
 struct udev;
+struct udev_monitor;
 struct input_absinfo;
 
 QT_BEGIN_NAMESPACE
 
 class QSocketNotifier;
+class QTimer;
 
 class LinuxJoystickInput : public QJoystickInput
 {
@@ -35,13 +35,13 @@ public:
     ~LinuxJoystickInput();
 
     void probeJoypads();
-    void processJoypads();
     void processJoypad(int id);
 
-protected:
-    void timerEvent(QTimerEvent *event) override;
-
 private:
+    void setupMonitor();
+    void onUdevEvent();
+    void onVibrationRequested(int device);
+
     enum {
         JOYPADS_MAX = 16,
         JOY_AXIS_COUNT = 6,
@@ -74,6 +74,7 @@ private:
         bool force_feedback = false;
         int ff_effect_id = -1;
         bool vibrating = false;
+        QTimer *vibrationStopTimer = nullptr;
     };
 
     void setupJoypadObject(const QString& name);
@@ -86,9 +87,10 @@ private:
     void joypadVibrationStop(gamepad &p_joypad, uint64_t p_timestamp);
 
     struct udev *m_udev = nullptr;
+    struct udev_monitor *m_udevMonitor = nullptr;
+    QSocketNotifier *m_monitorNotifier = nullptr;
     gamepad m_joypads[JOYPADS_MAX]; // joypad joystick gamestick tomatoe potatoe
     std::vector<QString> m_attached_devices;
-    QElapsedTimer m_elapsedTimer;
 };
 
 QT_END_NAMESPACE
