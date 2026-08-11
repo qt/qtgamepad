@@ -9,6 +9,7 @@ add_subdirectory(qjoydevicemappingparser)
 add_subdirectory(qactionstore)
 add_subdirectory(enums)
 add_subdirectory(quniversalinput)
+add_subdirectory(qgamepad)
 
 # The mapping transform test reaches private QUniversalInput members and can
 # only be built when the internal API is available.
