@@ -6,10 +6,10 @@
         "QtUsage": "Provides button and axis mappings for game controllers to the QGamepad layout.",
         "Description": "A community sourced database of game controller mappings to be used with SDL2 Game Controller functionality.",
         "Homepage": "https://github.com/mdqinc/SDL_GameControllerDB",
-        "Version": "9055df09a2bdd56339096639168c8bcdc6c0edc2",
+        "Version": "0499a01224c056cb915e9fcc1bac37aedbf2253c",
         "License": "zlib License",
         "LicenseId": "zlib",
         "LicenseFile": "LICENSE",
-        "Copyright": "Copyright (C) 1997-2022 Sam Lantinga <slouken@libsdl.org>"
+        "Copyright": "Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>"
     }
 ]
