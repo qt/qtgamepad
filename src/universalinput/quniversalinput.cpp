@@ -489,7 +489,8 @@ void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
         return;
     }
 
-    JoyEvent map = mappedAxisEvent(d->mappingDatabase[joy.mapping], axis, value);
+    JoyAxisRange range = FullAxis;
+    JoyEvent map = mappedAxisEvent(d->mappingDatabase[joy.mapping], axis, value, &range);
 
     if (map.type == TypeButton) {
         bool pressed = map.value > 0.5;
@@ -524,8 +525,12 @@ void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
     if (map.type == TypeAxis) {
         JoyAxis axis = JoyAxis(map.index);
         float value = map.value;
-        if (axis == JoyAxis::TriggerLeft || axis == JoyAxis::TriggerRight)
-            value = 0.5f + value / 2.0f; // Convert to a value between 0.0f and 1.0f.
+#ifndef Q_OS_ANDROID
+        // Only a full-axis trigger reports [-1, 1] and needs converting; half
+        // axes, and Android triggers, already report [0, 1].
+        if (range == FullAxis && (axis == JoyAxis::TriggerLeft || axis == JoyAxis::TriggerRight))
+            value = 0.5f + value / 2.0f;
+#endif
         sendAxisEvent(device, axis, value);
         return;
     }
@@ -702,7 +707,7 @@ QUniversalInput::JoyEvent QUniversalInput::mappedButtonEvent(const JoyDeviceMapp
     return event;
 }
 
-QUniversalInput::JoyEvent QUniversalInput::mappedAxisEvent(const JoyDeviceMapping &mapping, JoyAxis axis, float inValue)
+QUniversalInput::JoyEvent QUniversalInput::mappedAxisEvent(const JoyDeviceMapping &mapping, JoyAxis axis, float inValue, JoyAxisRange *outRange)
 {
     JoyEvent event;
 
@@ -716,6 +721,8 @@ QUniversalInput::JoyEvent QUniversalInput::mappedAxisEvent(const JoyDeviceMappin
                     (binding.input.axis.range == PositiveHalfAxis && value >= 0) ||
                     (binding.input.axis.range == NegativeHalfAxis && value < 0)) {
                 event.type = binding.outputType;
+                if (outRange)
+                    *outRange = binding.input.axis.range;
                 float shifted_positive_value = 0;
                 switch (binding.input.axis.range) {
                 case PositiveHalfAxis:

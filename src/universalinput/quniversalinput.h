@@ -240,7 +240,7 @@ private:
     void sendButtonEvent(int device, JoyButton index, bool pressed);
     void sendAxisEvent(int device, JoyAxis axis, float value);
     JoyEvent mappedButtonEvent(const JoyDeviceMapping &mapping, JoyButton button);
-    JoyEvent mappedAxisEvent(const JoyDeviceMapping &mapping, JoyAxis axis, float inValue);
+    JoyEvent mappedAxisEvent(const JoyDeviceMapping &mapping, JoyAxis axis, float inValue, JoyAxisRange *outRange = nullptr);
     void mappedHatEvents(const JoyDeviceMapping &mapping, HatDirection hat, JoyEvent events[size_t(HatDirection::Max)]);
 
 #ifdef QT_BUILD_INTERNAL

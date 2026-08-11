@@ -73,6 +73,7 @@ private slots:
     void positiveHalfAxisConvertsToFull();
     void axisOutsideHalfRangeYieldsNoEvent();
     void fullAxisMapsToButton();
+    void reportsMatchedInputRange();
 
     void hatMapsToButton();
 };
@@ -192,6 +193,25 @@ void tst_QMappingTransform::fullAxisMapsToButton()
     QCOMPARE(event.type, int(QUniversalInput::TypeButton));
     QCOMPARE(event.index, int(JoyButton::A));
     QCOMPARE(event.value, 0.5f);
+}
+
+// joyAxis() uses the reported input range to decide whether to convert a
+// trigger from [-1, 1] to [0, 1].
+void tst_QMappingTransform::reportsMatchedInputRange()
+{
+    auto *input = QUniversalInput::instance();
+
+    QUniversalInput::JoyAxisRange range = QUniversalInput::FullAxis;
+    input->mappedAxisEvent(single(axisToAxis(JoyAxis::TriggerLeft, QUniversalInput::PositiveHalfAxis,
+                                             false, JoyAxis::TriggerLeft, QUniversalInput::PositiveHalfAxis)),
+                           JoyAxis::TriggerLeft, 0.5f, &range);
+    QCOMPARE(range, QUniversalInput::PositiveHalfAxis);
+
+    range = QUniversalInput::PositiveHalfAxis;
+    input->mappedAxisEvent(single(axisToAxis(JoyAxis::TriggerRight, QUniversalInput::FullAxis,
+                                             false, JoyAxis::TriggerRight, QUniversalInput::FullAxis)),
+                           JoyAxis::TriggerRight, 0.5f, &range);
+    QCOMPARE(range, QUniversalInput::FullAxis);
 }
 
 void tst_QMappingTransform::hatMapsToButton()
