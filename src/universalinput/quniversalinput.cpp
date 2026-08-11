@@ -446,8 +446,12 @@ void QUniversalInput::joyButton(int device, JoyButton button, bool isPressed)
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
 
+    if (int(button) < 0 || int(button) >= JoyButtonsMax) {
+        qCWarning(lcUniversalInput) << "Ignoring out-of-range joypad button" << int(button);
+        return;
+    }
+
     Joypad &joy = d->joypadNames[device];
-    Q_ASSERT(int(button) < JoyButtonsMax);
 
     if (joy.lastButtons[size_t(button)] == isPressed)
         return;
@@ -475,7 +479,10 @@ void QUniversalInput::joyAxis(int device, JoyAxis axis, float value)
     Q_D(QUniversalInput);
     QMutexLocker locker(&d->mutex);
 
-    Q_ASSERT(int(axis) < JoyAxesMax);
+    if (int(axis) < 0 || int(axis) >= JoyAxesMax) {
+        qCWarning(lcUniversalInput) << "Ignoring out-of-range joypad axis" << int(axis);
+        return;
+    }
 
     Joypad &joy = d->joypadNames[device];
 

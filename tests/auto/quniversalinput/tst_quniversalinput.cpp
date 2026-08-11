@@ -27,6 +27,7 @@ private slots:
 
     void buttonEventDeduplicates();
     void axisEventDeduplicates();
+    void outOfRangeIndicesAreIgnored();
 
     void hatDecomposesToDpadButtons();
 
@@ -139,6 +140,24 @@ void tst_QUniversalInput::axisEventDeduplicates()
     input->joyAxis(device, JoyAxis::LeftX, -0.25f);
     QCOMPARE(spy.count(), 2);
     QCOMPARE(spy.at(1).at(2).toFloat(), -0.25f);
+}
+
+void tst_QUniversalInput::outOfRangeIndicesAreIgnored()
+{
+    auto *input = QUniversalInput::instance();
+    constexpr int device = 11;
+    input->updateJoyConnection(device, true, QStringLiteral("Pad"), QString());
+
+    QSignalSpy buttonSpy(input, &QUniversalInput::joyButtonEvent);
+    QSignalSpy axisSpy(input, &QUniversalInput::joyAxisEvent);
+
+    input->joyButton(device, JoyButton(QUniversalInput::JoyButtonsMax), true);
+    input->joyButton(device, JoyButton(-5), true);
+    input->joyAxis(device, JoyAxis(QUniversalInput::JoyAxesMax), 0.5f);
+    input->joyAxis(device, JoyAxis(-2), 0.5f);
+
+    QCOMPARE(buttonSpy.count(), 0);
+    QCOMPARE(axisSpy.count(), 0);
 }
 
 // Only the directions whose bit changed since the previous hat state emit.
