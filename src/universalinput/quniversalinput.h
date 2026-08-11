@@ -17,6 +17,12 @@
 #include <QtUniversalInput/qtuniversalinputglobal.h>
 #include <QtGui/QMouseEvent>
 
+#ifdef QT_BUILD_INTERNAL
+// In the global namespace, so the friend declaration below still refers to the
+// autotest when Qt is built into a namespace.
+class tst_QMappingTransform;
+#endif
+
 QT_BEGIN_NAMESPACE
 
 class QUniversalInputPrivate;
@@ -236,6 +242,10 @@ private:
     JoyEvent mappedButtonEvent(const JoyDeviceMapping &mapping, JoyButton button);
     JoyEvent mappedAxisEvent(const JoyDeviceMapping &mapping, JoyAxis axis, float inValue);
     void mappedHatEvents(const JoyDeviceMapping &mapping, HatDirection hat, JoyEvent events[size_t(HatDirection::Max)]);
+
+#ifdef QT_BUILD_INTERNAL
+    friend class ::tst_QMappingTransform;
+#endif
 
     Q_DECLARE_PRIVATE(QUniversalInput)
     Q_DISABLE_COPY_MOVE(QUniversalInput)
