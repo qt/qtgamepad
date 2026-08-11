@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright (C) The Qt Company Ltd.
+# SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+#
+# QJoyDeviceMappingParser test fixture. Comment lines and blank lines
+# must be skipped by the parser.
+
+03000000fixturedevice000000000001,Fixture Pad,a:b0,leftshoulder:b4,leftx:a0,lefttrigger:+a2,righty:-a3~,dpup:h0.1,platform:Linux,
+
+# A second entry, exercising iteration across an intervening comment and
+# blank line.
+03000000fixturedevice000000000002,Second Pad,b:b1,x:b2,platform:Linux,

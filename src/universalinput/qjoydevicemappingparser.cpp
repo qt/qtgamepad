@@ -38,6 +38,13 @@ static Axis axisFromString(const QString &axisStr)
 
     auto joyAxis = JoyAxis::Invalid;
     auto axisRange = QUniversalInput::JoyAxisRange::FullAxis;
+    bool invert = false;
+
+    // Strip the '~' invert marker before parsing the prefix and axis number.
+    if (axis.endsWith(u"~"_s)) {
+        invert = true;
+        axis.chop(1);
+    }
 
     // if first character is a minus, it's a negative axis
     if (axis[0] == u"-"_s) {
@@ -72,7 +79,7 @@ static Axis axisFromString(const QString &axisStr)
     } else {
     }
 
-    return {joyAxis, axisRange, false};
+    return {joyAxis, axisRange, invert};
 }
 
 static JoyButton buttonFromString(const QString &button)
@@ -224,11 +231,12 @@ std::optional<QUniversalInput::JoyDeviceMapping> QJoyDeviceMappingParser::next()
 
     auto line = m_stream.readLine().trimmed();
 
-    // skip comments and empty lines
+    // Skip comments and empty lines. Check for the end of the stream before
+    // reading, so that a valid entry on the last line is not discarded.
     while (line.startsWith(u"#"_s) || line.isEmpty()) {
-        line = m_stream.readLine().trimmed();
         if (m_stream.atEnd())
             return {};
+        line = m_stream.readLine().trimmed();
     }
 
     auto tokens = line.split(u',');
