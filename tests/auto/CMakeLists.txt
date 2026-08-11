@@ -17,3 +17,8 @@ add_subdirectory(factory)
 if(QT_FEATURE_private_tests)
     add_subdirectory(mappingtransform)
 endif()
+
+# The QML layer tests need Qt Quick, which is an optional dependency.
+if(TARGET Qt::Qml AND TARGET Qt::Quick)
+    add_subdirectory(qmlgamepad)
+endif()
