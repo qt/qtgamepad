@@ -382,28 +382,13 @@ void LinuxJoystickInput::processJoypad(int id)
                     float value = event.value;
                     value = axisCorrect(value, min, max);
 
-                    JoyAxis axis = JoyAxis::Invalid;
-
-                    switch (event.code) {
-                    case ABS_X:
-                        axis = JoyAxis::LeftX;
-                        break;
-                    case ABS_Y:
-                        axis = JoyAxis::LeftY;
-                        break;
-                    case ABS_RX:
-                        axis = JoyAxis::RightX;
-                        break;
-                    case ABS_RY:
-                        axis = JoyAxis::RightY;
-                        break;
-                    case ABS_Z:
-                        axis = JoyAxis::TriggerLeft;
-                        break;
-                    case ABS_RZ:
-                        axis = JoyAxis::TriggerRight;
-                        break;
-                    }
+                    // The controller database references physical axes by their
+                    // SDL-style sequential index (a0, a1, ...), not by evdev ABS
+                    // code, so report that index and let the mapping layer decide
+                    // which logical axis it drives. Hardcoding ABS_Z/ABS_RZ to the
+                    // triggers, for example, dropped the right stick on pads that
+                    // place it there while exposing the triggers as buttons.
+                    JoyAxis axis = JoyAxis(joy.joy_axis[event.code]);
 
                     input->joyAxis(joy.id, axis, value);
                 }

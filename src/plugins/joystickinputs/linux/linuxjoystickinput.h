@@ -44,7 +44,6 @@ private:
 
     enum {
         JOYPADS_MAX = 16,
-        JOY_AXIS_COUNT = 6,
         MIN_JOY_AXIS = 10,
         MAX_JOY_AXIS = 32768,
         MAX_JOY_BUTTONS = 128,
@@ -61,7 +60,9 @@ private:
         bool attached = false;
         bool confirmed = false;
         int key_map[MAX_KEY];
-        int joy_axis[JOY_AXIS_COUNT];
+        // Indexed by evdev ABS code; holds the SDL-style sequential axis index
+        // (a0, a1, ...) that the controller database mappings are written against.
+        int joy_axis[MAX_ABS];
 
         QUniversalInput::HatMask dpad;
 
