@@ -88,9 +88,9 @@ private:
     HWND hWnd = nullptr;
     LPDIRECTINPUT8 dinput = nullptr;
 
-    int id_to_change;
-    int slider_count;
-    int joypad_count;
+    int id_to_change = -1;
+    int slider_count = 0;
+    int joypad_count = 0;
     bool attached_joypads[JOYPADS_MAX];
     dinput_gamepad d_joypads[JOYPADS_MAX];
     xinput_gamepad x_joypads[XUSER_MAX_COUNT];
