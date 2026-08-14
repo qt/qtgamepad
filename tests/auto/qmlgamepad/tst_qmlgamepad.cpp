@@ -114,6 +114,6 @@ void tst_QmlGamepad::qmlInjectionForwardsToSingleton()
     QCOMPARE(spy.at(0).at(1).value<JoyButton>(), JoyButton::B);
 }
 
-QTEST_MAIN(tst_QmlGamepad)
+QTEST_GUILESS_MAIN(tst_QmlGamepad)
 
 #include "tst_qmlgamepad.moc"
