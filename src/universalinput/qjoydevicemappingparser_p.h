@@ -44,7 +44,7 @@ private:
     QTextStream m_stream;
     QString m_currentLine;
 
-    QRegularExpression m_buttonRegex{u"b([0-9]+)|(x)|(y)|(back)|(guide)|(start)|(leftstick)|(rightstick)|(leftshoulder)|(rightshoulder)|(misc1)|(paddle1)|(paddle2)|(paddle3)|(paddle4)|(touchpad)"_s};
+    QRegularExpression m_buttonRegex{u"b([0-9]+)|(x)|(y)|(back)|(guide)|(start)|(leftstick)|(rightstick)|(leftshoulder)|(rightshoulder)|(misc1)|(paddle1)|(paddle2)|(paddle3)|(paddle4)|(touchpad)|(misc2)|(misc3)|(misc4)|(misc5)|(misc6)"_s};
     QRegularExpression m_axisRegex{u"a[0-9]+|rightx|righty|leftx|lefty|lefttrigger|righttrigger"_s};
     QRegularExpression m_hatRegex{u"h[0-9]+|dpup|dpdown|dpleft|dpright|dpadup|dpaddown|dpadleft|dpadright"_s};
 };

@@ -126,6 +126,16 @@ static JoyButton buttonFromString(const QString &button)
         return JoyButton::Paddle4;
     if (button == u"touchpad"_s)
         return JoyButton::Touchpad;
+    if (button == u"misc2"_s)
+        return JoyButton::Misc2;
+    if (button == u"misc3"_s)
+        return JoyButton::Misc3;
+    if (button == u"misc4"_s)
+        return JoyButton::Misc4;
+    if (button == u"misc5"_s)
+        return JoyButton::Misc5;
+    if (button == u"misc6"_s)
+        return JoyButton::Misc6;
     if (button.startsWith(u"b"_s)) {
         bool ok;
         int index = button.mid(1).toInt(&ok);

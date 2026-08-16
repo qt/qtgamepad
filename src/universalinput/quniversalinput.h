@@ -86,6 +86,11 @@ public:
         Paddle3 = 18,
         Paddle4 = 19,
         Touchpad = 20,
+        Misc2 = 21,
+        Misc3 = 22,
+        Misc4 = 23,
+        Misc5 = 24,
+        Misc6 = 25,
     };
     Q_ENUM(JoyButton)
 

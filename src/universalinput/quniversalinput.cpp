@@ -81,6 +81,11 @@ using JoyButton = QUniversalInput::JoyButton;
     \value Paddle3 The third paddle button.
     \value Paddle4 The fourth paddle button.
     \value Touchpad The touchpad when pressed.
+    \value Misc2 A second miscellaneous button.
+    \value Misc3 A third miscellaneous button.
+    \value Misc4 A fourth miscellaneous button.
+    \value Misc5 A fifth miscellaneous button.
+    \value Misc6 A sixth miscellaneous button.
 */
 
 /*!
@@ -867,6 +872,11 @@ QDebug operator<<(QDebug debug, const JoyButton &joyButton)
     case JoyButton::Paddle3: debug.nospace() << "Paddle3"; break;
     case JoyButton::Paddle4: debug.nospace() << "Paddle4"; break;
     case JoyButton::Touchpad: debug.nospace() << "Touchpad"; break;
+    case JoyButton::Misc2: debug.nospace() << "Misc2"; break;
+    case JoyButton::Misc3: debug.nospace() << "Misc3"; break;
+    case JoyButton::Misc4: debug.nospace() << "Misc4"; break;
+    case JoyButton::Misc5: debug.nospace() << "Misc5"; break;
+    case JoyButton::Misc6: debug.nospace() << "Misc6"; break;
     default:
         debug.nospace() << "Button(" << static_cast<int>(joyButton) << ")";
         break;
