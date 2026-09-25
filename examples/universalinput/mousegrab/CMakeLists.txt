@@ -12,7 +12,7 @@ endif()
 
 set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/universalinput/mousegrab")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui UniversalInput Quick QuickUniversalInput)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui UniversalInput Quick QuickActionStore QuickUniversalInput)
 
 qt_add_executable(mousegrab
     main.cpp
